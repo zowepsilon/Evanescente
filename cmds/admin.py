@@ -18,7 +18,7 @@ class Administration(commands.Cog):
 
     @commands.group(invoke_without_command=True)
     async def moderator(self, ctx):
-        await ctx.send(":no_entry_sign: You must provide a subcommand! (`add` or `remove`)")
+        await ctx.send(":no_entry_sign: You must provide a subcommand! (`add`, `list`, `remove`)")
 
     @moderator.command(name="add")
     async def mod_add(self, ctx, user: discord.Member):
@@ -30,7 +30,6 @@ class Administration(commands.Cog):
         
         await ctx.send(":no_entry_sign: You need to be the owner to do that!")
 
-
     @moderator.command(name="remove")
     async def remove_moderator(self, ctx, user: discord.Member):
         if ctx.author.id == self.bot.config["owner"]:
@@ -39,6 +38,17 @@ class Administration(commands.Cog):
             self.bot.config["moderators"].remove(user.id)
             return await ctx.send(f":white_check_mark: Removed moderator permissions for `{user.display_name}`!")
         await ctx.send(":no_entry_sign: You need to be a moderator to do that!")
+
+    @moderator.command(name="list")
+    async def mod_list(self, ctx):
+        msg = ""
+        for mod in self.bot.config["moderators"]:
+            mod = await ctx.author.guild.fetch_member(mod)
+            msg += mod.name + ", "
+
+        await ctx.send(msg)
+
+        await ctx.send(":no_entry_sign: You need to be the owner to do that!")
 
 
 def setup(bot):
