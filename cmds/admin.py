@@ -41,14 +41,14 @@ class Administration(commands.Cog):
 
     @moderator.command(name="list")
     async def mod_list(self, ctx):
-        msg = ""
+        msg = "Moderators: "
         for mod in self.bot.config["moderators"]:
             mod = await ctx.author.guild.fetch_member(mod)
-            msg += mod.name + ", "
+            msg += f"`{mod.name}`"
+
+        msg = msg[:-2] + "."
 
         await ctx.send(msg)
-
-        await ctx.send(":no_entry_sign: You need to be the owner to do that!")
 
 
 def setup(bot):
