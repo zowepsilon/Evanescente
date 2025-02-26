@@ -66,7 +66,7 @@ class Developper(commands.Cog):
         await ctx.send(f":white_check_mark: Successfully added `{extension}` !")
 
     @ext.command(name="rebuild")
-    async def reload(self, ctx):
+    async def rebuild(self, ctx):
         if not await self.bot.is_owner(ctx.author):
             return await ctx.send(":no_entry_sign: You need to be the owner to do that!")
         async with ctx.message.channel.typing():
