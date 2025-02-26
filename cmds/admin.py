@@ -11,8 +11,10 @@ class Administration(commands.Cog):
     async def say(self, ctx, *, message: str):
         if ctx.author.id not in self.bot.config["moderators"]:
             return await ctx.send(":no_entry_sign: You need to be a moderator to do that!")
-
+        
         message = message.replace("\\<", "<")
+        message = message.replace("@everyone", f"`I'M WATCHING YOU, {ctx.author.display_name}`")
+        message = message.replace("@here", f"`I'M WATCHING YOU, {ctx.author.display_name}`")
         await ctx.send(message)
         #await ctx.message.delete()
 
