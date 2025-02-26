@@ -70,7 +70,7 @@ class Developper(commands.Cog):
         if not await self.bot.is_owner(ctx.author):
             return await ctx.send(":no_entry_sign: You need to be the owner to do that!")
         async with ctx.message.channel.typing():
-            output = subprocess.check_output(["git", "pull"])
+            output = subprocess.check_output(["git", "pull"]).decode("utf-8")
             await ctx.send(f"```\n{output}```")
 
             for ext in list(self.bot.extensions.keys()):
