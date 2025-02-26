@@ -16,7 +16,7 @@ class Administration(commands.Cog):
         message = message.replace("@everyone", f"`I'M WATCHING YOU, {ctx.author.display_name}`")
         message = message.replace("@here", f"`I'M WATCHING YOU, {ctx.author.display_name}`")
         await ctx.send(message)
-        #await ctx.message.delete()
+        await ctx.message.delete()
 
     @commands.group(invoke_without_command=True)
     async def moderator(self, ctx):
