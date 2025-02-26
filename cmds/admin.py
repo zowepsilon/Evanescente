@@ -44,7 +44,7 @@ class Administration(commands.Cog):
         msg = "Moderators: "
         for mod in self.bot.config["moderators"]:
             mod = await ctx.author.guild.fetch_member(mod)
-            msg += f"`{mod.name}`"
+            msg += f"`{mod.name}`, "
 
         msg = msg[:-2] + "."
 
