@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 
 import json
+import os
 
 class Developper(commands.Cog):
     def __init__(self, bot):
@@ -63,6 +64,14 @@ class Developper(commands.Cog):
         except Exception as err:
             return await ctx.send(f":no_entry_sign: An error occured while trying to load `{extension}`.\n`{err.__class__.__name__}: {err}`")
         await ctx.send(f":white_check_mark: Successfully added `{extension}` !")
+
+    @ext.command(name="rebuild")
+    async def reload(self, ctx):
+        if not await self.bot.is_owner(ctx.author):
+            return await ctx.send(":no_entry_sign: You need to be the owner to do that!")
+        async with ctx.message.channel.typing():
+            os.system("git pull")
+        await ctx.send(":white_check_mark: Rebuilt bot!")
 
 def setup(bot): 
     bot.add_cog(Developper(bot))
