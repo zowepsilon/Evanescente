@@ -70,7 +70,16 @@ class Developper(commands.Cog):
         if not await self.bot.is_owner(ctx.author):
             return await ctx.send(":no_entry_sign: You need to be the owner to do that!")
         async with ctx.message.channel.typing():
-            os.system("git pull")
+            output = subprocess.check_output(["git", "pull"])
+            await ctx.send(f"```\n{output}```")
+
+            for ext in list(self.bot.extensions.keys()):
+                try:
+                    self.bot.reload_extension(ext)
+                except Exception as err:
+                    return await ctx.send(f":no_entry_sign: An error occured while trying to load `{ext}`.\n`{err.__class__.__name__}: {err}`")
+            return await ctx.send(f":white_check_mark: Successfully reloaded all extensions !")
+
         await ctx.send(":white_check_mark: Rebuilt bot!")
 
 def setup(bot): 
