@@ -1,0 +1,8 @@
+{
+    "secrets": {
+        "discord": "<your Discord bot token>"
+    },
+    "prefix": "?",
+    "owner": 0,
+    "moderators": []
+}

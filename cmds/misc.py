@@ -1,0 +1,42 @@
+import discord
+from discord.ext import commands
+
+class Miscellaneous(commands.Cog): # create a class for our cog that inherits from commands.Cog
+    # this class is used to create a cog, which is a module that can be added to the bot
+
+    def __init__(self, bot): # this is a special method that is called when the cog is loaded
+        self.bot = bot
+        self.repeat = True
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f"Bot ready, logged in as {self.bot.user}")
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        pass
+
+    @commands.command()
+    async def ping(self, ctx):
+        await ctx.send(f"Bonk in {round(self.bot.latency*1000)}ms!")
+
+    @commands.command()
+    async def about(self, ctx):
+        owner = await self.bot.fetch_user(self.bot.config["owner"])
+        await ctx.send(f"`{self.bot.user.name} v{self.bot.__version__}` - Made by Zoé")
+
+    @commands.command()
+    async def fuck(self, ctx, target = "you"):
+        if "you" in target:
+            return await ctx.send("no u")
+        else:
+            return await ctx.send(f":white_check_mark: Fucked {target}! :+1:")
+
+    @commands.command()
+    async def rickroll(self, ctx):
+        await ctx.send("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+
+
+
+def setup(bot): # this is called by Pycord to setup the cog
+    bot.add_cog(Miscellaneous(bot)) # add the cog to the bot
