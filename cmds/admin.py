@@ -14,7 +14,7 @@ class Administration(commands.Cog):
 
         message = message.replace("\\<", "<")
         await ctx.send(message)
-        await ctx.message.delete()
+        #await ctx.message.delete()
 
     @commands.group(invoke_without_command=True)
     async def moderator(self, ctx):
