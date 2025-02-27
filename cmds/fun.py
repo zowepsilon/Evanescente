@@ -35,7 +35,11 @@ class Fun(commands.Cog): # create a class for our cog that inherits from command
             except ValueError:
                 return await ctx.send(f"Dé invalide: {d}")
             
-            rolls.append(random.randint(1, m))
+            try:
+                for _ in range(n):
+                    rolls.append(random.randint(1, m))
+            except:
+                return await ctx.send(f"Dé invalide: {d}")
         
         if len(rolls) == 0:
             return await ctx.send(f"{ctx.author.mention} choisit le déterminisme...")
