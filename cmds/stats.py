@@ -30,7 +30,7 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
 
         if message.author.bot:
             for (_, c) in self.counters.items():
-                c.delete_user()
+                c.delete_user(message.author.id)
 
         for (_, c) in self.counters.items():
             c.on_message(message)
