@@ -2,6 +2,7 @@
     "secrets": {
         "discord": "<your Discord bot token>"
     },
+    "database": "data.db",
     "prefix": "?",
     "owner": 0,
     "moderators": [],

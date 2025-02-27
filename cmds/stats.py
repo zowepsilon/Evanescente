@@ -1,0 +1,52 @@
+import discord
+from discord.ext import commands
+import random
+
+from utils import debuggable
+
+class Fun(commands.Cog): # create a class for our cog that inherits from commands.Cog
+    # this class is used to create a cog, which is a module that can be added to the bot
+
+    def __init__(self, bot): # this is a special method that is called when the cog is loaded
+        self.bot = bot
+        self.repeat = True
+
+        self.db = sqlite3.connect(self.bot.config["database"])
+        self.db.autocommit = True
+        self.cursor = self.db.cursor()
+
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS MessageCounts (
+                UserId int PRIMARY KEY,
+                Count int
+            );
+        """)
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        self.cursor.execute("""
+            INSERT INTO MessageCounts
+            VALUES(?, 1)
+            ON CONFLICT(UserId)
+            DO UPDATE
+            SET Count = Count + 1;
+        """, [message.author.id])
+
+    @commands.command()
+    @debuggable
+    async def rank(self, ctx, *, dices: str = ""):
+        self.cursor.execute("""
+            WITH Sorted AS (
+                SELECT ROW_NUMBER() OVER (ORDER BY Count DESC) AS Rank, *
+                FROM MessageCounts
+            )
+            SELECT Rank, Count FROM Sorted
+            WHERE UserId = ?;
+        """, [ctx.author.id])
+        
+        (rank, message_count) = self.cursor.fetchone()
+
+        await ctx.send(f"Statistiques pour {ctx.author.mention}: {message_count} messages - Rang: #{rank}")
+
+def setup(bot): # this is called by Pycord to setup the cog
+    bot.add_cog(Fun(bot)) # add the cog to the bot
