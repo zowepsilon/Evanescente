@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
+
 import random
+import sqlite3
 
 from utils import debuggable
 
