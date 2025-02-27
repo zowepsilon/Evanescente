@@ -18,7 +18,7 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
         self.cursor = self.db.cursor()
 
         self.counters = {
-            "messages": StatCounter(cursor, "MessageCounts", lambda msg: True),
+            "messages": StatCounter(self.cursor, "MessageCounts", lambda msg: True),
         }
 
     @commands.Cog.listener()
