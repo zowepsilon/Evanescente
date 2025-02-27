@@ -83,6 +83,7 @@ class Developper(commands.Cog):
         await ctx.send(":white_check_mark: Rebuilt bot!")
 
     @commands.command()
+    @debuggable
     async def exception(self, ctx):
         raise ValueError("user failed")
 
