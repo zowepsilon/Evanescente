@@ -38,10 +38,10 @@ class StatCounter:
             """, [message.author.id])
 
     def get_rank(self, user_id: int) -> (int, int):
-        self.cursor.execute("""
+        self.cursor.execute(f"""
             WITH Sorted AS (
                 SELECT ROW_NUMBER() OVER (ORDER BY Count DESC) AS Rank, *
-                FROM MessageCounts
+                FROM {self.table_name}
             )
             SELECT Rank, Count FROM Sorted
             WHERE UserId = ?;
