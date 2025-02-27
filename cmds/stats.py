@@ -23,7 +23,7 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        for c in self.counters:
+        for (_, c) in self.counters.items():
             c.on_message(message)
 
     @commands.command()
