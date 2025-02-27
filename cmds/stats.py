@@ -61,7 +61,7 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
             return await ctx.send(f"Unknown category `{category}`.")
         
         leaderboard = self.counters[category].get_leaderboard()
-        users = asyncio.gather(ctx.author.guild.fetch_member(user_id) for (_, user_id, _) in leaderboard)
+        users = await asyncio.gather(ctx.author.guild.fetch_member(user_id) for (_, user_id, _) in leaderboard)
 
         out = f"## Leaderboard ({category}s)\n"
         for user, (rank, user_id, message_count) in zip(users, leaderboard):
