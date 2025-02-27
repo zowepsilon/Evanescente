@@ -6,7 +6,7 @@ import sqlite3
 
 from utils import debuggable
 
-class Fun(commands.Cog): # create a class for our cog that inherits from commands.Cog
+class Stats(commands.Cog): # create a class for our cog that inherits from commands.Cog
     # this class is used to create a cog, which is a module that can be added to the bot
 
     def __init__(self, bot): # this is a special method that is called when the cog is loaded
@@ -51,4 +51,4 @@ class Fun(commands.Cog): # create a class for our cog that inherits from command
         await ctx.send(f"Statistiques pour {ctx.author.mention}: {message_count} messages - Rang: #{rank}")
 
 def setup(bot): # this is called by Pycord to setup the cog
-    bot.add_cog(Fun(bot)) # add the cog to the bot
+    bot.add_cog(Stats(bot)) # add the cog to the bot
