@@ -43,15 +43,5 @@ class Fun(commands.Cog): # create a class for our cog that inherits from command
         else:
             await ctx.send(f"{ctx.author.mention} a tiré " + ', '.join(rolls[:-1]) + f"et {rolls[-1]}"
 
-
-    @commands.command()
-    async def fuck(self, ctx, *, target: str = "you"):
-        if "you" in target:
-            return await ctx.send("no u")
-        else:
-            return await ctx.send(f"Fucked {target}! :+1:")
-    
-
-
 def setup(bot): # this is called by Pycord to setup the cog
     bot.add_cog(Fun(bot)) # add the cog to the bot

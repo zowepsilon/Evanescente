@@ -26,11 +26,11 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
         await ctx.send(f"`{self.bot.user.name} v{self.bot.__version__}` - Made by Zoé")
 
     @commands.command()
-    async def fuck(self, ctx, target = "you"):
+    async def fuck(self, ctx, *, target: str = "you"):
         if "you" in target:
             return await ctx.send("no u")
         else:
-            return await ctx.send(f":white_check_mark: Fucked {target}! :+1:")
+            return await ctx.send(f"Fucked {target}! :+1:")
 
     @commands.command()
     async def rickroll(self, ctx):
