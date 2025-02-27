@@ -50,5 +50,25 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
 
         await ctx.send(f"Statistiques pour {ctx.author.mention}: {message_count} messages - Rang: #{rank}")
 
+    @commands.command()
+    @debuggable
+    async def leaderboard(self, ctx, *, dices: str = ""):
+        self.cursor.execute("""
+            WITH Sorted AS (
+                SELECT ROW_NUMBER() OVER (ORDER BY Count DESC) AS Rank, *
+                FROM MessageCounts
+            )
+            SELECT Rank, UserId, Count FROM Sorted
+            LIMIT 20;
+        """)
+        
+        out = "## Leaderboard\n"
+        for (rank, user_id, message_count) in self.cursor.fetchall():
+            user = await ctx.author.guild.fetch_member(user_id)
+            out += f"{rank}. {user.name} - {message_count} messages\n"
+
+        await ctx.send(out)
+
+
 def setup(bot): # this is called by Pycord to setup the cog
     bot.add_cog(Stats(bot)) # add the cog to the bot
