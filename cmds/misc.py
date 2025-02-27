@@ -34,9 +34,9 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
         if "you" in target:
             return await ctx.send("no u")
         else:
-            target = target.remplace("@here", "@​here")
-            target = target.remplace("@everyone", "@​everyone")
-            target = target.remplace("<@&", "<​@​&​")
+            target = target.replace("@here", "@​here")
+            target = target.replace("@everyone", "@​everyone")
+            target = target.replace("<@&", "<​@​&​")
             return await ctx.send(f"Fucked {target}! :+1:")
 
     @commands.command()
