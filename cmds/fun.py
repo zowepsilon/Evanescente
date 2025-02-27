@@ -13,7 +13,7 @@ class Fun(commands.Cog): # create a class for our cog that inherits from command
         pass
 
     @commands.command()
-    async def roll(self, ctx, *, dices: str):
+    async def roll(self, ctx, *, dices: str = ""):
         rolls = []
         for d in dices.split():
             if d[0] == 'd':
