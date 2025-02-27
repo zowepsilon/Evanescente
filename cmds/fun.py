@@ -47,7 +47,7 @@ class Fun(commands.Cog): # create a class for our cog that inherits from command
             await ctx.send(f"{ctx.author.mention} a tiré un {rolls[0]}.")
         else:
             rolls = [str(r) for r in rolls]
-            await ctx.send(f"{ctx.author.mention} a tiré " + ', '.join(rolls[:-1]) + f"et {rolls[-1]}")
+            await ctx.send(f"{ctx.author.mention} a tiré " + ', '.join(rolls[:-1]) + f" et {rolls[-1]}.")
 
 def setup(bot): # this is called by Pycord to setup the cog
     bot.add_cog(Fun(bot)) # add the cog to the bot
