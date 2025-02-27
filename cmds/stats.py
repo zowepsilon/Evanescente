@@ -65,7 +65,7 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
         out = "## Leaderboard\n"
         for (rank, user_id, message_count) in self.cursor.fetchall():
             user = await ctx.author.guild.fetch_member(user_id)
-            out += f"{rank}. {user.name} - {message_count} messages\n"
+            out += f"{rank}. {user.display_name} - {message_count} messages\n"
 
         await ctx.send(out)
 
