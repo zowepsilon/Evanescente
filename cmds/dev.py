@@ -14,7 +14,6 @@ class Developper(commands.Cog):
     async def config(self, ctx):
         await ctx.send(":no_entry_sign: You must provide a subcommand (`save` or `reload`)")
 
-
     @config.command(name="reload")
     @debuggable
     async def config_reload(self, ctx):
@@ -93,6 +92,15 @@ class Developper(commands.Cog):
     @debuggable
     async def exception(self, ctx):
         raise ValueError("user failed")
+
+    @commands.command()
+    @debuggable
+    async def debug(self, ctx):
+        if not await self.bot.is_owner(ctx.author):
+            return await ctx.send(":no_entry_sign: You need to be the owner to do that!")
+
+        self.bot.config["debug"] = not self.bot.config["debug"]
+        await ctx.send(f"Le mode debug a été " + ("activé !" if self.bot.config["debug"] else "désactivé !"))
 
 def setup(bot): 
     bot.add_cog(Developper(bot))
