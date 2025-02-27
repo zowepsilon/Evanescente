@@ -55,7 +55,7 @@ class StatCounter:
         self.cursor.execute(f"""
             WITH Sorted AS (
                 SELECT ROW_NUMBER() OVER (ORDER BY Count DESC) AS Rank, *
-                FROM {self.tablMessageCountse_name}
+                FROM {self.table_name}
             )
             SELECT Rank, UserId, Count FROM Sorted
             LIMIT ?;

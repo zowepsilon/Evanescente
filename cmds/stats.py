@@ -34,7 +34,7 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
         if category not in self.counters.keys():
             return await ctx.send(f"Unknown category `{category}`.")
 
-        (rank, message_count) = self.counters.get_rank(user.id)
+        (rank, message_count) = self.counters[category].get_rank(user.id)
 
         await ctx.send(f"Statistiques pour {ctx.author.mention}: {message_count} messages - Rang: #{rank}")
 
