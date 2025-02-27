@@ -33,7 +33,7 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
 
     @commands.command()
     @debuggable
-    async def rank(self, ctx, *, category: str = None, user: discord.Member = None):
+    async def rank(self, ctx, *, category: str = "message", user: discord.Member = None):
         user = user if user is not None else ctx.author
 
         if category[-1] == 's':
