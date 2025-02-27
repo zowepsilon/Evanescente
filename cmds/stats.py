@@ -18,7 +18,7 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
         self.cursor = self.db.cursor()
 
         self.counters = {
-            "messages": StatCounter(self.cursor, "MessageCounts", lambda msg: True),
+            "message": StatCounter(self.cursor, "MessageCounts", lambda msg: True),
         }
 
     @commands.Cog.listener()
@@ -28,26 +28,32 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
 
     @commands.command()
     @debuggable
-    async def rank(self, ctx, *, category: str = "messages", user: discord.Member = None):
+    async def rank(self, ctx, *, category: str = "message", user: discord.Member = None):
         user = user if user is not None else ctx.author
+
+        if category[-1] == 's':
+            category = category[:-1]
 
         if category not in self.counters.keys():
             return await ctx.send(f"Unknown category `{category}`.")
 
         (rank, message_count) = self.counters[category].get_rank(user.id)
 
-        await ctx.send(f"Statistiques pour {ctx.author.mention}: {message_count} messages - Rang: #{rank}")
+        await ctx.send(f"Statistiques pour {ctx.author.mention}: {message_count} {category}s - Rang: #{rank}")
 
     @commands.command()
     @debuggable
-    async def leaderboard(self, ctx, *, category: str = "messages"):
+    async def leaderboard(self, ctx, *, category: str = "message"):
+        if category[-1] == 's':
+            category = category[:-1]
+
         if category not in self.counters.keys():
             return await ctx.send(f"Unknown category `{category}`.")
 
         out = f"## Leaderboard ({category})\n"
         for (rank, user_id, message_count) in self.counters[category].get_leaderboard():
             user = await ctx.author.guild.fetch_member(user_id)
-            out += f"{rank}. {user.display_name} - {message_count} messages\n"
+            out += f"{rank}. {user.display_name} - {message_count} {category}s\n"
 
         await ctx.send(out)
 
