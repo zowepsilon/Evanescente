@@ -33,6 +33,8 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
             for (_, c) in self.counters.items():
                 c.delete_user(message.author.id)
 
+            return
+
         for (_, c) in self.counters.items():
             c.on_message(message)
 
