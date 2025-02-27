@@ -75,7 +75,7 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
         out = "Les catégories sont "
         cat = list(self.counters.keys())
 
-        for c in cat:
+        for c in cat[:-1]:
             out += c + ", "
 
         out += f"et {cat[-1]}."
