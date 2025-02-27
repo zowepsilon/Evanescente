@@ -31,6 +31,12 @@ class StatCounter:
         if self.predicate(message.content):
             self.incr()
 
+    def delete_user(self, user_id: int):
+        self.cursor.execute(f"""
+            DELETE FROM {self.table_name}
+            WHERE UserId = ?;
+        """, [user_id])
+
     def incr(self):
         self.cursor.execute(f"""
             INSERT INTO {self.table_name}

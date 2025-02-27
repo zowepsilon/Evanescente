@@ -25,8 +25,12 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.author.bot or message.content[0] == '?':
+        if message.content[0] == '?':
             return
+
+        if message.author.bot:
+            for (_, c) in self.counters.items():
+                c.delete_user()
 
         for (_, c) in self.counters.items():
             c.on_message(message)
