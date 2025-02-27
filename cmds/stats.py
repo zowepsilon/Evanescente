@@ -26,8 +26,6 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.author.bot: return
-
         self.cursor.execute("""
             INSERT INTO MessageCounts
             VALUES(?, 1)
