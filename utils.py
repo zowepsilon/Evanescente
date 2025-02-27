@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import functools
 import traceback
 
@@ -11,3 +13,52 @@ def debuggable(f):
                 await ctx.send(f"Exception lors de l'exécution: ```\n{traceback.format_exc()}```")
 
     return new
+
+class StatCounter:
+    def __init__(self, cursor, table_name, predicate):
+        self.cursor = cursor
+        self.table_name = table_name
+        self.predicate = predicate
+
+        self.cursor.execute(f"""
+            CREATE TABLE IF NOT EXISTS {self.table_name} (
+                UserId int PRIMARY KEY,
+                Count int
+            );
+        """)
+
+    def on_message(self, message):
+        if self.predicate(message.content):
+            self.cursor.execute(f"""
+                INSERT INTO {self.table_name}
+                VALUES(?, 1)
+                ON CONFLICT(UserId)
+                DO UPDATE
+                SET Count = Count + 1;
+            """, [message.author.id])
+
+    def get_rank(self, user_id: int) -> (int, int):
+        self.cursor.execute("""
+            WITH Sorted AS (
+                SELECT ROW_NUMBER() OVER (ORDER BY Count DESC) AS Rank, *
+                FROM MessageCounts
+            )
+            SELECT Rank, Count FROM Sorted
+            WHERE UserId = ?;
+        """, [ctx.author.id])
+        
+        (rank, message_count) = self.cursor.fetchone()
+
+        return (rank, message_count)
+
+    def get_leaderboard(self, limit: int = 20) -> list[(int, int, int)]:
+        self.cursor.execute(f"""
+            WITH Sorted AS (
+                SELECT ROW_NUMBER() OVER (ORDER BY Count DESC) AS Rank, *
+                FROM {self.tablMessageCountse_name}
+            )
+            SELECT Rank, UserId, Count FROM Sorted
+            LIMIT ?;
+        """, [limit])
+
+        return self.cursor.fetchall()
