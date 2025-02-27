@@ -3,7 +3,7 @@ import traceback
 
 def debuggable(f):
     @functools.wraps(f)
-    def new(self, ctx, *args, **kwargs):
+    async def new(self, ctx, *args, **kwargs):
         try:
             f(self, ctx, *args, **kwargs)
         except Exception as exc:
