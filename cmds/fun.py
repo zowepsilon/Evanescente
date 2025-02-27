@@ -14,6 +14,7 @@ class Fun(commands.Cog): # create a class for our cog that inherits from command
         pass
 
     @commands.command()
+    @debuggable
     async def roll(self, ctx, *, dices: str = ""):
         rolls = []
         for raw_d in dices.split():

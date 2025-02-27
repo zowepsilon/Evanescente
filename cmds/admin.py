@@ -26,6 +26,7 @@ class Administration(commands.Cog):
         await ctx.send(":no_entry_sign: You must provide a subcommand! (`add`, `list`, `remove`)")
 
     @moderator.command(name="add")
+    @debuggable
     async def mod_add(self, ctx, user: discord.Member):
         if ctx.author.id == self.bot.config["owner"]:
             if user.id in self.bot.config["moderators"]:

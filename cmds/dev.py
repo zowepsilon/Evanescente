@@ -10,11 +10,13 @@ class Developper(commands.Cog):
         self.bot = bot
 
     @commands.group(invoke_without_command=True)
+    @debuggable
     async def config(self, ctx):
         await ctx.send(":no_entry_sign: You must provide a subcommand (`save` or `reload`)")
 
 
     @config.command(name="reload")
+    @debuggable
     async def config_reload(self, ctx):
         if not await self.bot.is_owner(ctx.author):
             return await ctx.send(":no_entry_sign: You need to be the owner to do that!")
@@ -24,6 +26,7 @@ class Developper(commands.Cog):
         await ctx.send(":white_check_mark: Reloaded configuration!")
 
     @config.command(name="save")
+    @debuggable
     async def config_save(self, ctx):
         if not await self.bot.is_owner(ctx.author):
             return await ctx.send(":no_entry_sign: You need to be a moderator to do that!")
@@ -33,11 +36,12 @@ class Developper(commands.Cog):
         await ctx.send(":white_check_mark: Saved configuration!")
 
     @commands.group(invoke_without_command=True)
+    @debuggable
     async def ext(self, ctx):
         await ctx.send(":no_entry_sign: You must provide a subcommand (`reload` or `add`)")
 
-
     @ext.command(name="reload")
+    @debuggable
     async def ext_reload(self, ctx, extension: str = None):
         print(await self.bot.is_owner(ctx.author))
         if not await self.bot.is_owner(ctx.author):
@@ -56,6 +60,7 @@ class Developper(commands.Cog):
         await ctx.send(f"Successfully reloaded `{extension}` !")
 
     @ext.command(name="add")
+    @debuggable
     async def ext_add(self, ctx, extension: str):
         if not await self.bot.is_owner(ctx.author):
             return await ctx.send(":no_entry_sign: You need to be the owner to do that!")
@@ -67,6 +72,7 @@ class Developper(commands.Cog):
         await ctx.send(f":white_check_mark: Successfully added `{extension}` !")
 
     @commands.command()
+    @debuggable
     async def rebuild(self, ctx):
         if not await self.bot.is_owner(ctx.author):
             return await ctx.send(":no_entry_sign: You need to be the owner to do that!")

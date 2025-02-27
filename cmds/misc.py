@@ -17,15 +17,18 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
         pass
 
     @commands.command()
+    @debuggable
     async def ping(self, ctx):
         await ctx.send(f"Bonk in {round(self.bot.latency*1000)}ms!")
 
     @commands.command()
+    @debuggable
     async def about(self, ctx):
         owner = await self.bot.fetch_user(self.bot.config["owner"])
         await ctx.send(f"`{self.bot.user.name} v{self.bot.__version__}` - Made by Zoé")
 
     @commands.command()
+    @debuggable
     async def fuck(self, ctx, *, target: str = "you"):
         if "you" in target:
             return await ctx.send("no u")
@@ -33,6 +36,7 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
             return await ctx.send(f"Fucked {target}! :+1:")
 
     @commands.command()
+    @debuggable
     async def rickroll(self, ctx):
         await ctx.send("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
 
