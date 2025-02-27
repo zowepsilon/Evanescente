@@ -38,11 +38,15 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
     async def on_reaction_add(self, reaction, user):
         if isinstance(reaction.emoji, str):
             self.reac_counter.incr(reaction.emoji)
+        elif isinstance(reaction.emoji, discord.Emoji):
+            self.reac_counter.incr(str(reaction.emoji))
 
     @commands.Cog.listener()
     async def on_reaction_remove(self, reaction, user):
         if isinstance(reaction.emoji, str):
             self.reac_counter.decr(reaction.emoji)
+        elif isinstance(reaction.emoji, discord.Emoji):
+            self.reac_counter.decr(str(reaction.emoji))
 
     @commands.command()
     @debuggable
