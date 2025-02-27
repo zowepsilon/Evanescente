@@ -20,6 +20,7 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
         self.counters = {
             "message": StatCounter(self.cursor, "MessageCounts", lambda msg: True),
             "feur": StatCounter(self.cursor, "FeurCounts", lambda msg: "feur" in msg),
+            "bouboubou": StatCounter(self.cursor, "BouboubouCounts", lambda msg: "bouboubou" in msg),
         }
 
     @commands.Cog.listener()
