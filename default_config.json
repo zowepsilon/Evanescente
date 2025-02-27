@@ -4,5 +4,6 @@
     },
     "prefix": "?",
     "owner": 0,
-    "moderators": []
+    "moderators": [],
+    "debug": false,
 }

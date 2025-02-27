@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from utils import debuggable
 
 
 class Administration(commands.Cog):
@@ -8,6 +9,7 @@ class Administration(commands.Cog):
         self.bot = bot
 
     @commands.command()
+    @debuggable
     async def say(self, ctx, *, message: str):
         if ctx.author.id not in self.bot.config["moderators"]:
             return await ctx.send(":no_entry_sign: You need to be a moderator to do that!")
@@ -19,6 +21,7 @@ class Administration(commands.Cog):
         await ctx.message.delete()
 
     @commands.group(invoke_without_command=True)
+    @debuggable
     async def moderator(self, ctx):
         await ctx.send(":no_entry_sign: You must provide a subcommand! (`add`, `list`, `remove`)")
 
@@ -33,6 +36,7 @@ class Administration(commands.Cog):
         await ctx.send(":no_entry_sign: You need to be the owner to do that!")
 
     @moderator.command(name="remove")
+    @debuggable
     async def remove_moderator(self, ctx, user: discord.Member):
         if ctx.author.id == self.bot.config["owner"]:
             if user.id not in self.bot.config["moderators"]:
@@ -42,6 +46,7 @@ class Administration(commands.Cog):
         await ctx.send(":no_entry_sign: You need to be a moderator to do that!")
 
     @moderator.command(name="list")
+    @debuggable
     async def mod_list(self, ctx):
         msg = "Moderators: "
         for mod in self.bot.config["moderators"]:
