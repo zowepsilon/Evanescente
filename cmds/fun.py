@@ -16,30 +16,32 @@ class Fun(commands.Cog): # create a class for our cog that inherits from command
     @commands.command()
     async def roll(self, ctx, *, dices: str = ""):
         rolls = []
-        for d in dices.split():
+        for raw_d in dices.split():
+            d = raw_d
+
             if d[0] == 'd':
                 n = 1
             elif d[0] in '0123456789':
                 n = int(d[0])
                 d = d[1:]
             else:
-                return await ctx.send(f"Dé invalide: {d}")
+                return await ctx.send(f"Dé invalide: {raw_d}")
 
             if d[0] != 'd':
-                return await ctx.send(f"Dé invalide: {d}")
+                return await ctx.send(f"Dé invalide: {raw_d}")
 
             d = d[1:]
 
             try:
                 m = int(d)
             except ValueError:
-                return await ctx.send(f"Dé invalide: {d}")
+                return await ctx.send(f"Dé invalide: {raw_d}")
             
             try:
                 for _ in range(n):
                     rolls.append(random.randint(1, m))
             except:
-                return await ctx.send(f"Dé invalide: {d}")
+                return await ctx.send(f"Dé invalide: {raw_d}")
         
         if len(rolls) == 0:
             return await ctx.send(f"{ctx.author.mention} choisit le déterminisme...")
