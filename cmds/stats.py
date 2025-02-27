@@ -5,7 +5,7 @@ import asyncio
 import random
 import sqlite3
 
-from utils import debuggable, StatCounter
+from utils import debuggable, StatCounter, ReacCounter
 
 class Stats(commands.Cog): # create a class for our cog that inherits from commands.Cog
     # this class is used to create a cog, which is a module that can be added to the bot
