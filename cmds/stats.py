@@ -50,7 +50,7 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
         if category not in self.counters.keys():
             return await ctx.send(f"Unknown category `{category}`.")
 
-        out = f"## Leaderboard ({category})\n"
+        out = f"## Leaderboard ({category}s)\n"
         for (rank, user_id, message_count) in self.counters[category].get_leaderboard():
             user = await ctx.author.guild.fetch_member(user_id)
             out += f"{rank}. {user.display_name} - {message_count} {category}s\n"
