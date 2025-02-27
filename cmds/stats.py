@@ -83,7 +83,7 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
     async def reactions(self, ctx):
         out = f"## Leaderboard des réactions\n"
         for (rank, emoji, count) in self.reac_counter.get_leaderboard():
-            out += f"{rank}. {chr(int(emoji))} - {count} réactions\n"
+            out += f"{rank}. {emoji} - {count} réactions\n"
 
         await ctx.send(out)
 
