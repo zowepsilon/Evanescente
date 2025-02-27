@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 
+import asyncio
 import random
 import sqlite3
 
@@ -58,10 +59,12 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
 
         if category not in self.counters.keys():
             return await ctx.send(f"Unknown category `{category}`.")
+        
+        leaderboard = self.counters[category].get_leaderboard()
+        users = asyncio.gather(ctx.author.guild.fetch_member(user_id) for (_, user_id, _) in leaderboard)
 
         out = f"## Leaderboard ({category}s)\n"
-        for (rank, user_id, message_count) in self.counters[category].get_leaderboard():
-            user = await ctx.author.guild.fetch_member(user_id)
+        for user, (rank, user_id, message_count) in zip(users, leaderboard):
             out += f"{rank}. {user.display_name} - {message_count} {category}s\n"
 
         await ctx.send(out)
