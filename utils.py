@@ -10,3 +10,4 @@ def debuggable(f):
             if self.bot.config["debug"] and ctx.author.id == self.bot.config["owner"]:
                 await ctx.send(f"Exception lors de l'exécution: ```\n{traceback.format_exc()}```")
 
+    return new
