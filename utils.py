@@ -29,7 +29,7 @@ class StatCounter:
 
     def on_message(self, message):
         if self.predicate(message.content):
-            self.incr()
+            self.incr(message.author.id)
 
     def delete_user(self, user_id: int):
         self.cursor.execute(f"""
@@ -37,23 +37,23 @@ class StatCounter:
             WHERE UserId = ?;
         """, [user_id])
 
-    def incr(self):
+    def incr(self, user_id: int):
         self.cursor.execute(f"""
             INSERT INTO {self.table_name}
             VALUES(?, 1)
             ON CONFLICT(UserId)
             DO UPDATE
             SET Count = Count + 1;
-        """, [message.author.id])
+        """, [user_id])
 
-    def decr(self):
+    def decr(self, user_id: int):
         self.cursor.execute(f"""
             INSERT INTO {self.table_name}
             VALUES(?, 0)
             ON CONFLICT(UserId)
             DO UPDATE
             SET Count = Count - 1;
-        """, [message.author.id])
+        """, [user_id])
 
     def get_rank(self, user_id: int) -> (int, int):
         self.cursor.execute(f"""
