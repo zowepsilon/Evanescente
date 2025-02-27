@@ -45,7 +45,7 @@ class StatCounter:
             )
             SELECT Rank, Count FROM Sorted
             WHERE UserId = ?;
-        """, [ctx.author.id])
+        """, [user_id])
         
         (rank, message_count) = self.cursor.fetchone()
 
