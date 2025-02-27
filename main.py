@@ -59,7 +59,7 @@ bot = Bot(modules=(
     "cmds.admin",
     "cmds.help",
     "cmds.dev",
-    "cmd.fun",
+    "cmds.fun",
 ))
 
 bot.run()
