@@ -40,7 +40,7 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
             self.reac_counter.incr(reaction.emoji)
 
     @commands.Cog.listener()
-    async def on_reaction_add(self, reaction, user):
+    async def on_reaction_remove(self, reaction, user):
         if isinstance(reaction.emoji, str):
             self.reac_counter.decr(reaction.emoji)
 
