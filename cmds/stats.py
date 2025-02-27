@@ -24,19 +24,25 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
             "bouboubou": StatCounter(self.cursor, "BouboubouCounts", lambda msg: "bouboubou" in msg),
         }
 
+        self.reac_counter = ReacCounter(self.cursor, "ReactionCounts")
+
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.content[0] == '?':
-            return
-
-        if message.author.bot:
-            for (_, c) in self.counters.items():
-                c.delete_user(message.author.id)
-
+        if message.author.bot or message.content[0] == '?':
             return
 
         for (_, c) in self.counters.items():
             c.on_message(message)
+
+    @commands.Cog.listener()
+    async def on_reaction_add(self, reaction, user):
+        if isinstance(reaction.emoji, str):
+            self.reac_counter.incr(reaction.emoji)
+
+    @commands.Cog.listener()
+    async def on_reaction_add(self, reaction, user):
+        if isinstance(reaction.emoji, str):
+            self.reac_counter.decr(reaction.emoji)
 
     @commands.command()
     @debuggable
@@ -68,6 +74,15 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
         out = f"## Leaderboard ({category}s)\n"
         for user, (rank, user_id, message_count) in zip(users, leaderboard):
             out += f"{rank}. {user.display_name} - {message_count} {category}s\n"
+
+        await ctx.send(out)
+
+    @commands.command()
+    @debuggable
+    async def reactions(self, ctx):
+        out = f"## Leaderboard des réactions\n"
+        for user, (rank, emoji, count) in self.reac_counter.get_leaderboard():
+            out += f"{rank}. :{emoji}: - {count} réactions\n"
 
         await ctx.send(out)
 
