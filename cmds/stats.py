@@ -22,6 +22,8 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
             "message": StatCounter(self.cursor, "MessageCounts", lambda msg: True),
             "feur": StatCounter(self.cursor, "FeurCounts", lambda msg: "feur" in msg.lower()),
             "bouboubou": StatCounter(self.cursor, "BouboubouCounts", lambda msg: "bouboubou" in msg.lower()),
+            "quoicoubeh": StatCounter(self.cursor, "QuoicoubehCounts", lambda msg: "quoicoubeh" in msg.lower()),
+    
         }
 
         self.reac_counter = ReacCounter(self.cursor, "ReactionCounts")
