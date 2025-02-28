@@ -23,7 +23,7 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
             "feur": StatCounter(self.cursor, "FeurCounts", lambda msg: "feur" in msg.lower()),
             "bouboubou": StatCounter(self.cursor, "BouboubouCounts", lambda msg: "bouboubou" in msg.lower()),
             "quoicoubeh": StatCounter(self.cursor, "QuoicoubehCounts", lambda msg: "quoicoubeh" in msg.lower()),
-    
+            "cute": StatCounter(self.cursor, "CuteCounts", lambda msg: any(w in msg.lower() for w in ("uwu", ":3", "rawr", "owo", "catgirl")),
         }
 
         self.reac_counter = ReacCounter(self.cursor, "ReactionCounts")
