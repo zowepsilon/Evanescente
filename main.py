@@ -54,6 +54,7 @@ class Bot(commands.Bot):
         print("Stopped bot!")
     
     def is_dev(self, user_id: int):
+        print(self.config["developers"])
         return user_id in self.config["developers"] 
 
 bot = Bot(modules=(
