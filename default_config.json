@@ -4,7 +4,7 @@
     },
     "database": "data.db",
     "prefix": "?",
-    "owner": 0,
+    "developers": [],
     "moderators": [],
     "debug": false
 }

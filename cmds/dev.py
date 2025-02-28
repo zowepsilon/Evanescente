@@ -17,8 +17,8 @@ class Developper(commands.Cog):
     @config.command(name="reload")
     @debuggable
     async def config_reload(self, ctx):
-        if not await self.bot.is_owner(ctx.author):
-            return await ctx.send(":no_entry_sign: You need to be the owner to do that!")
+        if not self.bot.is_dev(ctx.author):
+            return await ctx.send(":no_entry_sign: You need to be a developer to do that!")
         async with ctx.message.channel.typing():
             with open(self.bot.CONFIG_PATH, mode='r') as f:
                 self.bot.config = json.load(f)
@@ -27,8 +27,8 @@ class Developper(commands.Cog):
     @config.command(name="save")
     @debuggable
     async def config_save(self, ctx):
-        if not await self.bot.is_owner(ctx.author):
-            return await ctx.send(":no_entry_sign: You need to be a moderator to do that!")
+        if not self.bot.is_dev(ctx.author):
+            return await ctx.send(":no_entry_sign: You need to be a developer to do that!")
         async with ctx.message.channel.typing():
             with open(self.bot.CONFIG_PATH, mode='w') as f:
                 json.dump(self.bot.config, f, indent=4)
@@ -37,21 +37,21 @@ class Developper(commands.Cog):
     @commands.group(invoke_without_command=True)
     @debuggable
     async def ext(self, ctx):
-        await ctx.send(":no_entry_sign: You must provide a subcommand (`reload` or `add`)")
+        await ctx.send("You must provide a subcommand (`reload` or `add`)")
 
     @ext.command(name="reload")
     @debuggable
     async def ext_reload(self, ctx, extension: str = None):
         print(await self.bot.is_owner(ctx.author))
-        if not await self.bot.is_owner(ctx.author):
-            return await ctx.send(":no_entry_sign: You need to be the owner to do that!")
+        if not self.bot.is_dev(ctx.author):
+            return await ctx.send("You need to be a developer to do that!")
         if extension is None:
             for ext in list(self.bot.extensions.keys()):
                 try:
                     self.bot.reload_extension(ext)
                 except Exception as err:
-                    return await ctx.send(f":no_entry_sign: An error occured while trying to load `{ext}`.\n`{err.__class__.__name__}: {err}`")
-            return await ctx.send(f":white_check_mark: Successfully reloaded all extensions !")
+                    return await ctx.send(f"An error occured while trying to load `{ext}`.\n`{err.__class__.__name__}: {err}`")
+            return await ctx.send(f"Successfully reloaded all extensions !")
         try:
             self.bot.reload_extension(extension)
         except Exception as err:
@@ -61,8 +61,8 @@ class Developper(commands.Cog):
     @ext.command(name="add")
     @debuggable
     async def ext_add(self, ctx, extension: str):
-        if not await self.bot.is_owner(ctx.author):
-            return await ctx.send(":no_entry_sign: You need to be the owner to do that!")
+        if not self.bot.is_dev(ctx.author):
+            return await ctx.send("You need to be a developer to do that!")
         try:
             self.bot.load_extension(extension)
             self.bot.loaded_extensions.append(extension)
@@ -73,8 +73,8 @@ class Developper(commands.Cog):
     @commands.command()
     @debuggable
     async def rebuild(self, ctx):
-        if not await self.bot.is_owner(ctx.author):
-            return await ctx.send(":no_entry_sign: You need to be the owner to do that!")
+        if not self.bot.is_dev(ctx.author):
+            return await ctx.send("You need to be a developer to do that!")
         async with ctx.message.channel.typing():
             output = subprocess.check_output(["git", "pull"]).decode("utf-8")
             await ctx.send(f"```\n{output}```")
@@ -96,8 +96,8 @@ class Developper(commands.Cog):
     @commands.command()
     @debuggable
     async def debug(self, ctx):
-        if not await self.bot.is_owner(ctx.author):
-            return await ctx.send(":no_entry_sign: You need to be the owner to do that!")
+        if not self.bot.is_dev(ctx.author):
+            return await ctx.send("You need to be a developer to do that!")
 
         self.bot.config["debug"] = not self.bot.config["debug"]
         await ctx.send(f"Le mode debug a été " + ("activé !" if self.bot.config["debug"] else "désactivé !"))

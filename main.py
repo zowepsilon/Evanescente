@@ -52,7 +52,9 @@ class Bot(commands.Bot):
             json.dump(self.config, f, indent=4)
         
         print("Stopped bot!")
-
+    
+    def is_dev(self, user_id: int):
+        return user_id in self.config["developers"] 
 
 bot = Bot(modules=(
     "cmds.misc",
