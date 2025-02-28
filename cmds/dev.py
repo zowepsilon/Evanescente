@@ -17,7 +17,7 @@ class Developper(commands.Cog):
     @config.command(name="reload")
     @debuggable
     async def config_reload(self, ctx):
-        if not self.bot.is_dev(ctx.author):
+        if not self.bot.is_dev(ctx.author.id):
             return await ctx.send(":no_entry_sign: You need to be a developer to do that!")
         async with ctx.message.channel.typing():
             with open(self.bot.CONFIG_PATH, mode='r') as f:
@@ -27,7 +27,7 @@ class Developper(commands.Cog):
     @config.command(name="save")
     @debuggable
     async def config_save(self, ctx):
-        if not self.bot.is_dev(ctx.author):
+        if not self.bot.is_dev(ctx.author.id):
             return await ctx.send(":no_entry_sign: You need to be a developer to do that!")
         async with ctx.message.channel.typing():
             with open(self.bot.CONFIG_PATH, mode='w') as f:
@@ -42,8 +42,7 @@ class Developper(commands.Cog):
     @ext.command(name="reload")
     @debuggable
     async def ext_reload(self, ctx, extension: str = None):
-        print(await self.bot.is_owner(ctx.author))
-        if not self.bot.is_dev(ctx.author):
+        if not self.bot.is_dev(ctx.author.id):
             return await ctx.send("You need to be a developer to do that!")
         if extension is None:
             for ext in list(self.bot.extensions.keys()):
@@ -61,7 +60,7 @@ class Developper(commands.Cog):
     @ext.command(name="add")
     @debuggable
     async def ext_add(self, ctx, extension: str):
-        if not self.bot.is_dev(ctx.author):
+        if not self.bot.is_dev(ctx.author.id):
             return await ctx.send("You need to be a developer to do that!")
         try:
             self.bot.load_extension(extension)
@@ -73,7 +72,7 @@ class Developper(commands.Cog):
     @commands.command()
     @debuggable
     async def rebuild(self, ctx):
-        if not self.bot.is_dev(ctx.author):
+        if not self.bot.is_dev(ctx.author.id):
             return await ctx.send("You need to be a developer to do that!")
         async with ctx.message.channel.typing():
             output = subprocess.check_output(["git", "pull"]).decode("utf-8")
@@ -96,7 +95,7 @@ class Developper(commands.Cog):
     @commands.command()
     @debuggable
     async def debug(self, ctx):
-        if not self.bot.is_dev(ctx.author):
+        if not self.bot.is_dev(ctx.author.id):
             return await ctx.send("You need to be a developer to do that!")
 
         self.bot.config["debug"] = not self.bot.config["debug"]

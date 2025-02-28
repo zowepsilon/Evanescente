@@ -9,8 +9,10 @@ def debuggable(f):
         try:
             await f(self, ctx, *args, **kwargs)
         except Exception as exc:
-            if self.bot.config["debug"] and ctx.author.id == self.bot.config["owner"]:
+            if self.bot.config["debug"] and self.bot.is_dev(ctx.author.id):
                 await ctx.send(f"Exception lors de l'exécution: ```\n{traceback.format_exc()}```")
+            else:
+                raise exc
 
     return new
 
