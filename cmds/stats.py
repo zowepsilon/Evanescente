@@ -20,7 +20,7 @@ class Stats(commands.Cog):
             "cute": StatCounter(self.bot.cursor, "CuteCounts", lambda msg: any(w in msg.lower() for w in ("uwu", ":3", "rawr", "owo", "catgirl"))),
         }
 
-        self.reac_counter = ReacCounter(self.cursor, "ReactionCounts")
+        self.reac_counter = ReacCounter(self.bot.cursor, "ReactionCounts")
 
     @commands.Cog.listener()
     async def on_message(self, message):
