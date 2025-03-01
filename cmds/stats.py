@@ -78,11 +78,11 @@ class Stats(commands.Cog):
         if range is not None:
             subrange_spl = subrange.split("-")
             if len(subrange_spl) != 2:
-                return await.ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
+                return await ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
             try:
                 start, end = int(start), int(end)
             except ValueError:
-                return await.ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
+                return await ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
         
             leaderboard = self.counters[category].get_leaderboard(start, end)
         else:
