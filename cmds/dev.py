@@ -99,7 +99,7 @@ class Developper(commands.Cog):
             for m in ctx.authour.guild.members:
                 self.bot.nickname_cache.set_nick(m.id, m.display_nick)
 
-            await.ctx.send(f"Les noms de {len(ctx.authour.guild.members)} membres ont été rechargés !")
+            await ctx.send(f"Les noms de {len(ctx.authour.guild.members)} membres ont été rechargés !")
 
     @commands.command()
     @debuggable
