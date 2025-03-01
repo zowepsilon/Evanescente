@@ -124,7 +124,7 @@ class Stats(commands.Cog):
             leaderboard = self.reac_counter.get_leaderboard(None, 10)
 
         out = f"## Leaderboard des réactions\n"
-        for (rank, emoji, count) in self.reac_counter.get_leaderboard():
+        for (rank, emoji, count) in leaderboard:
             out += f"{rank}. {emoji} - {count} réactions\n"
 
         await ctx.send(out)
