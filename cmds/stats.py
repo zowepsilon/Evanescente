@@ -74,6 +74,10 @@ class Stats(commands.Cog):
     @commands.command()
     @debuggable
     async def leaderboard(self, ctx, category: str = "message", subrange: str = None):
+        if category[0] in '0123456789':
+            subrange = category
+            category = "message"
+
         if category[-1] == 's':
             category = category[:-1]
 
@@ -106,6 +110,19 @@ class Stats(commands.Cog):
     @commands.command()
     @debuggable
     async def reactions(self, ctx):
+        if subrange is not None:
+            subrange_spl = subrange.split("-")
+            if len(subrange_spl) != 2:
+                return await ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
+            try:
+                start, end = int(subrange_spl[0]), int(subrange_spl[1])
+            except ValueError:
+                return await ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
+        
+            leaderboard = self.reac_counter.get_leaderboard(start, end)
+        else:
+            leaderboard = self.reac_counter.get_leaderboard(None, 10)
+
         out = f"## Leaderboard des réactions\n"
         for (rank, emoji, count) in self.reac_counter.get_leaderboard():
             out += f"{rank}. {emoji} - {count} réactions\n"
