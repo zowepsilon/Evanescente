@@ -138,7 +138,6 @@ class ReacCounter:
                 LIMIT ?;
             """, [end])
         else:
-            limit = 
             self.cursor.execute(f"""
                 WITH Sorted AS (
                     SELECT ROW_NUMBER() OVER (ORDER BY Count DESC) AS Rank, *
