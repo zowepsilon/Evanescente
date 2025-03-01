@@ -40,8 +40,8 @@ class Bot(commands.Bot):
 
         self.nickname_cache = NicknameCache(self.cursor, "NicknameCache")
 
-        self.startup_time = time.time()
-        self.reload_time = time.time()
+        self.startup_time = time()
+        self.reload_time = time()
 
         super().__init__(
             command_prefix=commands.when_mentioned_or(self.config["prefix"]),
