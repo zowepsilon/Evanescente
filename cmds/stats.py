@@ -48,20 +48,8 @@ class Stats(commands.Cog):
     async def on_member_update(self, before, after):
         self.bot.nickname_cache.set_nick(after.id, after.display_name)
 
-    async def get_nickname(self, ctx, user_id: int) -> str | None:
-        nick = self.bot.nickname_cache.get_nick(user_id)
-
-        if nick is None:
-            print(f"Could not find a nickname for {user_id}, fetching it from Discord...")
-            try:
-                nick = (await ctx.author.guild.fetch_member(user_id)).display_name
-                self.bot.nickname_cache.set_nick(user_id, nick)
-            except discord.errors.NotFound:
-                return None
-        else:
-            nick = nick[0]
-
-        return nick
+    def get_nickname(self, ctx, user_id: int) -> str | None:
+        return self.bot.nickname_cache.get_nick(user_id)
         
     @commands.command()
     @debuggable
@@ -91,7 +79,7 @@ class Stats(commands.Cog):
 
         out = f"## Leaderboard ({category}s)\n"
         for rank, user_id, message_count in leaderboard:
-            name = await self.get_nickname(ctx, user_id)
+            name = self.get_nickname(ctx, user_id)
             if name is None:
                 name = "<unknown>"
 

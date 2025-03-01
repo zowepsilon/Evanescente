@@ -34,6 +34,8 @@ class Developper(commands.Cog):
                 json.dump(self.bot.config, f, indent=4)
         await ctx.send(":white_check_mark: Saved configuration!")
 
+
+
     @commands.group(invoke_without_command=True)
     @debuggable
     async def ext(self, ctx):
@@ -86,6 +88,18 @@ class Developper(commands.Cog):
             return await ctx.send(f":white_check_mark: Successfully reloaded all extensions !")
 
         await ctx.send(":white_check_mark: Rebuilt bot!")
+
+    
+    @commands.command()
+    @debuggable
+    async def reload_names(self, ctx):
+        if not self.bot.is_dev(ctx.author.id):
+            return await ctx.send("You need to be a developer to do that!")
+        async with ctx.message.channel.typing():
+            for m in ctx.authour.guild.members:
+                self.bot.nickname_cache.set_nick(m.id, m.display_nick)
+
+            await.ctx.send(f"Les noms de {len(ctx.authour.guild.members)} membres ont été rechargés !")
 
     @commands.command()
     @debuggable
