@@ -25,7 +25,7 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
     @commands.command()
     @debuggable
     async def about(self, ctx):
-        await ctx.send(f"`{self.bot.user.name} v{self.bot.__version__}` - she/her - Made by Zoé")
+        await ctx.send(f"`{self.bot.user.name} v{self.bot.__version__}` - she/her - Faite par Zoé, lancée le {strftime("%d/%m/%Y à %H:%M:%S", self.bot.startup_time}, rechargée le {strftime("%d/%m/%Y à %H:%M:%S", self.bot.reload_time}.")
 
     @commands.command()
     @debuggable

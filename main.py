@@ -12,8 +12,6 @@ from utils import NicknameCache
 intents = discord.Intents.all()
 
 class Bot(commands.Bot):
-    __version__ = '1.0'
-
     CONFIG_PATH = "config.json"
     DEFAULT_CONFIG_PATH = "default_config.json"
     
@@ -41,6 +39,9 @@ class Bot(commands.Bot):
         self.cursor = self.db.cursor()
 
         self.nickname_cache = NicknameCache(self.cursor, "NicknameCache")
+
+        self.startup_time = time.time()
+        self.reload_time = time.time()
 
         super().__init__(
             command_prefix=commands.when_mentioned_or(self.config["prefix"]),

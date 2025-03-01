@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from utils import debuggable
 
+import time
 import json
 import subprocess
 
@@ -46,6 +47,8 @@ class Developper(commands.Cog):
     async def ext_reload(self, ctx, extension: str = None):
         if not self.bot.is_dev(ctx.author.id):
             return await ctx.send("You need to be a developer to do that!")
+
+        self.bot.reload_time = time.time()
         if extension is None:
             for ext in list(self.bot.extensions.keys()):
                 try:
@@ -76,6 +79,9 @@ class Developper(commands.Cog):
     async def rebuild(self, ctx):
         if not self.bot.is_dev(ctx.author.id):
             return await ctx.send("You need to be a developer to do that!")
+
+        self.bot.reload_time = time.time()
+
         async with ctx.message.channel.typing():
             output = subprocess.check_output(["git", "pull"]).decode("utf-8")
             await ctx.send(f"```\n{output}```")
