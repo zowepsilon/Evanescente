@@ -22,9 +22,9 @@ class Stats(commands.Cog):
             "feur": StatCounter(self.bot.cursor, "FeurCounts", lambda msg: "feur" in msg.lower()),
             "bouboubou": StatCounter(self.bot.cursor, "BouboubouCounts", lambda msg: "bouboubou" in msg.lower()),
             "quoicoubeh": StatCounter(self.bot.cursor, "QuoicoubehCounts", lambda msg: "quoicoubeh" in msg.lower()),
-            "cute": StatCounter(self.bot.cursor, "CuteCounts", lambda msg: any(w in msg.lower() for w in cute),
-            "insulte": StatCounter(self.bot.cursor, "InsulteCounts", lambda msg: any(w in msg.lower() for w in insultes),
-            "tokipona": StatCounter(self.bot.cursor, "TokiPonaCounts", lambda msg: any(w in msg.lower() for w in tokipona),
+            "cute": StatCounter(self.bot.cursor, "CuteCounts", lambda msg: any(w in msg.lower() for w in cute)),
+            "insulte": StatCounter(self.bot.cursor, "InsulteCounts", lambda msg: any(w in msg.lower() for w in insultes)),
+            "tokipona": StatCounter(self.bot.cursor, "TokiPonaCounts", lambda msg: any(w in msg.lower() for w in tokipona)),
         }
 
         self.reac_counter = ReacCounter(self.bot.cursor, "ReactionCounts")
