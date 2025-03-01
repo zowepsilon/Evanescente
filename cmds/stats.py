@@ -87,7 +87,7 @@ class Stats(commands.Cog):
         leaderboard = self.counters[category].get_leaderboard()
 
         out = f"## Leaderboard ({category}s)\n"
-        for user, (rank, user_id, message_count) in zip(users, leaderboard):
+        for rank, user_id, message_count in leaderboard:
             name = await self.get_nickname(ctx, user_id)
             if name is None:
                 name = "<unknown>"
