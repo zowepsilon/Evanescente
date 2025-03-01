@@ -5,7 +5,6 @@ import datetime
 import discord
 from discord.ext import commands
 
-
 intents = discord.Intents.all()
 
 class Bot(commands.Bot):
@@ -44,6 +43,12 @@ class Bot(commands.Bot):
     def run(self):
         print("Launching bot...")
 
+        self.db = sqlite3.connect(self.bot.config["database"])
+        self.db.autocommit = True
+        self.cursor = self.db.cursor()
+
+        self.nickname_cache = NicknameCache(self.cursor, "NicknameCache")
+
         super().run(self.config["secrets"]["discord"])
         
         print("\nSaving data...")
@@ -54,7 +59,7 @@ class Bot(commands.Bot):
         print("Stopped bot!")
     
     def is_dev(self, user_id: int):
-        return user_id in self.config["developers"] 
+        return user_id in self.config["developers"]
 
 bot = Bot(modules=(
     "cmds.misc",

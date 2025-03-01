@@ -138,3 +138,31 @@ class ReacCounter:
         """, [limit])
 
         return self.cursor.fetchall()
+
+class NicknameCache:
+    def __init__(self, cursor, table_name):
+        self.cursor = cursor
+        self.table_name = table_name
+
+        self.cursor.execute(f"""
+            CREATE TABLE IF NOT EXISTS {self.table_name} (
+                UserId int PRIMARY KEY,
+                Name VARCHAR(255)
+            );
+        """)
+
+    def get_nick(self, user_id: int) -> str | None:
+        self.cursor.execute(f"""
+            SELECT Name
+            FROM {self.table_name}
+            WHERE UserId = ?;
+        """, user_id)
+        
+        return self.cursor.fetchone()
+
+    def set_nick(self, user_id: int, name: str):
+        self.cursor.execute(f"""
+            UPDATE {self.table_name}
+            SET Name = ?
+            WHERE UserId = ?;
+        """,  [name, user_id])

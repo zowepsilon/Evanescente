@@ -7,30 +7,24 @@ import sqlite3
 
 from utils import debuggable, StatCounter, ReacCounter
 
-class Stats(commands.Cog): # create a class for our cog that inherits from commands.Cog
-    # this class is used to create a cog, which is a module that can be added to the bot
-
-    def __init__(self, bot): # this is a special method that is called when the cog is loaded
+class Stats(commands.Cog):
+    def __init__(self, bot):
         self.bot = bot
         self.repeat = True
 
-        self.db = sqlite3.connect(self.bot.config["database"])
-        self.db.autocommit = True
-        self.cursor = self.db.cursor()
-
         self.counters = {
-            "message": StatCounter(self.cursor, "MessageCounts", lambda msg: True),
-            "feur": StatCounter(self.cursor, "FeurCounts", lambda msg: "feur" in msg.lower()),
-            "bouboubou": StatCounter(self.cursor, "BouboubouCounts", lambda msg: "bouboubou" in msg.lower()),
-            "quoicoubeh": StatCounter(self.cursor, "QuoicoubehCounts", lambda msg: "quoicoubeh" in msg.lower()),
-            "cute": StatCounter(self.cursor, "CuteCounts", lambda msg: any(w in msg.lower() for w in ("uwu", ":3", "rawr", "owo", "catgirl"))),
+            "message": StatCounter(self.bot.cursor, "MessageCounts", lambda msg: True),
+            "feur": StatCounter(self.bot.cursor, "FeurCounts", lambda msg: "feur" in msg.lower()),
+            "bouboubou": StatCounter(self.bot.cursor, "BouboubouCounts", lambda msg: "bouboubou" in msg.lower()),
+            "quoicoubeh": StatCounter(self.bot.cursor, "QuoicoubehCounts", lambda msg: "quoicoubeh" in msg.lower()),
+            "cute": StatCounter(self.bot.cursor, "CuteCounts", lambda msg: any(w in msg.lower() for w in ("uwu", ":3", "rawr", "owo", "catgirl"))),
         }
 
         self.reac_counter = ReacCounter(self.cursor, "ReactionCounts")
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.author.bot or message.content[0] == '?':
+        if message.author.bot or len(message.content) == 0 or message.content[0] == '?':
             return
 
         for (_, c) in self.counters.items():
@@ -50,6 +44,22 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
         elif isinstance(reaction.emoji, discord.Emoji):
             self.reac_counter.decr(str(reaction.emoji))
 
+    @commands.Cog.listener()
+    async def on_member_update(self, before, after):
+        self.bot.nickname_cache.set_nick(after.id, after.display_name)
+
+    async def get_nickname(self, ctx, user_id: int) -> str | None:
+        nick = self.bot.nickname_cache.get_nick(after.id, after.display_name)
+
+        if nick is None:
+            try:
+                nick = await ctx.author.guild.fetch_member(user_id).display_name
+                self.bot.nickname_cache.set_nick(user_id, nick)
+            except discord.errors.NotFound:
+                return None
+
+        return nick
+        
     @commands.command()
     @debuggable
     async def rank(self, ctx, *, category: str = "message", user: discord.Member = None):
@@ -75,11 +85,14 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
             return await ctx.send(f"Catégorie inconnue `{category}`. {self.category_message()}")
         
         leaderboard = self.counters[category].get_leaderboard()
-        users = await asyncio.gather(*(ctx.author.guild.fetch_member(user_id) for (_, user_id, _) in leaderboard))
 
         out = f"## Leaderboard ({category}s)\n"
         for user, (rank, user_id, message_count) in zip(users, leaderboard):
-            out += f"{rank}. {user.display_name} - {message_count} {category}s\n"
+            name = await self.get_nickname(ctx, user_id)
+            if name is None:
+                name = "<unknown>"
+
+            out += f"{rank}. {} - {message_count} {category}s\n"
 
         await ctx.send(out)
 
@@ -104,5 +117,5 @@ class Stats(commands.Cog): # create a class for our cog that inherits from comma
         return out
 
 
-def setup(bot): # this is called by Pycord to setup the cog
-    bot.add_cog(Stats(bot)) # add the cog to the bot
+def setup(bot):
+    bot.add_cog(Stats(bot))
