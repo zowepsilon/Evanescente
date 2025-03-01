@@ -49,7 +49,7 @@ class Stats(commands.Cog):
         self.bot.nickname_cache.set_nick(after.id, after.display_name)
 
     async def get_nickname(self, ctx, user_id: int) -> str | None:
-        nick = self.bot.nickname_cache.get_nick(after.id, after.display_name)
+        nick = self.bot.nickname_cache.get_nick(user_id)
 
         if nick is None:
             try:
