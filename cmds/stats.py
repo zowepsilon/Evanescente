@@ -5,7 +5,7 @@ import asyncio
 import random
 import sqlite3
 
-from utils import debuggable, StatCounter, ReacCounter
+from utils import debuggable, StatCounter, ReacCounter, WordCounter
 
 cute = ["uwu", ":3", "rawr", "owo", "catgirl"]
 
