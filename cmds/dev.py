@@ -97,7 +97,7 @@ class Developper(commands.Cog):
             return await ctx.send("You need to be a developer to do that!")
         async with ctx.message.channel.typing():
             for m in ctx.author.guild.members:
-                self.bot.nickname_cache.set_nick(m.id, m.display_nick)
+                self.bot.nickname_cache.set_nick(m.id, m.display_name)
 
             await ctx.send(f"Les noms de {len(ctx.author.guild.members)} membres ont été rechargés !")
 
