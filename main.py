@@ -32,6 +32,12 @@ class Bot(commands.Bot):
             else:
                 print("Warning: Could not find config!")
 
+        self.db = sqlite3.connect(self.bot.config["database"])
+        self.db.autocommit = True
+        self.cursor = self.db.cursor()
+
+        self.nickname_cache = NicknameCache(self.cursor, "NicknameCache")
+
         super().__init__(
             command_prefix=commands.when_mentioned_or(self.config["prefix"]),
             intents=intents
@@ -42,12 +48,6 @@ class Bot(commands.Bot):
         
     def run(self):
         print("Launching bot...")
-
-        self.db = sqlite3.connect(self.bot.config["database"])
-        self.db.autocommit = True
-        self.cursor = self.db.cursor()
-
-        self.nickname_cache = NicknameCache(self.cursor, "NicknameCache")
 
         super().run(self.config["secrets"]["discord"])
         
