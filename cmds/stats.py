@@ -85,7 +85,7 @@ class Stats(commands.Cog):
             if len(subrange_spl) != 2:
                 return await ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
             try:
-                start, end = int(start), int(end)
+                start, end = int(subrange_spl[0]), int(subrange_spl[1])
             except ValueError:
                 return await ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
         
