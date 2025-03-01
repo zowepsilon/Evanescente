@@ -49,10 +49,10 @@ class Stats(commands.Cog):
         self.bot.nickname_cache.set_nick(after.id, after.display_name)
 
     async def get_nickname(self, ctx, user_id: int) -> str | None:
-        print(f"{user_id = }")
         nick = self.bot.nickname_cache.get_nick(user_id)
 
         if nick is None:
+            print(f"Could not find a nickname for {user_id}, fetching it from Discord...")
             try:
                 nick = (await ctx.author.guild.fetch_member(user_id)).display_name
                 self.bot.nickname_cache.set_nick(user_id, nick)
