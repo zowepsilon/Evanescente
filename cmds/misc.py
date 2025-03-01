@@ -26,7 +26,7 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
     @debuggable
     async def about(self, ctx):
         owner = await self.bot.fetch_user(self.bot.config["owner"])
-        await ctx.send(f"`{self.bot.user.name} v{self.bot.__version__}` - Made by Zoé")
+        await ctx.send(f"`{self.bot.user.name} v{self.bot.__version__}` - she/her - Made by Zoé")
 
     @commands.command()
     @debuggable
