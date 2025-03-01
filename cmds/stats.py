@@ -68,14 +68,25 @@ class Stats(commands.Cog):
 
     @commands.command()
     @debuggable
-    async def leaderboard(self, ctx, *, category: str = "message"):
+    async def leaderboard(self, ctx, *, category: str = "message", subrange: str = None):
         if category[-1] == 's':
             category = category[:-1]
 
         if category not in self.counters.keys():
             return await ctx.send(f"Catégorie inconnue `{category}`. {self.category_message()}")
         
-        leaderboard = self.counters[category].get_leaderboard()
+        if range is not None:
+            subrange_spl = subrange.split("-")
+            if len(subrange_spl) != 2:
+                return await.ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
+            try:
+                start, end = int(start), int(end)
+            except ValueError:
+                return await.ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
+        
+            leaderboard = self.counters[category].get_leaderboard(start, end)
+        else:
+            leaderboard = self.counters[category].get_leaderboard(None, 10)
 
         out = f"## Leaderboard ({category}s)\n"
         for rank, user_id, message_count in leaderboard:

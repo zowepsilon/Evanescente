@@ -127,15 +127,27 @@ class ReacCounter:
 
         return (rank, message_count)
 
-    def get_leaderboard(self, limit: int = 20) -> list[(int, str, int)]:
-        self.cursor.execute(f"""
-            WITH Sorted AS (
-                SELECT ROW_NUMBER() OVER (ORDER BY Count DESC) AS Rank, *
-                FROM {self.table_name}
-            )
-            SELECT Rank, Emoji, Count FROM Sorted
-            LIMIT ?;
-        """, [limit])
+    def get_leaderboard(self, start: int = None, end: int = None) -> list[(int, str, int)]:
+        if start is not None:
+            self.cursor.execute(f"""
+                WITH Sorted AS (
+                    SELECT ROW_NUMBER() OVER (ORDER BY Count DESC) AS Rank, *
+                    FROM {self.table_name}
+                )
+                SELECT Rank, Emoji, Count FROM Sorted
+                LIMIT ?;
+            """, [end])
+        else:
+            limit = 
+            self.cursor.execute(f"""
+                WITH Sorted AS (
+                    SELECT ROW_NUMBER() OVER (ORDER BY Count DESC) AS Rank, *
+                    FROM {self.table_name}
+                )
+                SELECT Rank, Emoji, Count FROM Sorted
+                OFFSET ?
+                LIMIT ?;
+            """, [start-1, end-start+1])
 
         return self.cursor.fetchall()
 
