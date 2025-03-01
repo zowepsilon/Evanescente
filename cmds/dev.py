@@ -48,7 +48,7 @@ class Developper(commands.Cog):
         if not self.bot.is_dev(ctx.author.id):
             return await ctx.send("You need to be a developer to do that!")
 
-        self.bot.reload_time = time.time()
+        self.bot.reload_time = time.gmtime()
         if extension is None:
             for ext in list(self.bot.extensions.keys()):
                 try:
@@ -80,7 +80,7 @@ class Developper(commands.Cog):
         if not self.bot.is_dev(ctx.author.id):
             return await ctx.send("You need to be a developer to do that!")
 
-        self.bot.reload_time = time.time()
+        self.bot.reload_time = time.gmtime()
 
         async with ctx.message.channel.typing():
             output = subprocess.check_output(["git", "pull"]).decode("utf-8")

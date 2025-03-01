@@ -1,5 +1,5 @@
 import json
-from time import time
+import time
 import datetime
 
 import sqlite3
@@ -40,8 +40,8 @@ class Bot(commands.Bot):
 
         self.nickname_cache = NicknameCache(self.cursor, "NicknameCache")
 
-        self.startup_time = time()
-        self.reload_time = time()
+        self.startup_time = time.gmtime()
+        self.reload_time = time.gmtime()
 
         super().__init__(
             command_prefix=commands.when_mentioned_or(self.config["prefix"]),
