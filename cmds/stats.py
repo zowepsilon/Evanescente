@@ -55,7 +55,7 @@ class Stats(commands.Cog):
         name = None
 
         words = words_of_message(message.content)
-        print(words)
+        print(self, words)
         for w in words:
             if self.word_counter.exists(w):
                 continue
