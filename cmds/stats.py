@@ -14,7 +14,7 @@ tokipona = ["toki ", "pona ", "ala ", " li ", "mute ", "wile", "jan ", "kama ", 
 
 word_chars = "aàâäbcçĉdeéèêëfghiîïjĵjklmnoôöpqrstuùûüvwxyÿz-"
 word_seps = "'()[]{}\"/,?;:.!`*_"
-sep_trans = str.maketrans({c: ' '} for c in word_seps)
+sep_trans = str.maketrans({c: ' ' for c in word_seps})
 
 def words_of_message(text: str) -> list[str]:
     return [word for word in text.lower().translate(sep_trans).split() if all(c in word_chars for c in word)]
