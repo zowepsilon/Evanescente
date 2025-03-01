@@ -73,7 +73,7 @@ class Stats(commands.Cog):
 
     @commands.command()
     @debuggable
-    async def leaderboard(self, ctx, *, category: str = "message", subrange: str = None):
+    async def leaderboard(self, ctx, category: str = "message", subrange: str = None):
         if category[-1] == 's':
             category = category[:-1]
 
