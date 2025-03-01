@@ -34,7 +34,7 @@ class Bot(commands.Bot):
             else:
                 print("Warning: Could not find config!")
 
-        self.db = sqlite3.connect(self.bot.config["database"])
+        self.db = sqlite3.connect(self.config["database"])
         self.db.autocommit = True
         self.cursor = self.db.cursor()
 
