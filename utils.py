@@ -88,9 +88,8 @@ class StatCounter:
                     FROM {self.table_name}
                 )
                 SELECT Rank, UserId, Count FROM Sorted
-                OFFSET ?
-                LIMIT ?;
-            """, [start-1, end-start+1])
+                WHERE Rank BETWEEN ? AND ?
+            """, [start, end])
 
         return self.cursor.fetchall()
 
