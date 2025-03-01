@@ -10,7 +10,14 @@ from utils import debuggable, StatCounter, ReacCounter
 cute = ["uwu", ":3", "rawr", "owo", "catgirl"]
 
 insultes = ["chokbar", "putain", "merde", "fuck", "shit"]
-tokipona = ["toki ", "pona ", "ala ", "li ", "mute ", "wile", "jan ", "kama ", "waso ", "sina "]
+tokipona = ["toki ", "pona ", "ala ", " li ", "mute ", "wile", "jan ", "kama ", "waso ", "sina "]
+
+word_chars = "aàâäbcçĉdeéèêëfghiîïjĵjklmnoôöpqrstuùûüvwxyÿz-"
+word_seps = "'()[]{}\"/,?;:.!`*_"
+sep_trans = str.make_trans({c: ' '} for c in word_sep)
+
+def words_of_message(text: str) -> list[str]:
+    return [word for word in text.lower().translate(sep_trans).split() if all(c in word_chars for c in word)]
 
 class Stats(commands.Cog):
     def __init__(self, bot):
@@ -28,6 +35,7 @@ class Stats(commands.Cog):
         }
 
         self.reac_counter = ReacCounter(self.bot.cursor, "ReactionCounts")
+        #self.word_counter = WordCounter(self.bot.cursor, "WordCounts")
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -36,6 +44,11 @@ class Stats(commands.Cog):
 
         for (_, c) in self.counters.items():
             c.on_message(message)
+
+        words = words_of_message(message.content)
+        print(f"Message: {message.content}")
+        print(f"Mots: {words}")
+
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):

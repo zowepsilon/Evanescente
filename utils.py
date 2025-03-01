@@ -159,6 +159,50 @@ class ReacCounter:
 
         return self.cursor.fetchall()
 
+class WordCounter:
+    def __init__(self, cursor, table_name):
+        self.cursor = cursor
+        self.table_name = table_name
+
+        self.cursor.execute(f"""
+            CREATE TABLE IF NOT EXISTS {self.table_name} (
+                Word VARCHAR(255) PRIMARY KEY,
+                Count int,
+                FirstUserId int
+            );
+        """)
+
+    def incr(self, word: str, user_id: int):
+        self.cursor.execute(f"""
+            INSERT INTO {self.table_name}
+            VALUES(?, 1, ?)
+            ON CONFLICT(Word)
+            DO UPDATE
+            SET Count = Count + 1;
+        """, [word, user_id])
+
+    def get_leaderboard(self, start: int = None, end: int = None) -> list[(int, str, int, int)]:
+        if start is None:
+            self.cursor.execute(f"""
+                WITH Sorted AS (
+                    SELECT ROW_NUMBER() OVER (ORDER BY Count DESC) AS Rank, *
+                    FROM {self.table_name}
+                )
+                SELECT Rank, Word, Count, FirstUserId FROM Sorted
+                LIMIT ?;
+            """, [end])
+        else:
+            self.cursor.execute(f"""
+                WITH Sorted AS (
+                    SELECT ROW_NUMBER() OVER (ORDER BY Count DESC) AS Rank, *
+                    FROM {self.table_name}
+                )
+                SELECT Rank, Word, Count, FirstUserId FROM Sorted
+                WHERE Rank BETWEEN ? AND ?
+            """, [start, end])
+
+        return self.cursor.fetchall()
+
 class NicknameCache:
     def __init__(self, cursor, table_name):
         self.cursor = cursor
