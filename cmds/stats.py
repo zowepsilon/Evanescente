@@ -75,7 +75,7 @@ class Stats(commands.Cog):
         if category not in self.counters.keys():
             return await ctx.send(f"Catégorie inconnue `{category}`. {self.category_message()}")
         
-        if range is not None:
+        if subrange is not None:
             subrange_spl = subrange.split("-")
             if len(subrange_spl) != 2:
                 return await ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
