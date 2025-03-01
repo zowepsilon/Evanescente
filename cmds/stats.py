@@ -48,9 +48,6 @@ class Stats(commands.Cog):
         for (_, c) in self.counters.items():
             c.on_message(message)
         
-        if not self.bot.is_dev(message.author.id):
-            return
-
         voc_channel = None
         name = None
 
