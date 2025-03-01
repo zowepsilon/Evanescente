@@ -7,6 +7,8 @@ import sqlite3
 import discord
 from discord.ext import commands
 
+from utils import NicknameCache
+
 intents = discord.Intents.all()
 
 class Bot(commands.Bot):
