@@ -92,7 +92,7 @@ class Stats(commands.Cog):
             if name is None:
                 name = "<unknown>"
 
-            out += f"{rank}. {} - {message_count} {category}s\n"
+            out += f"{rank}. {name} - {message_count} {category}s\n"
 
         await ctx.send(out)
 
