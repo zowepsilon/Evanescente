@@ -182,7 +182,7 @@ class Stats(commands.Cog):
         out = f"## Leaderboard des mots\n"
         for (rank, word, count, user_id) in leaderboard:
             name = self.get_nickname(user_id)
-            out += f"{rank}. {word} \\*{count} - trouvé par {name}\n"
+            out += f"{rank}. `{word}` - utilisé {count} fois, trouvé par {name}\n"
 
         await ctx.send(out)
 
