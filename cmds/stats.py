@@ -58,6 +58,8 @@ class Stats(commands.Cog):
                 self.bot.nickname_cache.set_nick(user_id, nick)
             except discord.errors.NotFound:
                 return None
+        else:
+            nick = nick[0]
 
         return nick
         
