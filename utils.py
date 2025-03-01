@@ -172,14 +172,14 @@ class WordCounter:
             );
         """)
 
-    def incr(self, word: str, user_id: int):
-        self.cursor.execute(f"""
+    def add_words(self, words_and_users: list[(str, int)]):
+        self.cursor.executemany(f"""
             INSERT INTO {self.table_name}
             VALUES(?, 1, ?)
             ON CONFLICT(Word)
             DO UPDATE
             SET Count = Count + 1;
-        """, [word, user_id])
+        """, words_and_users)
 
     def get_leaderboard(self, start: int = None, end: int = None) -> list[(int, str, int, int)]:
         if start is None:

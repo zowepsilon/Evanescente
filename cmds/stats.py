@@ -38,7 +38,7 @@ class Stats(commands.Cog):
         }
 
         self.reac_counter = ReacCounter(self.bot.cursor, "ReactionCounts")
-        #self.word_counter = WordCounter(self.bot.cursor, "WordCounts")
+        self.word_counter = WordCounter(self.bot.cursor, "WordCounts")
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -49,9 +49,6 @@ class Stats(commands.Cog):
             c.on_message(message)
 
         words = words_of_message(message.content)
-        print(f"Message: {message.content}")
-        print(f"Mots: {words}")
-
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
@@ -75,7 +72,7 @@ class Stats(commands.Cog):
         name = self.bot.nickname_cache.get_nick(user_id)
 
         if name is None:
-            return None
+            return "<unknown>"
 
         return name[0]
         
@@ -123,9 +120,6 @@ class Stats(commands.Cog):
         out = f"## Leaderboard ({category}s)\n"
         for rank, user_id, message_count in leaderboard:
             name = self.get_nickname(ctx, user_id)
-            if name is None:
-                name = "<unknown>"
-
             out += f"{rank}. {name} - {message_count} {category}s\n"
 
         await ctx.send(out)
@@ -149,6 +143,29 @@ class Stats(commands.Cog):
         out = f"## Leaderboard des réactions\n"
         for (rank, emoji, count) in leaderboard:
             out += f"{rank}. {emoji} - {count} réactions\n"
+
+        await ctx.send(out)
+
+    @commands.command()
+    @debuggable
+    async def words(self, ctx, subrange: str = None):
+        if subrange is not None:
+            subrange_spl = subrange.split("-")
+            if len(subrange_spl) != 2:
+                return await ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
+            try:
+                start, end = int(subrange_spl[0]), int(subrange_spl[1])
+            except ValueError:
+                return await ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
+        
+            leaderboard = self.word_counter.get_leaderboard(start, end)
+        else:
+            leaderboard = self.word_counter.get_leaderboard(None, 10)
+
+        out = f"## Leaderboard des mots\n"
+        for (rank, word, count, user_id) in leaderboard:
+            name = self.get_nickname(ctx, user_id)
+            out += f"{rank}. {word} \*{count} - trouvé par {name}\n"
 
         await ctx.send(out)
 
