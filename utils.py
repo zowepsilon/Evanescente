@@ -71,7 +71,7 @@ class StatCounter:
 
         return (rank, message_count)
 
-    def get_leaderboard(self, start: int = None, end: int = None) -> list[(int, str, int)]:
+    def get_leaderboard(self, start: int = None, end: int = None) -> list[(int, int, int)]:
         if start is None:
             self.cursor.execute(f"""
                 WITH Sorted AS (

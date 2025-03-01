@@ -49,7 +49,12 @@ class Stats(commands.Cog):
         self.bot.nickname_cache.set_nick(after.id, after.display_name)
 
     def get_nickname(self, ctx, user_id: int) -> str | None:
-        return self.bot.nickname_cache.get_nick(user_id)
+        name = self.bot.nickname_cache.get_nick(user_id)
+
+        if name is None:
+            return None
+
+        return name[0]
         
     @commands.command()
     @debuggable
