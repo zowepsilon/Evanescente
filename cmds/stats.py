@@ -7,6 +7,11 @@ import sqlite3
 
 from utils import debuggable, StatCounter, ReacCounter
 
+cute = ["uwu", ":3", "rawr", "owo", "catgirl"]
+
+insultes = ["chokbar", "putain", "merde", "fuck", "shit"]
+tokipona = ["toki ", "pona ", "ala ", "li ", "mute ", "wile", "jan ", "kama ", "waso ", "sina "]
+
 class Stats(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -17,7 +22,9 @@ class Stats(commands.Cog):
             "feur": StatCounter(self.bot.cursor, "FeurCounts", lambda msg: "feur" in msg.lower()),
             "bouboubou": StatCounter(self.bot.cursor, "BouboubouCounts", lambda msg: "bouboubou" in msg.lower()),
             "quoicoubeh": StatCounter(self.bot.cursor, "QuoicoubehCounts", lambda msg: "quoicoubeh" in msg.lower()),
-            "cute": StatCounter(self.bot.cursor, "CuteCounts", lambda msg: any(w in msg.lower() for w in ("uwu", ":3", "rawr", "owo", "catgirl"))),
+            "cute": StatCounter(self.bot.cursor, "CuteCounts", lambda msg: any(w in msg.lower() for w in cute),
+            "insulte": StatCounter(self.bot.cursor, "InsulteCounts", lambda msg: any(w in msg.lower() for w in insultes),
+            "tokipona": StatCounter(self.bot.cursor, "TokiPonaCounts", lambda msg: any(w in msg.lower() for w in tokipona),
         }
 
         self.reac_counter = ReacCounter(self.bot.cursor, "ReactionCounts")
