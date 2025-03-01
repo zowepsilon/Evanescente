@@ -72,7 +72,7 @@ class StatCounter:
         return (rank, message_count)
 
     def get_leaderboard(self, start: int = None, end: int = None) -> list[(int, str, int)]:
-        if start is not None:
+        if start is None:
             self.cursor.execute(f"""
                 WITH Sorted AS (
                     SELECT ROW_NUMBER() OVER (ORDER BY Count DESC) AS Rank, *
@@ -139,7 +139,7 @@ class ReacCounter:
         return (rank, message_count)
 
     def get_leaderboard(self, start: int = None, end: int = None) -> list[(int, str, int)]:
-        if start is not None:
+        if start is None:
             self.cursor.execute(f"""
                 WITH Sorted AS (
                     SELECT ROW_NUMBER() OVER (ORDER BY Count DESC) AS Rank, *
