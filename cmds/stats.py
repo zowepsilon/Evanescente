@@ -48,13 +48,14 @@ class Stats(commands.Cog):
         for (_, c) in self.counters.items():
             c.on_message(message)
         
-        if not self.bot.is_dev(message.author):
+        if self.bot.is_dev(message.author):
             return
 
         voc_channel = None
         name = None
 
         words = words_of_message(message.content)
+        print(words)
         for w in words:
             if self.word_counter.exists(w):
                 continue
