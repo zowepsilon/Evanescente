@@ -162,7 +162,8 @@ class NicknameCache:
 
     def set_nick(self, user_id: int, name: str):
         self.cursor.execute(f"""
-            UPDATE {self.table_name}
+            INSERT INTO {self.table_name}
+            VALUES(?, ?)
+            ON CONFLICT(UserId)
             SET Name = ?
-            WHERE UserId = ?;
-        """,  [name, user_id])
+        """,  [user_id, name, name])
