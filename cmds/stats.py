@@ -17,7 +17,10 @@ word_seps = "'()[]{}\"/,?;:.!`*_"
 sep_trans = str.maketrans({c: ' ' for c in word_seps})
 
 def words_of_message(text: str) -> list[str]:
-    return [word for word in text.lower().translate(sep_trans).split() if all(c in word_chars for c in word)]
+    return [
+        word for word in text.lower().translate(sep_trans).split()
+        if len(word) > 1 and word[0] != '-' and word[-1] != '-' and all(c in word_chars for c in word)
+    ]
 
 class Stats(commands.Cog):
     def __init__(self, bot):
