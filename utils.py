@@ -165,5 +165,6 @@ class NicknameCache:
             INSERT INTO {self.table_name}
             VALUES(?, ?)
             ON CONFLICT(UserId)
+            DO UPDATE
             SET Name = ?
         """,  [user_id, name, name])
