@@ -62,7 +62,7 @@ class Stats(commands.Cog):
 
             if voc_channel is None:
                 voc_channel = self.bot.get_channel(self.bot.config["vocabulaire_id"])
-                name = self.bot.nickname_cache.get_nick(message.author.id)
+                name = self.get_nickname(message.author.id)
 
             print(f"Nouveau mot : {w} - trouvé par {name}")
             await voc_channel.send(f"Nouveau mot : {w} - trouvé par {name}")
