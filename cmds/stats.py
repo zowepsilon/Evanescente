@@ -54,7 +54,7 @@ class Stats(commands.Cog):
 
         if nick is None:
             try:
-                nick = await ctx.author.guild.fetch_member(user_id).display_name
+                nick = (await ctx.author.guild.fetch_member(user_id)).display_name
                 self.bot.nickname_cache.set_nick(user_id, nick)
             except discord.errors.NotFound:
                 return None
