@@ -156,7 +156,7 @@ class NicknameCache:
             SELECT Name
             FROM {self.table_name}
             WHERE UserId = ?;
-        """, user_id)
+        """, [user_id])
         
         return self.cursor.fetchone()
 
