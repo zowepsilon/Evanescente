@@ -85,7 +85,7 @@ class Stats(commands.Cog):
     async def on_member_update(self, before, after):
         self.bot.nickname_cache.set_nick(after.id, after.display_name)
 
-    def get_nickname(self, ctx, user_id: int) -> str | None:
+    def get_nickname(self, user_id: int) -> str | None:
         name = self.bot.nickname_cache.get_nick(user_id)
 
         if name is None:
@@ -136,7 +136,7 @@ class Stats(commands.Cog):
 
         out = f"## Leaderboard ({category}s)\n"
         for rank, user_id, message_count in leaderboard:
-            name = self.get_nickname(ctx, user_id)
+            name = self.get_nickname(user_id)
             out += f"{rank}. {name} - {message_count} {category}s\n"
 
         await ctx.send(out)
@@ -181,7 +181,7 @@ class Stats(commands.Cog):
 
         out = f"## Leaderboard des mots\n"
         for (rank, word, count, user_id) in leaderboard:
-            name = self.get_nickname(ctx, user_id)
+            name = self.get_nickname(user_id)
             out += f"{rank}. {word} \\*{count} - trouvé par {name}\n"
 
         await ctx.send(out)
