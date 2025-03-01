@@ -109,7 +109,7 @@ class Stats(commands.Cog):
 
     @commands.command()
     @debuggable
-    async def reactions(self, ctx):
+    async def reactions(self, ctx, subrange: str = None):
         if subrange is not None:
             subrange_spl = subrange.split("-")
             if len(subrange_spl) != 2:
