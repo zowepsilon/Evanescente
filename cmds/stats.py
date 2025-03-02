@@ -60,7 +60,7 @@ class Stats(commands.Cog):
                 voc_channel = self.bot.get_channel(self.bot.config["vocabulaire_id"])
                 name = sanitize(self.get_nickname(message.author.id))
 
-            await voc_channel.send(f"Nouveau mot : {w} - trouvé par {name}")
+            await voc_channel.send(f"Nouveau mot : `{w}` - trouvé par {name}")
 
         self.word_counter.add_words(words, message.author.id)
 
@@ -184,7 +184,17 @@ class Stats(commands.Cog):
 
         await ctx.send(out)
 
-    
+    @commands.command()
+    @debuggable
+    async def word(self, ctx, word: str):
+        word = lower(sanitize(word))
+        try:
+            (rank, count, first_user_id) = self.word_counter.get_word_rank(word)
+        except TypeError:
+            return await ctx.send(f"Mot inconnu: `{word}`")
+        
+        name = sanitize(self.get_nickname(first_user_id))
+        await ctx.send(f"Statistiques pour `{word}`: #{rank} - utilisé {count} fois, trouvé par {name}"
     
     def category_message(self):
         out = "Les catégories sont "

@@ -201,7 +201,7 @@ class WordCounter:
 
     # TODO: count(select * from table where author = name) or smthing like that
 
-    def get_word_rank(self, word: str) -> (int, int):
+    def get_word_rank(self, word: str) -> (int, int, int):
         self.cursor.execute(f"""
             WITH Sorted AS (
                 SELECT ROW_NUMBER() OVER (ORDER BY Count DESC) AS Rank, *
