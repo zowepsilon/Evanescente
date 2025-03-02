@@ -106,7 +106,7 @@ class Stats(commands.Cog):
 
         await ctx.send(out)
 
-    @commands.command()
+    @commands.command(aliases=["lb"])
     @debuggable
     async def leaderboard(self, ctx, category: str = "message", subrange: str = None):
         if category[0] in '0123456789':
