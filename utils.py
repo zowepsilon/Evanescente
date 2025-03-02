@@ -216,7 +216,7 @@ class WordCounter:
             SELECT Rank, WordCount
             FROM Rankings
             WHERE FirstUserId = ?;
-        """)
+        """, [user_id])
 
         (rank, count) = self.cursor.fetchone()
 
