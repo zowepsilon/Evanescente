@@ -201,7 +201,21 @@ class WordCounter:
 
     # TODO: count(select * from table where author = name) or smthing like that
 
-    def get_leaderboard(self, start: int = None, end: int = None) -> list[(int, str, int, int)]:
+    def get_word_rank(self, word: str) -> (int, int):
+        self.cursor.execute(f"""
+            WITH Sorted AS (
+                SELECT ROW_NUMBER() OVER (ORDER BY Count DESC) AS Rank, *
+                FROM {self.table_name}
+            )
+            SELECT Rank, Count, FirstUserId FROM Sorted
+            WHERE UserId = ?;
+        """, [user_id])
+        
+        (rank, count, first_user_id) = self.cursor.fetchone()
+
+        return (rank, count, first_user_id)
+
+    def get_word_leaderboard(self, start: int = None, end: int = None) -> list[(int, str, int, int)]:
         if start is None:
             self.cursor.execute(f"""
                 WITH Sorted AS (

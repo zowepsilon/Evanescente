@@ -92,18 +92,16 @@ class Stats(commands.Cog):
         
     @commands.command()
     @debuggable
-    async def rank(self, ctx, *, category: str = "message", user: discord.Member = None):
+    async def rank(self, ctx, *, user: discord.Member = None):
         user = user if user is not None else ctx.author
 
-        if category[-1] == 's':
-            category = category[:-1]
+        out = f"### Statistiques pour {ctx.author.menton}: \n"
+        for category in self.counters.keys():
+            (rank, message_count) = self.counters[category].get_rank(user.id)
 
-        if category not in self.counters.keys():
-            return await ctx.send(f"Unknown category `{category}`. {self.category_message()}")
+            out += f"- {message_count} {category}s - Rang: #{rank}\n"
 
-        (rank, message_count) = self.counters[category].get_rank(user.id)
-
-        await ctx.send(f"Statistiques pour {ctx.author.mention}: {message_count} {category}s - Rang: #{rank}")
+        await ctx.send(out)
 
     @commands.command()
     @debuggable
@@ -172,9 +170,9 @@ class Stats(commands.Cog):
             except ValueError:
                 return await ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
         
-            leaderboard = self.word_counter.get_leaderboard(start, end)
+            leaderboard = self.word_counter.get_word_leaderboard(start, end)
         else:
-            leaderboard = self.word_counter.get_leaderboard(None, 10)
+            leaderboard = self.word_counter.get_word_leaderboard(None, 10)
 
         out = f"## Leaderboard des mots\n"
         for (rank, word, count, user_id) in leaderboard:
@@ -183,6 +181,8 @@ class Stats(commands.Cog):
 
         await ctx.send(out)
 
+    
+    
     def category_message(self):
         out = "Les catégories sont "
         cat = list(self.counters.keys())
