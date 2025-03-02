@@ -16,6 +16,13 @@ def debuggable(f):
 
     return new
 
+
+def sanitize(text: str) -> str:
+    return text \
+        .replace("@here", "@​here") \
+        .replace("@everyone", "@​everyone") \
+        .replace("<@&", "<​@​&​")
+
 class StatCounter:
     def __init__(self, cursor, table_name, predicate):
         self.cursor = cursor

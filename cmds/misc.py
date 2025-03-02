@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from utils import debuggable
+from utils import debuggable, sanitize
 
 from time import strftime
 
@@ -38,9 +38,7 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
         if "you" in target:
             return await ctx.send("no u")
         else:
-            target = target.replace("@here", "@​here")
-            target = target.replace("@everyone", "@​everyone")
-            target = target.replace("<@&", "<​@​&​")
+            target = sanitize(target)
             return await ctx.send(f"Fucked {target}! :+1:")
 
     @commands.command()

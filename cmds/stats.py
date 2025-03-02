@@ -5,7 +5,7 @@ import asyncio
 import random
 import sqlite3
 
-from utils import debuggable, StatCounter, ReacCounter, WordCounter
+from utils import debuggable, StatCounter, ReacCounter, WordCounter, sanitize
 
 cute = ["uwu", ":3", "rawr", "owo", "catgirl", "bébou"]
 
@@ -58,7 +58,7 @@ class Stats(commands.Cog):
 
             if voc_channel is None:
                 voc_channel = self.bot.get_channel(self.bot.config["vocabulaire_id"])
-                name = self.get_nickname(message.author.id)
+                name = sanitize(self.get_nickname(message.author.id))
 
             await voc_channel.send(f"Nouveau mot : {w} - trouvé par {name}")
 
@@ -133,7 +133,7 @@ class Stats(commands.Cog):
 
         out = f"## Leaderboard ({category}s)\n"
         for rank, user_id, message_count in leaderboard:
-            name = self.get_nickname(user_id)
+            name = sanitize(self.get_nickname(user_id))
             out += f"{rank}. {name} - {message_count} {category}s\n"
 
         await ctx.send(out)
@@ -178,7 +178,7 @@ class Stats(commands.Cog):
 
         out = f"## Leaderboard des mots\n"
         for (rank, word, count, user_id) in leaderboard:
-            name = self.get_nickname(user_id)
+            name = sanitize(self.get_nickname(user_id))
             out += f"{rank}. `{word}` - utilisé {count} fois, trouvé par {name}\n"
 
         await ctx.send(out)
