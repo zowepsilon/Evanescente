@@ -95,7 +95,7 @@ class Stats(commands.Cog):
     async def rank(self, ctx, *, user: discord.Member = None):
         user = user if user is not None else ctx.author
 
-        out = f"### Statistiques pour {ctx.author.menton}: \n"
+        out = f"### Statistiques pour {ctx.author.mention}: \n"
         for category in self.counters.keys():
             (rank, message_count) = self.counters[category].get_rank(user.id)
 
