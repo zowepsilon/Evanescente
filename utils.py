@@ -210,7 +210,7 @@ class WordCounter:
             ),
             Rankings AS (
                 SELECT FirstUserId, WordCount,
-                       RANK() OVER (ORDER BY Counts DESC) AS Rank
+                       RANK() OVER (ORDER BY WordCount DESC) AS Rank
                 FROM Counts
             )
             SELECT Rank, WordCount
