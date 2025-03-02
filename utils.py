@@ -222,6 +222,40 @@ class WordCounter:
 
         return (rank, count)
 
+    def get_user_leaderboard(self, start: int = None, end: int = None) -> list[(int, int, int)]:
+        if start is None:
+            self.cursor.execute(f"""
+                WITH Counts AS (
+                    SELECT FirstUserId, COUNT(*) AS WordCount
+                    FROM {self.table_name}
+                    GROUP BY FirstUserId
+                ),
+                Rankings AS (
+                    SELECT FirstUserId, WordCount,
+                           RANK() OVER (ORDER BY WordCount DESC) AS Rank
+                    FROM Counts
+                )
+                SELECT Rank, FirstUserId, WordCount FROM Rankings
+                LIMIT ?;
+            """, [end])
+        else:
+            self.cursor.execute(f"""
+                WITH Counts AS (
+                    SELECT FirstUserId, COUNT(*) AS WordCount
+                    FROM {self.table_name}
+                    GROUP BY FirstUserId
+                ),
+                Rankings AS (
+                    SELECT FirstUserId, WordCount,
+                           RANK() OVER (ORDER BY WordCount DESC) AS Rank
+                    FROM Counts
+                )
+                SELECT Rank, FirstUserId, WordCount FROM Rankings
+                WHERE Rank BETWEEN ? AND ?
+            """, [start, end])
+
+        return self.cursor.fetchall()
+
     def get_word_rank(self, word: str) -> (int, int, int):
         self.cursor.execute(f"""
             WITH Sorted AS (

@@ -146,6 +146,30 @@ class Stats(commands.Cog):
 
         await ctx.send(out)
 
+
+    @commands.command()
+    @debuggable
+    async def explorers(self, ctx, subrange: str = None):
+        if subrange is not None:
+            subrange_spl = subrange.split("-")
+            if len(subrange_spl) != 2:
+                return await ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
+            try:
+                start, end = int(subrange_spl[0]), int(subrange_spl[1])
+            except ValueError:
+                return await ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
+        
+            leaderboard = self.word_counter.get_user_leaderboard(start, end)
+        else:
+            leaderboard = self.word_counter.get_user_leaderboard(None, 10)
+
+        out = f"## Leaderboard d'exploration\n"
+        for rank, user_id, count in leaderboard:
+            name = sanitize(self.get_nickname(user_id))
+            out += f"{rank}. {name} - {} mots trouvés\n"
+
+        await ctx.send(out)
+    
     @commands.command()
     @debuggable
     async def reactions(self, ctx, subrange: str = None):
