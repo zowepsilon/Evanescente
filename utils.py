@@ -208,8 +208,8 @@ class WordCounter:
                 FROM {self.table_name}
             )
             SELECT Rank, Count, FirstUserId FROM Sorted
-            WHERE UserId = ?;
-        """, [user_id])
+            WHERE Word = ?;
+        """, [word])
         
         (rank, count, first_user_id) = self.cursor.fetchone()
 
