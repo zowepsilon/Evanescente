@@ -104,6 +104,13 @@ class Stats(commands.Cog):
 
             out += f"- {message_count} {category}s - Rang: #{rank}\n"
 
+        
+        try:
+            (rank, count) = self.word_counter.get_user_rank(user.id)
+            out += f"- {count} mots trouvés - Rang: #{rank}"
+        except TypeError:
+            pass
+
         await ctx.send(out)
 
     @commands.command(aliases=["lb"])

@@ -201,6 +201,27 @@ class WordCounter:
 
     # TODO: count(select * from table where author = name) or smthing like that
 
+    def get_user_rank(self, user_id: int) -> (int, int):
+        self.cursor.execute(f"""
+            WITH Counts AS (
+                SELECT FirstUserId, COUNT(*) AS WordCount
+                FROM {self.table_name}
+                GROUP BY FirstUserId
+            ),
+            Rankings AS (
+                SELECT FirstUserId, WordCount,
+                       RANK() OVER (ORDER BY Counts DESC) AS Rank
+                FROM WordCounts
+            )
+            SELECT Rank, WordCount
+            FROM Rankings
+            WHERE FirstUserId = ?;
+        """)
+
+        (rank, count) = self.cursor.fetchone()
+
+        return (rank, count)
+
     def get_word_rank(self, word: str) -> (int, int, int):
         self.cursor.execute(f"""
             WITH Sorted AS (
