@@ -166,7 +166,7 @@ class Stats(commands.Cog):
         out = f"## Leaderboard d'exploration\n"
         for rank, user_id, count in leaderboard:
             name = sanitize(self.get_nickname(user_id))
-            out += f"{rank}. {name} - {} mots trouvés\n"
+            out += f"{rank}. {name} - {count} mots trouvés\n"
 
         await ctx.send(out)
     
