@@ -7,7 +7,7 @@ import sqlite3
 
 from utils import debuggable, StatCounter, ReacCounter, WordCounter
 
-cute = ["uwu", ":3", "rawr", "owo", "catgirl"]
+cute = ["uwu", ":3", "rawr", "owo", "catgirl", "bébou"]
 
 insultes = ["chokbar", "putain", "merde", "fuck", "shit", "ptn"]
 tokipona = ["toki ", "pona ", "ala ", " li ", "mute ", "wile", "jan ", "kama ", "waso ", "sina "]
