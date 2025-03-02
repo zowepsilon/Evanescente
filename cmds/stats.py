@@ -97,7 +97,10 @@ class Stats(commands.Cog):
 
         out = f"### Statistiques pour {ctx.author.mention}: \n"
         for category in self.counters.keys():
-            (rank, message_count) = self.counters[category].get_rank(user.id)
+            try:
+                (rank, message_count) = self.counters[category].get_rank(user.id)
+            except TypeError:
+                continue
 
             out += f"- {message_count} {category}s - Rang: #{rank}\n"
 
