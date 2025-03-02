@@ -187,7 +187,7 @@ class Stats(commands.Cog):
     @commands.command()
     @debuggable
     async def word(self, ctx, word: str):
-        word = lower(sanitize(word))
+        word = sanitize(word.lower())
         try:
             (rank, count, first_user_id) = self.word_counter.get_word_rank(word)
         except TypeError:
