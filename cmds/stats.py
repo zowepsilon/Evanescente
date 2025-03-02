@@ -194,7 +194,7 @@ class Stats(commands.Cog):
             return await ctx.send(f"Mot inconnu: `{word}`")
         
         name = sanitize(self.get_nickname(first_user_id))
-        await ctx.send(f"Statistiques pour `{word}`: #{rank} - utilisé {count} fois, trouvé par {name}"
+        await ctx.send(f"Statistiques pour `{word}`: #{rank} - utilisé {count} fois, trouvé par {name}")
     
     def category_message(self):
         out = "Les catégories sont "
