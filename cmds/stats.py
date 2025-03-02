@@ -9,7 +9,7 @@ from utils import debuggable, StatCounter, ReacCounter, WordCounter
 
 cute = ["uwu", ":3", "rawr", "owo", "catgirl"]
 
-insultes = ["chokbar", "putain", "merde", "fuck", "shit"]
+insultes = ["chokbar", "putain", "merde", "fuck", "shit", "ptn"]
 tokipona = ["toki ", "pona ", "ala ", " li ", "mute ", "wile", "jan ", "kama ", "waso ", "sina "]
 
 word_chars = "aàâäbcçĉdeéèêëfghiîïjĵjklmnoôöpqrstuùûüvwxyÿz-"

@@ -192,6 +192,8 @@ class WordCounter:
             SET Count = Count + 1;
         """, [(w, user_id) for w in words])
 
+    # TODO: count(select * from table where author = name) or smthing like that
+
     def get_leaderboard(self, start: int = None, end: int = None) -> list[(int, str, int, int)]:
         if start is None:
             self.cursor.execute(f"""
