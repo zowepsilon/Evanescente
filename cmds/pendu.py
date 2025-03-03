@@ -67,7 +67,7 @@ class Pendu(commands.Cog):
                 await message.channel.send(f"`{letter}` n'était dans le mot :(")
                 await self.print_state(message.channel)
 
-    async def print_state(self, channel: discord.Channel):
+    async def print_state(self, channel):
         state = self.games[channel.id]
 
         out = f"### Mot : `{state.partial_word()}`"
