@@ -23,6 +23,16 @@ def sanitize(text: str) -> str:
         .replace("@everyone", "@​everyone") \
         .replace("<@&", "<​@​&​")
 
+word_chars = "aàâäbcçĉdeéèêëfghiîïjĵjklmnoôöpqrstuùûüvwxyÿz-"
+word_seps = "'()[]{}\"/,?;:.!`*_"
+sep_trans = str.maketrans({c: ' ' for c in word_seps})
+
+def words_of_message(text: str) -> list[str]:
+    return [
+        word for word in text.lower().translate(sep_trans).split()
+        if len(word) > 1 and word[0] != '-' and word[-1] != '-' and all(c in word_chars for c in word)
+    ]
+
 class StatCounter:
     def __init__(self, cursor, table_name, predicate):
         self.cursor = cursor
@@ -199,7 +209,14 @@ class WordCounter:
             SET Count = Count + 1;
         """, [(w, user_id) for w in words])
 
-    # TODO: count(select * from table where author = name) or smthing like that
+    def get_random_word(self) -> str:
+        self.cursor.execute(f"""
+            SELECT Word FROM {self.table_name}
+            ORDER BY RAND()
+            LIMIT 1
+        """)
+
+        return self.cursor.fetchone()[0]
 
     def get_user_rank(self, user_id: int) -> (int, int):
         self.cursor.execute(f"""

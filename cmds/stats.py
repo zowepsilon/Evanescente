@@ -5,22 +5,12 @@ import asyncio
 import random
 import sqlite3
 
-from utils import debuggable, StatCounter, ReacCounter, WordCounter, sanitize
+from utils import debuggable, StatCounter, ReacCounter, WordCounter, sanitize, words_of_message
 
 cute = ["uwu", ":3", "rawr", "owo", "catgirl", "bébou"]
 
 insultes = ["chokbar", "putain", "merde", "fuck", "shit", "ptn"]
 tokipona = ["toki ", "pona ", "ala ", " li ", "mute ", "wile", "jan ", "kama ", "waso ", "sina "]
-
-word_chars = "aàâäbcçĉdeéèêëfghiîïjĵjklmnoôöpqrstuùûüvwxyÿz-"
-word_seps = "'()[]{}\"/,?;:.!`*_"
-sep_trans = str.maketrans({c: ' ' for c in word_seps})
-
-def words_of_message(text: str) -> list[str]:
-    return [
-        word for word in text.lower().translate(sep_trans).split()
-        if len(word) > 1 and word[0] != '-' and word[-1] != '-' and all(c in word_chars for c in word)
-    ]
 
 class Stats(commands.Cog):
     def __init__(self, bot):
@@ -38,7 +28,6 @@ class Stats(commands.Cog):
         }
 
         self.reac_counter = ReacCounter(self.bot.cursor, "ReactionCounts")
-        self.word_counter = WordCounter(self.bot.cursor, "WordCounts")
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -53,7 +42,7 @@ class Stats(commands.Cog):
 
         words = words_of_message(message.content)
         for w in words:
-            if self.word_counter.exists(w):
+            if self.bot.word_counter.exists(w):
                 continue
 
             if voc_channel is None:
@@ -62,7 +51,7 @@ class Stats(commands.Cog):
 
             await voc_channel.send(f"Nouveau mot : `{w}` - trouvé par {name}")
 
-        self.word_counter.add_words(words, message.author.id)
+        self.bot.word_counter.add_words(words, message.author.id)
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
@@ -106,7 +95,7 @@ class Stats(commands.Cog):
 
         
         try:
-            (rank, count) = self.word_counter.get_user_rank(user.id)
+            (rank, count) = self.bot.word_counter.get_user_rank(user.id)
             out += f"- {count} mots trouvés - Rang: #{rank}"
         except TypeError:
             pass
@@ -159,9 +148,9 @@ class Stats(commands.Cog):
             except ValueError:
                 return await ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
         
-            leaderboard = self.word_counter.get_user_leaderboard(start, end)
+            leaderboard = self.bot.word_counter.get_user_leaderboard(start, end)
         else:
-            leaderboard = self.word_counter.get_user_leaderboard(None, 10)
+            leaderboard = self.bot.word_counter.get_user_leaderboard(None, 10)
 
         out = f"## Leaderboard d'exploration\n"
         for rank, user_id, count in leaderboard:
@@ -204,9 +193,9 @@ class Stats(commands.Cog):
             except ValueError:
                 return await ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
         
-            leaderboard = self.word_counter.get_word_leaderboard(start, end)
+            leaderboard = self.bot.word_counter.get_word_leaderboard(start, end)
         else:
-            leaderboard = self.word_counter.get_word_leaderboard(None, 10)
+            leaderboard = self.bot.word_counter.get_word_leaderboard(None, 10)
 
         out = f"## Leaderboard des mots\n"
         for (rank, word, count, user_id) in leaderboard:
@@ -220,7 +209,7 @@ class Stats(commands.Cog):
     async def word(self, ctx, word: str):
         word = sanitize(word.lower())
         try:
-            (rank, count, first_user_id) = self.word_counter.get_word_rank(word)
+            (rank, count, first_user_id) = self.bot.word_counter.get_word_rank(word)
         except TypeError:
             return await ctx.send(f"Mot inconnu: `{word}`")
         

@@ -39,6 +39,7 @@ class Bot(commands.Bot):
         self.cursor = self.db.cursor()
 
         self.nickname_cache = NicknameCache(self.cursor, "NicknameCache")
+        self.word_counter = WordCounter(self.cursor, "WordCounts")
 
         self.startup_time = time.gmtime()
         self.reload_time = time.gmtime()
