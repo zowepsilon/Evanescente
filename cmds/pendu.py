@@ -20,10 +20,10 @@ class PenduState:
     remaining: int
 
     def complete(self) -> bool:
-        return all(c in self.found for c in word)
+        return all(c in self.found for c in self.word)
 
     def partial_word(self) -> str:
-        return str(c if c in self.found else '_' for c in word)
+        return str(c if c in self.found else '_' for c in self.word)
 
 class Pendu(commands.Cog):
     def __init__(self, bot):
