@@ -25,7 +25,7 @@ class PenduState:
     def partial_word(self) -> str:
         return str(c if c in self.found else '_' for c in word)
 
-class Stats(commands.Cog):
+class Pendu(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.repeat = True
@@ -91,4 +91,4 @@ class Stats(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Stats(bot))
+    bot.add_cog(Pendu(bot))
