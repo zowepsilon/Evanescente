@@ -53,7 +53,7 @@ class Pendu(commands.Cog):
             await message.channel.send(f"`{letter}` était dans le mot !")
             
             if self.games[channel].complete():
-                await channel.send(f"Gagné ! Le mot était `{self.games[channel].word}`.")
+                await message.channel.send(f"Gagné ! Le mot était `{self.games[channel].word}`.")
                 self.games.pop(channel)
             else:
                 await self.print_state(message.channel)
@@ -61,7 +61,7 @@ class Pendu(commands.Cog):
             self.games[channel].remaining -= 1
 
             if self.games[channel].remaining == 0:
-                await channel.send(f"Perdu ! Le mot était `{self.games[channel].word}`.")
+                await message.channel.send(f"Perdu ! Le mot était `{self.games[channel].word}`.")
                 self.games.pop(channel)
             else:
                 await message.channel.send(f"`{letter}` n'était dans le mot :(")
