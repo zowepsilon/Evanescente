@@ -16,7 +16,7 @@ tokipona = ["toki ", "pona ", "ala ", " li ", "mute ", "wile", "jan ", "kama ", 
 @dataclass
 class PenduState:
     word: str
-    found: set[str] = field(default_factory=set)
+    found: set[str]
     remaining: int
 
     def complete(self) -> bool:
