@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import functools
 import traceback
+import random
 
 def debuggable(f):
     @functools.wraps(f)
@@ -212,11 +213,9 @@ class WordCounter:
     def get_random_word(self) -> str:
         self.cursor.execute(f"""
             SELECT Word FROM {self.table_name}
-            ORDER BY RAND()
-            LIMIT 1
         """)
 
-        return self.cursor.fetchone()[0]
+        return random.choice(self.cursor.fetchall())[0]
 
     def get_user_rank(self, user_id: int) -> (int, int):
         self.cursor.execute(f"""
