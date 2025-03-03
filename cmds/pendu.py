@@ -23,7 +23,7 @@ class PenduState:
         return all(c in self.found for c in self.word)
 
     def partial_word(self) -> str:
-        return str(c if c in self.found else '_' for c in self.word)
+        return ''.join(c if c in self.found else '_' for c in self.word)
 
 class Pendu(commands.Cog):
     def __init__(self, bot):
