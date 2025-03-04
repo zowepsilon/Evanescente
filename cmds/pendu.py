@@ -42,18 +42,28 @@ class Pendu(commands.Cog):
             return
 
         letter = message.content[0]
+        word = self.games[channel].word
 
         if letter in self.games[channel].found:
             await message.channel.send(f"`{letter}` a déjà été trouvée !")
             await self.print_state(message.channel)
             return
 
-        if letter in self.games[channel].word:
+        if letter in word:
             self.games[channel].found.add(letter)
             await message.channel.send(f"`{letter}` était dans le mot !")
             
             if self.games[channel].complete():
-                await message.channel.send(f"Gagné ! Le mot était `{self.games[channel].word}`.")
+                try:
+                    (_, count, user_id) = self.bot.word_counter.get_word_rank(word)
+                    nickname =  self.bot.nickname_cache.get_nick(user_id)
+
+                    if nickname is None:
+                        nickname = "Inconnu au bataillon"
+
+                    await message.channel.send(f"Gagné ! Le mot était `{word}`, trouvé par @{nickname}et utilisé {count} fois.")
+                except TypeError:
+                    await message.channel.send(f"Gagné ! Le mot était `{word}`. Ses statistiques sont inconnues.")
                 self.games.pop(channel)
             else:
                 await self.print_state(message.channel)
@@ -61,7 +71,7 @@ class Pendu(commands.Cog):
             self.games[channel].remaining -= 1
 
             if self.games[channel].remaining == 0:
-                await message.channel.send(f"Perdu ! Le mot était `{self.games[channel].word}`.")
+                await message.channel.send(f"Perdu ! Le mot était `{word}`.")
                 self.games.pop(channel)
             else:
                 await message.channel.send(f"`{letter}` n'était dans le mot :(")
