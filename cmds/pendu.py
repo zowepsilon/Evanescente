@@ -45,13 +45,11 @@ class Pendu(commands.Cog):
         word = self.games[channel].word
 
         if letter in self.games[channel].found:
-            await message.channel.send(f"`{letter}` a déjà été trouvée !")
-            await self.print_state(message.channel)
+            await self.print_state(message.channel, f"`{letter}` a déjà été trouvée !")
             return
 
         if letter in word:
             self.games[channel].found.add(letter)
-            await message.channel.send(f"`{letter}` était dans le mot !")
             
             if self.games[channel].complete():
                 try:
@@ -61,12 +59,12 @@ class Pendu(commands.Cog):
                     if nickname is None:
                         nickname = "Inconnu au bataillon"
 
-                    await message.channel.send(f"Gagné ! Le mot était `{word}`, trouvé par @{nickname}et utilisé {count} fois.")
+                    await message.channel.send(f"Gagné ! Le mot était `{word}`, trouvé par @{nickname} et utilisé {count} fois.")
                 except TypeError:
                     await message.channel.send(f"Gagné ! Le mot était `{word}`. Ses statistiques sont inconnues.")
                 self.games.pop(channel)
             else:
-                await self.print_state(message.channel)
+                await self.print_state(message.channel, f"`{letter}` était dans le mot !")
         else:
             self.games[channel].remaining -= 1
 
@@ -74,16 +72,14 @@ class Pendu(commands.Cog):
                 await message.channel.send(f"Perdu ! Le mot était `{word}`.")
                 self.games.pop(channel)
             else:
-                await message.channel.send(f"`{letter}` n'était dans le mot :(")
-                await self.print_state(message.channel)
+                await self.print_state(message.channel, f"`{letter}` n'était dans le mot :(")
 
-    async def print_state(self, channel):
+    async def print_state(self, channel, message = ""):
         state = self.games[channel.id]
 
-        out = f"### Mot : `{state.partial_word()}`"
-        out += f"- Coups restants : {state.remaining}"
+        out = f"Le mot est **`{state.partial_word()}`**, vous avez {state.remaining} coups restants"
 
-        await channel.send(out)
+        await channel.send(f"{message}\n{out}")
 
     @commands.group(invoke_without_command=True)
     @debuggable
@@ -96,8 +92,7 @@ class Pendu(commands.Cog):
         word = self.bot.word_counter.get_random_word()
         self.games[ctx.channel.id] = PenduState(word=word, found=set(), remaining=int(len(word) / difficulty))
         
-        await ctx.send("Le pendu a commencé !")
-        await self.print_state(ctx.channel)
+        await self.print_state(ctx.channel, "Le pendu a commencé :tada:")
 
 
 def setup(bot):
