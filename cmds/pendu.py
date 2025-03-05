@@ -96,7 +96,7 @@ class Pendu(commands.Cog):
 
     @pendu.command(name="start")
     @debuggable
-    async def pendu_start(self, ctx, difficulty: float = 0.7):
+    async def pendu_start(self, ctx, difficulty: float = 0.3):
         word = self.bot.word_counter.get_random_word()
         self.games[ctx.channel.id] = PenduState(word=word, remaining=int(len(word) / difficulty), message=None)
         await self.up(ctx.message.channel)
