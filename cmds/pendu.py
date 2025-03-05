@@ -78,6 +78,7 @@ class Pendu(commands.Cog):
             await message.add_reaction("✅")
             
             if self.games[channel].complete():
+                self.up(channel)
                 self.games.pop(channel)
         else:
             self.games[channel].wrong.add(letter)
@@ -97,9 +98,20 @@ class Pendu(commands.Cog):
     @debuggable
     async def pendu_start(self, ctx, difficulty: float = 0.2):
         word = self.bot.word_counter.get_random_word()
-        message = await ctx.send("UwU")
-        self.games[ctx.channel.id] = PenduState(word=word, remaining=int(len(word) / difficulty), message=message)
-        await self.games[ctx.channel.id].update()
+        self.games[ctx.channel.id] = PenduState(word=word, remaining=int(len(word) / difficulty), message=None)
+        await self.up(ctx.message.channel.id)
+
+    @pendu.command(name="up")
+    @debuggable
+    async def pendu_up(self, ctx):
+        if ctx.message.channel.id not in self.games.keys():
+            return await ctx.send("Pas de pendu en cours !")
+
+        self.up(ctx.channel.id)
+
+    async def up(self, channel_id: int):
+        self.games[channel_id].message = await ctx.send("uwu")
+        await self.games[channel_id].update()
 
 def setup(bot):
     bot.add_cog(Pendu(bot))
