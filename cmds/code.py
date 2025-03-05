@@ -54,7 +54,7 @@ class Code(commands.Cog):
         with ctx.message.channel.typing():
             async with connect("wss://play.rust-lang.org/websocket") as websocket:
                 message = await ctx.send("Exécution en cours...")
-                state = RunnerState(stdout="", stderr="", finished=false, message=message)
+                state = RunnerState(stdout="", stderr="", finished=False, message=message)
 
                 await websocket.send('{"type":"websocket/connected","payload":{"iAcceptThisIsAnUnsupportedApi":true},"meta":{"websocket":true,"sequenceNumber":0}}')
                 await websocket.recv()
