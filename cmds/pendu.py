@@ -17,17 +17,41 @@ tokipona = ["toki ", "pona ", "ala ", " li ", "mute ", "wile ", "jan ", "kama ",
 
 @dataclass
 class PenduState:
+    message: Message
     word: str
-    found: set[str]
     remaining: int
 
-    message: Message
+    found: set[str] = field(default_factory=set)
+    wrong: set[str] = field(default_factory=set)
+
+    win: bool = False
 
     def complete(self) -> bool:
         return all(c in self.found for c in self.word)
 
     def partial_word(self) -> str:
         return ''.join(c if c in self.found else '_' for c in self.word)
+
+    async def update(self):
+        out = ""
+
+        if self.complete():
+            out += "## Gagné !\n"
+        elif self.remaining == 0:
+            out += "## Perdu !\n"
+
+        if self.remaining != 0 and not self.complete():
+            out += f"### Le mot est `{self.partial_word()}`."
+        else:
+            out += f"### Le mot était `{self.word}`."
+
+        out += f"- Coups restants: {self.remaining}"
+
+        out += "- Lettres trouvées : " + ''.join(sorted(list(self.found)))
+        out += "- Lettres incorrectes : " + ''.join(sorted(list(self.wrong)))
+
+        await self.message.edit(out)
+
 
 class Pendu(commands.Cog):
     def __init__(self, bot):
@@ -48,39 +72,21 @@ class Pendu(commands.Cog):
         letter = message.content[0]
         word = self.games[channel].word
 
-        if letter in self.games[channel].found:
-            await self.print_state(message.channel, f"`{letter}` a déjà été trouvée !")
-            return
-
         if letter in word:
             self.games[channel].found.add(letter)
+            await self.games[channel].update()
+            await self.games[channel].message.add_reaction("✔️")
             
             if self.games[channel].complete():
-                (_, count, user_id) = self.bot.word_counter.get_word_rank(word)
-                nickname =  self.bot.nickname_cache.get_nick(user_id)
-
-                if nickname is None:
-                    nickname = "Inconnu au bataillon"
-
-                await message.channel.send(f"Gagné ! Le mot était `{word}`, trouvé par {nickname} et utilisé {count} fois.")
                 self.games.pop(channel)
-            else:
-                await self.print_state(message.channel, f"`{letter}` était dans le mot !")
         else:
+            self.games[channel].wrong.add(letter)
             self.games[channel].remaining -= 1
+            await self.games[channel].update()
+            await self.games[channel].message.add_reaction("❌")
 
             if self.games[channel].remaining == 0:
-                await message.channel.send(f"Perdu ! Le mot était `{word}`.")
                 self.games.pop(channel)
-            else:
-                await self.print_state(message.channel, f"`{letter}` n'était dans le mot :(")
-
-    async def print_state(self, channel, message = ""):
-        state = self.games[channel.id]
-
-        out = f"Le mot est **`{state.partial_word()}`**, vous avez {state.remaining} coups restants"
-
-        await channel.send(f"{message}\n{out}")
 
     @commands.group(invoke_without_command=True)
     @debuggable
@@ -91,10 +97,9 @@ class Pendu(commands.Cog):
     @debuggable
     async def pendu_start(self, ctx, difficulty: float = 0.2):
         word = self.bot.word_counter.get_random_word()
-        self.games[ctx.channel.id] = PenduState(word=word, found=set(), remaining=int(len(word) / difficulty))
-        
-        await ctx.send("Le pendu a commencé !")
-        self.games[ctx.channel.id] = await ctx.send(f"Le mot est **`{state.partial_word()}`**, vous avez {state.remaining} coups restants")
+        message = await ctx.send("UwU")
+        self.games[ctx.channel.id] = PenduState(word=word, remaining=int(len(word) / difficulty), message=message)
+        self.games[ctx.channel.id].update()
 
 def setup(bot):
     bot.add_cog(Pendu(bot))
