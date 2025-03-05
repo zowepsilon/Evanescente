@@ -50,7 +50,7 @@ class Code(commands.Cog):
             if ctx.message.reference is None:
                 return await ctx.send("Il faut répondre à un message contenant du code ou donner le code en argument !")
 
-            code = self.bot.get_message(ctx.message.reference.message_id).content
+            code = (await ctx.fetch_message(ctx.message.reference.message_id)).content
 
 
         if code.startswith("```rust"):
