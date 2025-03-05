@@ -78,7 +78,7 @@ class Pendu(commands.Cog):
             await message.add_reaction("✅")
             
             if self.games[channel].complete():
-                self.up(message.channel)
+                await self.up(message.channel)
                 self.games.pop(channel)
         else:
             self.games[channel].wrong.add(letter)
@@ -107,7 +107,7 @@ class Pendu(commands.Cog):
         if ctx.message.channel.id not in self.games.keys():
             return await ctx.send("Pas de pendu en cours !")
 
-        self.up(ctx.channel)
+        await self.up(ctx.channel)
 
     async def up(self, channel: Channel):
         self.games[channel.id].message = await channel.send("uwu")
