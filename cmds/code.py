@@ -62,46 +62,45 @@ class Code(commands.Cog):
 
         TIMEOUT = 10
 
-        with ctx.message.channel.typing():
-            async with connect("wss://play.rust-lang.org/websocket") as websocket:
-                message = await ctx.send("Exécution en cours...")
-                state = RunnerState(stdout="", stderr="", finished=False, failed=True, message=message)
+        async with connect("wss://play.rust-lang.org/websocket") as websocket:
+            message = await ctx.send("Exécution en cours...")
+            state = RunnerState(stdout="", stderr="", finished=False, failed=True, message=message)
 
-                await websocket.send('{"type":"websocket/connected","payload":{"iAcceptThisIsAnUnsupportedApi":true},"meta":{"websocket":true,"sequenceNumber":0}}')
-                await websocket.recv()
-                await websocket.recv()
+            await websocket.send('{"type":"websocket/connected","payload":{"iAcceptThisIsAnUnsupportedApi":true},"meta":{"websocket":true,"sequenceNumber":0}}')
+            await websocket.recv()
+            await websocket.recv()
 
-                req = '{"type":"output/execute/wsExecuteRequest","payload":{"channel":"stable","mode":"debug","edition":"2024","crateType":"bin","tests":false,"code":"' \
-                    + code \
-                    + '","backtrace":false},"meta":{"websocket":true,"sequenceNumber":1}}'
-                await websocket.send(req)
+            req = '{"type":"output/execute/wsExecuteRequest","payload":{"channel":"stable","mode":"debug","edition":"2024","crateType":"bin","tests":false,"code":"' \
+                + code \
+                + '","backtrace":false},"meta":{"websocket":true,"sequenceNumber":1}}'
+            await websocket.send(req)
 
-                start = time.time()
-    
-                async for message in websocket:
-                    res = json.loads(message)
+            start = time.time()
+
+            async for message in websocket:
+                res = json.loads(message)
 
 
-                    match res["type"]:
-                        case "output/execute/wsExecuteEnd":
-                            state.finished = True
-                            await state.update_message()
-                            break
-
-                        case "output/execute/wsExecuteStderr":
-                            state.stderr += res["payload"]
-                            await state.update_message()
-
-                        case "output/execute/wsExecuteStdout":
-                            state.stdout += res["payload"]
-                            await state.update_message()
-                        
-
-                    if time.time() > start + TIMEOUT:
+                match res["type"]:
+                    case "output/execute/wsExecuteEnd":
                         state.finished = True
-                        state.failed = True
                         await state.update_message()
                         break
+
+                    case "output/execute/wsExecuteStderr":
+                        state.stderr += res["payload"]
+                        await state.update_message()
+
+                    case "output/execute/wsExecuteStdout":
+                        state.stdout += res["payload"]
+                        await state.update_message()
+                    
+
+                if time.time() > start + TIMEOUT:
+                    state.finished = True
+                    state.failed = True
+                    await state.update_message()
+                    break
 
 def setup(bot):
     bot.add_cog(Code(bot))
