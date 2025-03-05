@@ -99,7 +99,7 @@ class Pendu(commands.Cog):
         word = self.bot.word_counter.get_random_word()
         message = await ctx.send("UwU")
         self.games[ctx.channel.id] = PenduState(word=word, remaining=int(len(word) / difficulty), message=message)
-        self.games[ctx.channel.id].update()
+        await self.games[ctx.channel.id].update()
 
 def setup(bot):
     bot.add_cog(Pendu(bot))
