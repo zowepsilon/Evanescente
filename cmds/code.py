@@ -45,10 +45,12 @@ class Code(commands.Cog):
     @commands.command()
     @debuggable
     async def run(self, ctx, code: str):
-        code = """
-        fn main() {
-            println!("Hello, world!");
-        }
+        print(repr(code))
+
+        code = f"""
+        fn main() {{
+            {code}
+        }}
         """.replace("\n", "\\n").replace("\"", "\\\"")
 
         with ctx.message.channel.typing():
