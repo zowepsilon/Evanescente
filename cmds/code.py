@@ -45,9 +45,9 @@ class Code(commands.Cog):
     @commands.command()
     @debuggable
     async def run(self, ctx, *, code: str):
-        if code.startwith("```rust"):
+        if code.startswith("```rust"):
             code = code[7:-3]
-        elif code.startwith("```"):
+        elif code.startswith("```"):
             code = code[3:-3]
 
         code = f"""
