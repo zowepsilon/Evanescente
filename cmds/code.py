@@ -53,12 +53,15 @@ class Code(commands.Cog):
             code = code[7:-3]
         elif code.startswith("```"):
             code = code[3:-3]
+    
+        if "fn main()" not in code:
+            code = f"""
+            fn main() {{
+                {code}
+            }}
+            """
 
-        code = f"""
-        fn main() {{
-            {code}
-        }}
-        """.replace("\n", "\\n").replace("\"", "\\\"")
+        code = code.replace("\n", "\\n").replace("\"", "\\\"")
 
         TIMEOUT = 10
 
