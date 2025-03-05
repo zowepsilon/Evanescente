@@ -41,14 +41,14 @@ class PenduState:
             out += "## Perdu !\n"
 
         if self.remaining != 0 and not self.complete():
-            out += f"### Le mot est `{self.partial_word()}`."
+            out += f"### Le mot est `{self.partial_word()}`.\n"
         else:
-            out += f"### Le mot était `{self.word}`."
+            out += f"### Le mot était `{self.word}`.\n"
 
-        out += f"- Coups restants: {self.remaining}"
+        out += f"- Coups restants: {self.remaining}\n"
 
-        out += "- Lettres trouvées : " + ''.join(sorted(list(self.found)))
-        out += "- Lettres incorrectes : " + ''.join(sorted(list(self.wrong)))
+        out += "- Lettres trouvées : " + ''.join(sorted(list(self.found))) + '\n'
+        out += "- Lettres incorrectes : " + ''.join(sorted(list(self.wrong))) + '\n'
 
         await self.message.edit(out)
 
