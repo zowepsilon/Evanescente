@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import discord
 from discord.ext import commands
 
@@ -11,13 +13,15 @@ from utils import debuggable, sanitize, words_of_message
 cute = ["uwu", ":3", "rawr", "owo", "catgirl", "bébou"]
 
 insultes = ["chokbar", "putain", "merde", "fuck", "shit", "ptn"]
-tokipona = ["toki ", "pona ", "ala ", " li ", "mute ", "wile", "jan ", "kama ", "waso ", "sina "]
+tokipona = ["toki ", "pona ", "ala ", " li ", "mute ", "wile ", "jan ", "kama ", "waso ", "sina "]
 
 @dataclass
 class PenduState:
     word: str
     found: set[str]
     remaining: int
+
+    message: Message
 
     def complete(self) -> bool:
         return all(c in self.found for c in self.word)
@@ -52,16 +56,13 @@ class Pendu(commands.Cog):
             self.games[channel].found.add(letter)
             
             if self.games[channel].complete():
-                try:
-                    (_, count, user_id) = self.bot.word_counter.get_word_rank(word)
-                    nickname =  self.bot.nickname_cache.get_nick(user_id)
+                (_, count, user_id) = self.bot.word_counter.get_word_rank(word)
+                nickname =  self.bot.nickname_cache.get_nick(user_id)
 
-                    if nickname is None:
-                        nickname = "Inconnu au bataillon"
+                if nickname is None:
+                    nickname = "Inconnu au bataillon"
 
-                    await message.channel.send(f"Gagné ! Le mot était `{word}`, trouvé par @{nickname} et utilisé {count} fois.")
-                except TypeError:
-                    await message.channel.send(f"Gagné ! Le mot était `{word}`. Ses statistiques sont inconnues.")
+                await message.channel.send(f"Gagné ! Le mot était `{word}`, trouvé par {nickname} et utilisé {count} fois.")
                 self.games.pop(channel)
             else:
                 await self.print_state(message.channel, f"`{letter}` était dans le mot !")
@@ -81,6 +82,8 @@ class Pendu(commands.Cog):
 
         await channel.send(f"{message}\n{out}")
 
+    @commands
+
     @commands.group(invoke_without_command=True)
     @debuggable
     async def pendu(self, ctx):
@@ -92,8 +95,8 @@ class Pendu(commands.Cog):
         word = self.bot.word_counter.get_random_word()
         self.games[ctx.channel.id] = PenduState(word=word, found=set(), remaining=int(len(word) / difficulty))
         
-        await self.print_state(ctx.channel, "Le pendu a commencé :tada:")
-
+        await ctx.send("Le pendu a commencé !")
+        self.games[ctx.channel.id] = await ctx.send(f"Le mot est **`{state.partial_word()}`**, vous avez {state.remaining} coups restants")
 
 def setup(bot):
     bot.add_cog(Pendu(bot))

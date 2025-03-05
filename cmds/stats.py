@@ -47,7 +47,7 @@ class Stats(commands.Cog):
 
             if voc_channel is None:
                 voc_channel = self.bot.get_channel(self.bot.config["vocabulaire_id"])
-                name = sanitize(self.get_nickname(message.author.id))
+                name = sanitize(self.bot.nickname_cache.get_nick(message.author.id))
 
             await voc_channel.send(f"Nouveau mot : `{w}` - trouvé par {name}")
 
@@ -71,14 +71,6 @@ class Stats(commands.Cog):
     async def on_member_update(self, before, after):
         self.bot.nickname_cache.set_nick(after.id, after.display_name)
 
-    def get_nickname(self, user_id: int) -> str | None:
-        name = self.bot.nickname_cache.get_nick(user_id)
-
-        if name is None:
-            return "<unknown>"
-
-        return name[0]
-        
     @commands.command()
     @debuggable
     async def rank(self, ctx, *, user: discord.Member = None):
@@ -130,7 +122,7 @@ class Stats(commands.Cog):
 
         out = f"## Leaderboard ({category}s)\n"
         for rank, user_id, message_count in leaderboard:
-            name = sanitize(self.get_nickname(user_id))
+            name = sanitize(self.bot.nickname_cache.get_nick(user_id))
             out += f"{rank}. {name} - {message_count} {category}s\n"
 
         await ctx.send(out)
@@ -154,7 +146,7 @@ class Stats(commands.Cog):
 
         out = f"## Leaderboard d'exploration\n"
         for rank, user_id, count in leaderboard:
-            name = sanitize(self.get_nickname(user_id))
+            name = sanitize(self.bot.nickname_cache.get_nick(user_id))
             out += f"{rank}. {name} - {count} mots trouvés\n"
 
         await ctx.send(out)
@@ -199,7 +191,7 @@ class Stats(commands.Cog):
 
         out = f"## Leaderboard des mots\n"
         for (rank, word, count, user_id) in leaderboard:
-            name = sanitize(self.get_nickname(user_id))
+            name = sanitize(self.bot.nickname_cache.get_nick(user_id))
             out += f"{rank}. `{word}` - utilisé {count} fois, trouvé par {name}\n"
 
         await ctx.send(out)
@@ -213,7 +205,7 @@ class Stats(commands.Cog):
         except TypeError:
             return await ctx.send(f"Mot inconnu: `{word}`")
         
-        name = sanitize(self.get_nickname(first_user_id))
+        name = sanitize(self.bot.nickname_cache.get_nick(first_user_id))
         await ctx.send(f"Statistiques pour `{word}`: #{rank} - utilisé {count} fois, trouvé par {name}")
     
     def category_message(self):

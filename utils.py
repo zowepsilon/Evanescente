@@ -327,7 +327,8 @@ class NicknameCache:
             WHERE UserId = ?;
         """, [user_id])
         
-        return self.cursor.fetchone()
+        result = self.cursor.fetchone()
+        return "<unknown>" if result is None else result[0]
 
     def set_nick(self, user_id: int, name: str):
         self.cursor.execute(f"""

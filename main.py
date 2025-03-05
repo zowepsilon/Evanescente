@@ -74,7 +74,8 @@ bot = Bot(modules=(
     "cmds.dev",
     "cmds.fun",
     "cmds.stats",
-    "cmds.pendu"
+    "cmds.pendu",
+    "cmds.code",
 ))
 
 bot.run()
