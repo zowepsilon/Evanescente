@@ -23,16 +23,16 @@ class RunnerState:
     async def update_message(self):
         out = "Exécution en cours...\n" if not self.finished else "Exécution terminée\n"
 
-        if self.stdout != "":
-            out += "-# STDOUT\n"
-            out += "```\n"
-            out += self.stdout.replace("`", "​`")
-            out += "```\n"
-
         if self.stderr != "":
             out += "-# STDERR\n"
             out += "```rust\n"
             out += self.stderr.replace("`", "​`")
+            out += "```\n"
+
+        if self.stdout != "":
+            out += "-# STDOUT\n"
+            out += "```\n"
+            out += self.stdout.replace("`", "​`")
             out += "```\n"
 
         await self.message.edit(out)
