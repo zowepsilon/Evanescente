@@ -48,7 +48,14 @@ class Code(commands.Cog):
 
     @commands.command()
     @debuggable
-    async def run(self, ctx, *, code: str):
+    async def run(self, ctx, *, code: str = None):
+        if code is None:
+            if ctx.message.reference is None:
+                return await ctx.send("Il faut répondre à un message contenant du code ou donner le code en argument !")
+
+            code = self.bot.get_message(ctx.message.reference.message_id).content
+
+
         if code.startswith("```rust"):
             code = code[7:-3]
         elif code.startswith("```"):
