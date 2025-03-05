@@ -6,6 +6,7 @@ from discord.ext import commands
 from dataclasses import dataclass
 
 import json
+import time
 import asyncio
 from websockets.asyncio.client import connect
 
@@ -16,11 +17,14 @@ class RunnerState:
     stdout: str
     stderr: str
     finished: bool
+    failed: bool
 
     message: Message
 
     async def update_message(self):
-        out = "Exécution en cours...\n" if not self.finished else "Exécution terminée\n"
+        out = "Exécution en cours...\n" if not self.finished \
+            else "Exécution terminée\n" if not self.failed \
+            else "Exécution trop longue\n"
 
         if self.stdout != "":
             out += "-# STDOUT\n"
@@ -56,10 +60,12 @@ class Code(commands.Cog):
         }}
         """.replace("\n", "\\n").replace("\"", "\\\"")
 
+        TIMEOUT = 10
+
         with ctx.message.channel.typing():
             async with connect("wss://play.rust-lang.org/websocket") as websocket:
                 message = await ctx.send("Exécution en cours...")
-                state = RunnerState(stdout="", stderr="", finished=False, message=message)
+                state = RunnerState(stdout="", stderr="", finished=False, failed=True, message=message)
 
                 await websocket.send('{"type":"websocket/connected","payload":{"iAcceptThisIsAnUnsupportedApi":true},"meta":{"websocket":true,"sequenceNumber":0}}')
                 await websocket.recv()
@@ -70,8 +76,11 @@ class Code(commands.Cog):
                     + '","backtrace":false},"meta":{"websocket":true,"sequenceNumber":1}}'
                 await websocket.send(req)
 
+                start = time.time()
+    
                 async for message in websocket:
                     res = json.loads(message)
+
 
                     match res["type"]:
                         case "output/execute/wsExecuteEnd":
@@ -87,9 +96,12 @@ class Code(commands.Cog):
                             state.stdout += res["payload"]
                             await state.update_message()
                         
-                        case _:
-                            print(f"WARNING: unknown message {res}")
 
+                    if time.time() > start + TIMEOUT:
+                        self.state.finished = True
+                        self.state.failed = True
+                        await state.update_message()
+                        break
 
 def setup(bot):
     bot.add_cog(Code(bot))
