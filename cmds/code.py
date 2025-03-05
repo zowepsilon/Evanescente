@@ -17,14 +17,11 @@ class RunnerState:
     stdout: str
     stderr: str
     finished: bool
-    failed: bool
 
     message: Message
 
     async def update_message(self):
-        out = "Exécution en cours...\n" if not self.finished \
-            else "Exécution terminée\n" if not self.failed \
-            else "Exécution trop longue\n"
+        out = "Exécution en cours...\n" if not self.finished else "Exécution terminée\n"
 
         if self.stdout != "":
             out += "-# STDOUT\n"
@@ -74,7 +71,7 @@ class Code(commands.Cog):
 
         async with connect("wss://play.rust-lang.org/websocket") as websocket:
             message = await ctx.send("Exécution en cours...")
-            state = RunnerState(stdout="", stderr="", finished=False, failed=True, message=message)
+            state = RunnerState(stdout="", stderr="", finished=False, message=message)
 
             await websocket.send('{"type":"websocket/connected","payload":{"iAcceptThisIsAnUnsupportedApi":true},"meta":{"websocket":true,"sequenceNumber":0}}')
             await websocket.recv()
@@ -108,7 +105,6 @@ class Code(commands.Cog):
 
                 if time.time() > start + TIMEOUT:
                     state.finished = True
-                    state.failed = True
                     await state.update_message()
                     break
 
