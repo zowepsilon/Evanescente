@@ -44,7 +44,7 @@ class Code(commands.Cog):
 
     @commands.command()
     @debuggable
-    async def run(self, ctx, code: str):
+    async def run(self, ctx, *, code: str):
         print(repr(code))
 
         code = f"""
