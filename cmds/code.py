@@ -98,8 +98,8 @@ class Code(commands.Cog):
                         
 
                     if time.time() > start + TIMEOUT:
-                        self.state.finished = True
-                        self.state.failed = True
+                        state.finished = True
+                        state.failed = True
                         await state.update_message()
                         break
 
