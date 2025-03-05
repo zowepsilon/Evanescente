@@ -19,7 +19,7 @@ class RunnerState:
 
     message: Message
 
-    def update_message(self):
+    async def update_message(self):
         out = "Exécution en cours...\n" if not self.finished else "Exécution terminée\n"
 
         if self.stdout != "":
@@ -34,7 +34,7 @@ class RunnerState:
             out += self.stderr
             out += "```\n"
 
-        self.message.edit(out)
+        await self.message.edit(out)
 
 
 class Code(commands.Cog):
@@ -71,16 +71,16 @@ class Code(commands.Cog):
                     match res["type"]:
                         case "output/execute/wsExecuteEnd":
                             state.finished = True
-                            state.update_message()
+                            await state.update_message()
                             break
 
                         case "output/execute/wsExecuteStderr":
                             state.stderr += res["payload"]
-                            state.update_message()
+                            await state.update_message()
 
                         case "output/execute/wsExecuteStdout":
                             state.stdout += res["payload"]
-                            state.update_message()
+                            await state.update_message()
 
 
 def setup(bot):
