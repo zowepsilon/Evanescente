@@ -86,6 +86,9 @@ class Code(commands.Cog):
                         case "output/execute/wsExecuteStdout":
                             state.stdout += res["payload"]
                             await state.update_message()
+                        
+                        case _:
+                            print(f"WARNING: unknown message {res}")
 
 
 def setup(bot):
