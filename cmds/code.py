@@ -70,7 +70,7 @@ class Code(commands.Cog):
             await websocket.recv()
             await websocket.recv()
 
-            req = '{"type":"output/execute/wsExecuteRequest","payload":{"channel":"stable","mode":"debug","edition":"2024","crateType":"bin","tests":false,"code":"' \
+            req = '{"type":"output/execute/wsExecuteRequest","payload":{"channel":"nightly","mode":"debug","edition":"2024","crateType":"bin","tests":false,"code":"' \
                 + code \
                 + '","backtrace":false},"meta":{"websocket":true,"sequenceNumber":1}}'
             await websocket.send(req)
