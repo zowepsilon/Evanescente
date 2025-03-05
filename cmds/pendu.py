@@ -75,7 +75,7 @@ class Pendu(commands.Cog):
         if letter in word:
             self.games[channel].found.add(letter)
             await self.games[channel].update()
-            await self.games[channel].message.add_reaction("✔️")
+            await message.add_reaction("✅")
             
             if self.games[channel].complete():
                 self.games.pop(channel)
@@ -83,7 +83,7 @@ class Pendu(commands.Cog):
             self.games[channel].wrong.add(letter)
             self.games[channel].remaining -= 1
             await self.games[channel].update()
-            await self.games[channel].message.add_reaction("❌")
+            await message.add_reaction("❌")
 
             if self.games[channel].remaining == 0:
                 self.games.pop(channel)
