@@ -82,8 +82,6 @@ class Pendu(commands.Cog):
 
         await channel.send(f"{message}\n{out}")
 
-    @commands
-
     @commands.group(invoke_without_command=True)
     @debuggable
     async def pendu(self, ctx):
