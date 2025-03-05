@@ -3,6 +3,8 @@ from __future__ import annotations
 import discord
 from discord.ext import commands
 
+from dataclasses import dataclass
+
 import json
 import asyncio
 from websockets.asyncio.client import connect
