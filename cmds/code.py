@@ -25,13 +25,13 @@ class RunnerState:
         if self.stdout != "":
             out += "-# STDOUT\n"
             out += "```\n"
-            out += self.stdout
+            out += self.stdout.replace("`", "​`")
             out += "```\n"
 
         if self.stderr != "":
-            out += "-# STDOUT\n"
+            out += "-# STDERR\n"
             out += "```\n"
-            out += self.stderr
+            out += self.stderr.replace("`", "​`")
             out += "```\n"
 
         await self.message.edit(out)
