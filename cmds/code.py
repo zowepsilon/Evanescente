@@ -30,7 +30,7 @@ class RunnerState:
 
         if self.stderr != "":
             out += "-# STDERR\n"
-            out += "```\n"
+            out += "```rust\n"
             out += self.stderr.replace("`", "​`")
             out += "```\n"
 
@@ -45,7 +45,10 @@ class Code(commands.Cog):
     @commands.command()
     @debuggable
     async def run(self, ctx, *, code: str):
-        print(repr(code))
+        if code.startwith("```rust"):
+            code = code[7:-3]
+        elif code.startwith("```"):
+            code = code[3:-3]
 
         code = f"""
         fn main() {{
