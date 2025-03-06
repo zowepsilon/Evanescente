@@ -83,7 +83,7 @@ class Code(commands.Cog):
             await websocket.send(req)
             
             try:
-                with asyncio.timeout(TIMEOUT):
+                async with asyncio.timeout(TIMEOUT):
                     async for raw in websocket:
                         res = json.loads(raw)
 
