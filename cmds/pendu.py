@@ -69,8 +69,14 @@ class Pendu(commands.Cog):
         if message.channel.id not in self.games.keys():
             return
 
-        letter = message.content[0]
+        letter = message.content[0].lower()
         word = self.games[channel].word
+
+        if letter in self.games[channel].found:
+            return
+
+        if letter in self.games[channel].wrong:
+            return
 
         if letter in word:
             self.games[channel].found.add(letter)
