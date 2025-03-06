@@ -68,9 +68,9 @@ class Code(commands.Cog):
         code = code.replace("\n", "\\n").replace("\"", "\\\"")
 
         TIMEOUT = 10
+        message = await ctx.send("Exécution en cours...")
 
         async with connect("wss://play.rust-lang.org/websocket") as websocket:
-            message = await ctx.send("Exécution en cours...")
             state = RunnerState(stdout="", stderr="", finished=False, message=message)
 
             await websocket.send('{"type":"websocket/connected","payload":{"iAcceptThisIsAnUnsupportedApi":true},"meta":{"websocket":true,"sequenceNumber":0}}')
@@ -81,32 +81,33 @@ class Code(commands.Cog):
                 + code \
                 + '","backtrace":false},"meta":{"websocket":true,"sequenceNumber":1}}'
             await websocket.send(req)
+            
+            try:
+                with asyncio.timeout(TIMEOUT):
+                    async for raw in websocket:
+                        res = json.loads(raw)
 
-            start = time.time()
+                        match res["type"]:
+                            case "output/execute/wsExecuteEnd":
+                                state.finished = True
+                                await state.update_message()
+                                break
 
-            async for message in websocket:
-                res = json.loads(message)
+                            case "output/execute/wsExecuteStderr":
+                                state.stderr += res["payload"]
+                                await state.update_message()
 
+                            case "output/execute/wsExecuteStdout":
+                                state.stdout += res["payload"]
+                                await state.update_message()
 
-                match res["type"]:
-                    case "output/execute/wsExecuteEnd":
-                        state.finished = True
-                        await state.update_message()
-                        break
+                            case _:
+                                print("UNKNOWN REQUEST TYPE:", res["type"])
+                                print("REQUEST :", res)
 
-                    case "output/execute/wsExecuteStderr":
-                        state.stderr += res["payload"]
-                        await state.update_message()
-
-                    case "output/execute/wsExecuteStdout":
-                        state.stdout += res["payload"]
-                        await state.update_message()
-                    
-
-                if time.time() > start + TIMEOUT:
-                    state.finished = True
-                    await state.update_message()
-                    break
+            except asyncio.TimeoutError:
+                state.finished = True
+                await state.update_message()
 
 def setup(bot):
     bot.add_cog(Code(bot))
