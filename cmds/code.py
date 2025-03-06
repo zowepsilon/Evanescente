@@ -70,6 +70,8 @@ class Code(commands.Cog):
         TIMEOUT = 10
         message = await ctx.send("Exécution en cours...")
 
+        print("CODE:", code)
+
         async with connect("wss://play.rust-lang.org/websocket") as websocket:
             state = RunnerState(stdout="", stderr="", finished=False, message=message)
 
