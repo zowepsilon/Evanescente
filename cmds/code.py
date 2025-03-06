@@ -65,7 +65,7 @@ class Code(commands.Cog):
             }}
             """
 
-        code = code.replace("\n", "\\n").replace("\"", "\\\"")
+        code = code.replace("\\", "\\\\").replace("\n", "\\n").replace("\"", "\\\"")
 
         TIMEOUT = 10
         message = await ctx.send("Exécution en cours...")
