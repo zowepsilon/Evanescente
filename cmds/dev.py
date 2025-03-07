@@ -129,6 +129,8 @@ class Developper(commands.Cog):
         rebuild = DatabaseRebuilder(db_path)
         await ctx.send(f"DB connectée à {db_path}")
 
+        await ctx.send(f"{ctx.message.created_at}")
+
         all_messages = []
         n = 0
         for channel in ctx.guild.channels:
