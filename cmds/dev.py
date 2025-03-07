@@ -129,8 +129,6 @@ class Developper(commands.Cog):
         rebuild = DatabaseRebuilder(db_path)
         await ctx.send(f"DB connectée à {db_path}")
 
-        await ctx.send(f"{ctx.message.created_at}, {type(ctx.message.created_at)}, {int(ctx.message.created_at)}, {dir(ctx.message.created_at)}")
-
         all_messages = []
         n = 0
         for channel in ctx.guild.channels:
@@ -150,7 +148,7 @@ class Developper(commands.Cog):
             all_messages.extend(channel_messages)
 
         await ctx.send(f"{n} salons ont été analysés pour {len(all_messages)} messages au total.\nJe trie les messages par date...")
-        all_messages.sort()
+        all_messages.sort(key=lambda message: message.created_at)
         await ctx.send(f"Tri des messages terminé !")
 
 
