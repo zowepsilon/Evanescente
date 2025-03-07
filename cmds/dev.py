@@ -126,7 +126,7 @@ class Developper(commands.Cog):
         if not self.bot.is_dev(ctx.author.id):
             return await ctx.send("You need to be a developer to do that!")
         
-        rebuild = DatabaseRebuilder(db_path)
+        rebuilder = DatabaseRebuilder(db_path)
         await ctx.send(f"DB connectée à {db_path}")
 
         all_messages = []
@@ -150,10 +150,12 @@ class Developper(commands.Cog):
         await ctx.send(f"{n} salons ont été analysés pour {len(all_messages)} messages au total.\nJe trie les messages par date...")
         all_messages.sort(key=lambda message: message.created_at)
         await ctx.send(f"Tri des messages terminé !")
+        await ctx.send(f"Début du traitement des messages...")
+        for message in all_messages:
+            rebuilder.process_message(message)
 
-        for msg in all_messages:
-            await ctx.send(f"{msg.content}")
-
+        await ctx.send("Les messages ont bien été traités !")
+        
 
 def setup(bot): 
     bot.add_cog(Developper(bot))
