@@ -84,8 +84,6 @@ class Stats(commands.Cog):
                 continue
 
             out += f"- {message_count} {category}s - Rang: #{rank}\n"
-
-        
         try:
             (rank, count) = self.bot.word_counter.get_user_rank(user.id)
             out += f"- {count} mots trouvés - Rang: #{rank}"

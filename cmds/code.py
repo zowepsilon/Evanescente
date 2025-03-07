@@ -103,6 +103,8 @@ class Code(commands.Cog):
                                 state.stdout += res["payload"]
                                 await state.update_message()
 
+                            case "output/execute/wsExecuteStatus" | "output/execute/wsExecuteBegin":
+                                pass
                             case _:
                                 print("UNKNOWN REQUEST TYPE:", res["type"])
                                 print("REQUEST :", res)

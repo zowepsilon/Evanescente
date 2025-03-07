@@ -8,7 +8,7 @@ import random
 import sqlite3
 from dataclasses import dataclass, field
 
-from utils import debuggable, sanitize, words_of_message
+from utils import debuggable, sanitize, words_of_message, PenduAccuracyCounter
 
 cute = ["uwu", ":3", "rawr", "owo", "catgirl", "bébou"]
 
@@ -59,6 +59,7 @@ class Pendu(commands.Cog):
         self.repeat = True
 
         self.games: dict[int, PenduState] = {}
+        self.db = PenduAccuracyCounter(self.bot.cursor, "PenduAccuracies")
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -82,6 +83,8 @@ class Pendu(commands.Cog):
             self.games[channel].found.add(letter)
             await self.games[channel].update()
             await message.add_reaction("✅")
+
+            self.db.add_correct_letter(message.author.id)
             
             if self.games[channel].complete():
                 await self.up(message.channel)
@@ -91,6 +94,8 @@ class Pendu(commands.Cog):
             self.games[channel].remaining -= 1
             await self.games[channel].update()
             await message.add_reaction("❌")
+
+            self.db.add_wrong_letter(message.author.id)
 
             if self.games[channel].remaining == 0:
                 self.games.pop(channel)
@@ -118,6 +123,30 @@ class Pendu(commands.Cog):
     async def up(self, channel: Channel):
         self.games[channel.id].message = await channel.send("uwu")
         await self.games[channel.id].update()
+
+    @pendu.command(name="leaderboard", aliases=["lb"])
+    @debuggable
+    async def pendu_lb(self, ctx, subrange: str = None):
+        if subrange is not None:
+            subrange_spl = subrange.split("-")
+            if len(subrange_spl) != 2:
+                return await ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
+            try:
+                start, end = int(subrange_spl[0]), int(subrange_spl[1])
+            except ValueError:
+                return await ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
+        
+            leaderboard = self.db.get_leaderboard(start, end)
+        else:
+            leaderboard = self.db.get_leaderboard(None, 10)
+
+        out = f"## Leaderboard du pendu\n"
+        for rank, user_id, correct_count, total_count, accuracy in leaderboard:
+            name = sanitize(self.bot.nickname_cache.get_nick(user_id))
+            out += f"{rank}. {name} - Précision : {accuracy} ({correct_count}/{total_count} mots)\n"
+
+        await ctx.send(out)
+
 
 def setup(bot):
     bot.add_cog(Pendu(bot))

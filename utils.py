@@ -338,3 +338,68 @@ class NicknameCache:
             DO UPDATE
             SET Name = ?
         """,  [user_id, name, name])
+
+
+class PenduAccuracyCounter:
+    def __init__(self, cursor, table_name):
+        self.cursor = cursor
+        self.table_name = table_name
+
+        self.cursor.execute(f"""
+            CREATE TABLE IF NOT EXISTS {self.table_name} (
+                UserId int PRIMARY KEY,
+                CorrectCount int,
+                TotalCount int
+            );
+        """)
+
+    def add_correct_letter(self, user_id: int):
+        self.cursor.execute(f"""
+            INSERT INTO {self.table_name}
+            VALUES(?, 1, 1)
+            ON CONFLICT(UserId)
+            DO UPDATE
+            SET
+            CorrectCount = CorrectCount + 1,
+            TotalCount = TotalCount + 1;
+        """, [user_id])
+
+    def add_wrong_letter(self, user_id: int):
+        self.cursor.execute(f"""
+            INSERT INTO {self.table_name}
+            VALUES(?, 0, 1)
+            ON CONFLICT(UserId)
+            DO UPDATE
+            SET TotalCount = TotalCount + 1;
+        """, [user_id])
+
+    def get_leaderboard(self, start: int = None, end: int = None) -> list[(int, int, int, int, float)]:
+        if start is None:
+            self.cursor.execute(f"""
+                WITH Ratios AS (
+                    SELECT *, CAST(CorrectCount AS float) / CAST(TotalCount AS float) AS Accuracy
+                    FROM {self.table_name}
+                ), Rankings AS (
+                    SELECT ROW_NUMBER() OVER (ORDER BY Accuracy DESC) AS Rank, *
+                    FROM Ratios
+                )
+                SELECT Rank, UserId, CorrectCount, TotalCount, Accuracy
+                FROM Rankings
+                LIMIT ?;
+
+            """, [end])
+        else:
+            self.cursor.execute(f"""
+                WITH Ratios AS (
+                    SELECT *, CAST(CorrectCount AS float) / CAST(TotalCount AS float) AS Accuracy
+                    FROM {self.table_name}
+                ), Rankings AS (
+                    SELECT ROW_NUMBER() OVER (ORDER BY Accuracy DESC) AS Rank, *
+                    FROM Ratios
+                )
+                SELECT Rank, UserId, CorrectCount, TotalCount, Accuracy
+                FROM Rankings
+                WHERE Rank BETWEEN ? AND ?
+            """, [start, end])
+
+        return self.cursor.fetchall()
