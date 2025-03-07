@@ -104,7 +104,7 @@ class Code(commands.Cog):
 
                             case "output/execute/wsExecuteStdout":
                                 payload = res["payload"]
-                                if payload[0] = '\r':
+                                if payload[0] == '\r':
                                     state.stdout.pop()
                                     payload = payload[1:]
 
