@@ -68,14 +68,14 @@ class Bot(commands.Bot):
         return user_id in self.config["developers"]
 
 bot = Bot(modules=(
-    #"cmds.misc",
-    #"cmds.admin",
-    #"cmds.help",
+    "cmds.misc",
+    "cmds.admin",
+    "cmds.help",
     "cmds.dev",
-    #"cmds.fun",
-    #"cmds.stats",
-    #"cmds.pendu",
-    #"cmds.code",
+    "cmds.fun",
+    "cmds.stats",
+    "cmds.pendu",
+    "cmds.code",
 ))
 
 bot.run()
