@@ -131,7 +131,7 @@ class Developper(commands.Cog):
 
         all_messages = []
         for channel in ctx.guild.channels:
-            if isinstance(channels, discord.CategoryChannel):
+            if isinstance(channel, discord.CategoryChannel):
                 continue
 
             channel_messages = await channel.history(limit=None).flatten()
