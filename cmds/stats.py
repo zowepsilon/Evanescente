@@ -58,8 +58,7 @@ class Stats(commands.Cog):
         if found_count > 10:
             await message.add_reaction("🤓")
 
-        for task in tasks:
-            await task
+        await asyncio.gather(*tasks)
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
