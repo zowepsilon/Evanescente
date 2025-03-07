@@ -129,8 +129,11 @@ class Developper(commands.Cog):
         rebuild = DatabaseRebuilder(db_path)
         await ctx.send(f"DB connectée à {db_path}")
 
+        all_messages = []
         for channel in ctx.guild.channels:
-            await ctx.send(f"{channel.name} : {channel}")
+            channel_messages = await channel.history(limit=None).flatten()
+            await ctx.send(f"{len(channel_messages)} trouvés dans {channel.name}")
+            all_messages.extend(channel_messages)
 
 
 def setup(bot): 
