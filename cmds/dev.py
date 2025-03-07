@@ -131,6 +131,9 @@ class Developper(commands.Cog):
 
         all_messages = []
         for channel in ctx.guild.channels:
+            if isinstance(channels, discord.CategoryChannel):
+                continue
+
             channel_messages = await channel.history(limit=None).flatten()
             await ctx.send(f"{len(channel_messages)} trouvés dans {channel.name}")
             all_messages.extend(channel_messages)
