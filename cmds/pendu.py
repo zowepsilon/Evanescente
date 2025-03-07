@@ -148,7 +148,7 @@ class Pendu(commands.Cog):
             name = sanitize(self.bot.nickname_cache.get_nick(user_id))
             percentage = round(100.0*accuracy, 2)
 
-            out += f"{rank}. {name} - Précision : {percentage}% ({correct_count}/{total_count} mots)\n"
+            out += f"{rank}. {name} - Précision : {percentage}% ({correct_count}/{total_count} lettres)\n"
 
         await ctx.send(out)
 
