@@ -20,6 +20,7 @@ class PenduState:
     message: Message
     word: str
     remaining: int
+    bot: Bot
 
     found: set[str] = field(default_factory=set)
     wrong: set[str] = field(default_factory=set)
@@ -43,7 +44,12 @@ class PenduState:
         if self.remaining != 0 and not self.complete():
             out += f"### Le mot est `{self.partial_word()}`.\n"
         else:
-            out += f"### Le mot était `{self.word}`.\n"
+            out += f"### Le mot était `{self.word}`."
+
+            (rank, count, first_user_id) = self.bot.word_counter.get_word_rank(self.word)
+            name = sanitize(self.bot.nickname_cache.get_nick(first_user_id))
+
+            out += f"#{rank} - utilisé {count} fois, trouvé par {name}.\n"
 
         out += f"- Coups restants: {self.remaining}\n"
 
@@ -84,7 +90,6 @@ class Pendu(commands.Cog):
 
         if letter in word:
             self.games[channel].found.add(letter)
-            await self.games[channel].update()
             await message.add_reaction("✅")
 
             self.db.add_correct_letter(message.author.id)
@@ -92,6 +97,8 @@ class Pendu(commands.Cog):
             if self.games[channel].complete():
                 await self.up(message.channel)
                 self.games.pop(channel)
+            else:
+                await self.games[channel].update()
         else:
             self.games[channel].wrong.add(letter)
             self.games[channel].remaining -= 1
@@ -101,6 +108,7 @@ class Pendu(commands.Cog):
             self.db.add_wrong_letter(message.author.id)
 
             if self.games[channel].remaining == 0:
+                await self.up(message.channel)
                 self.games.pop(channel)
 
     @commands.group(invoke_without_command=True)
@@ -112,7 +120,7 @@ class Pendu(commands.Cog):
     @debuggable
     async def pendu_start(self, ctx, difficulty: float = 0.3):
         word = self.bot.word_counter.get_random_word()
-        self.games[ctx.channel.id] = PenduState(word=word, remaining=int(len(word) / difficulty), message=None)
+        self.games[ctx.channel.id] = PenduState(word=word, remaining=int(len(word) / difficulty), message=None, bot=self.bot)
         await self.up(ctx.message.channel)
 
     @pendu.command(name="up")
