@@ -37,9 +37,13 @@ class Stats(commands.Cog):
         name = None
 
         words = words_of_message(message.content)
+
+        found_count = 0
         for w in words:
             if self.bot.word_counter.exists(w):
                 continue
+
+            found_count += 1
 
             if voc_channel is None:
                 voc_channel = self.bot.get_channel(self.bot.config["vocabulaire_id"])
@@ -48,6 +52,9 @@ class Stats(commands.Cog):
             await voc_channel.send(f"Nouveau mot : `{w}` - trouvé par {name}")
 
         self.bot.word_counter.add_words(words, message.author.id)
+
+        if found_count > 10:
+            await message.add_reaction("🤓")
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
