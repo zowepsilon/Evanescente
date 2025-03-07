@@ -44,12 +44,12 @@ class PenduState:
         if self.remaining != 0 and not self.complete():
             out += f"### Le mot est `{self.partial_word()}`.\n"
         else:
-            out += f"### Le mot était `{self.word}`."
+            out += f"### Le mot était `{self.word}` "
 
             (rank, count, first_user_id) = self.bot.word_counter.get_word_rank(self.word)
             name = sanitize(self.bot.nickname_cache.get_nick(first_user_id))
 
-            out += f"#{rank} - utilisé {count} fois, trouvé par {name}.\n"
+            out += f"(#{rank} - utilisé {count} fois, trouvé par {name})\n"
 
         out += f"- Coups restants: {self.remaining}\n"
 
