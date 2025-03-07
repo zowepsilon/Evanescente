@@ -23,7 +23,7 @@ class DatabaseRebuilder:
             "tokipona": StatCounter(self.cursor, "TokiPonaCounts", lambda msg: any(w in msg.lower() for w in tokipona)),
         }
 
-        self.reac_counter = ReacCounter(self.bot.cursor, "ReactionCounts")
+        self.reac_counter = ReacCounter(self.cursor, "ReactionCounts")
 
     def process_message(self, message):
         if message.author.bot or len(message.content) == 0 or message.content[0] == '?':
