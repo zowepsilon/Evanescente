@@ -71,7 +71,7 @@ class Code(commands.Cog):
         message = await ctx.send("Exécution en cours...")
 
         async with connect("wss://play.rust-lang.org/websocket") as websocket:
-            state = RunnerState(stdout="", stderr="", finished=False, message=message)
+            state = RunnerState(stdout=[], stderr=[], finished=False, message=message)
 
             await websocket.send('{"type":"websocket/connected","payload":{"iAcceptThisIsAnUnsupportedApi":true},"meta":{"websocket":true,"sequenceNumber":0}}')
             await websocket.recv()
