@@ -52,7 +52,6 @@ class Code(commands.Cog):
 
             code = (await ctx.fetch_message(ctx.message.reference.message_id)).content
 
-
         if code.startswith("```rust"):
             code = code[7:-3]
         elif code.startswith("```"):
