@@ -95,7 +95,7 @@ class Code(commands.Cog):
 
                             case "output/execute/wsExecuteStderr":
                                 payload = res["payload"]
-                                if payload[0] = '\r':
+                                if payload[0] == '\r':
                                     state.stderr.pop()
                                     payload = payload[1:]
 
