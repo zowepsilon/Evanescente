@@ -155,6 +155,12 @@ class Developper(commands.Cog):
             rebuilder.process_message(message)
 
         await ctx.send("Les messages ont bien été traités !")
+        await ctx.send("Début du caching des noms...")
+        
+        for m in ctx.author.guild.members:
+            self.bot.nickname_cache.set_nick(m.id, m.display_name)
+
+        await ctx.send(f"Les noms de {len(ctx.author.guild.members)} membres ont été rechargés !")
         
 
 def setup(bot): 
