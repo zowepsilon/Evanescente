@@ -136,15 +136,13 @@ class Developper(commands.Cog):
                 continue
 
             n += 1
-            if n == 5:
-                break
 
             try:
                 channel_messages = await channel.history(limit=None).flatten()
             except discord.Forbidden:
                 continue
 
-            await ctx.send(f"{len(channel_messages)} trouvés dans {channel.name}")
+            await ctx.send(f"- {len(channel_messages)} trouvés dans {channel.name}")
             all_messages.extend(channel_messages)
 
         await ctx.send(f"{n} salons ont été analysés pour {len(all_messages)} messages au total.\nJe trie les messages par date...")
