@@ -130,7 +130,7 @@ class Developper(commands.Cog):
         await ctx.send(f"DB connectée à {db_path}")
 
         for channel in ctx.guild.channels:
-            ctx.send(f"{channel.name} : {channel}")
+            await ctx.send(f"{channel.name} : {channel}")
 
 
 def setup(bot): 
