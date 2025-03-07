@@ -8,7 +8,7 @@ import random
 import sqlite3
 from dataclasses import dataclass, field
 
-from utils import debuggable, sanitize, words_of_message, PenduAccuracyCounter
+from utils import debuggable, sanitize, words_of_message, PenduAccuracyCounter, word_chars
 
 cute = ["uwu", ":3", "rawr", "owo", "catgirl", "bébou"]
 
@@ -72,6 +72,9 @@ class Pendu(commands.Cog):
 
         letter = message.content[0].lower()
         word = self.games[channel].word
+
+        if letter not in word_chars:
+            return
 
         if letter in self.games[channel].found:
             return
