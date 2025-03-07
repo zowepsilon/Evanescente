@@ -5,12 +5,8 @@ import asyncio
 import random
 import sqlite3
 
-from utils import debuggable, StatCounter, ReacCounter, WordCounter, sanitize, words_of_message
+from utils import debuggable, StatCounter, ReacCounter, WordCounter, sanitize, words_of_message, cute, insultes, tokipona
 
-cute = ["uwu", ":3", "rawr", "owo", "catgirl", "bébou"]
-
-insultes = ["chokbar", "putain", "merde", "fuck", "shit", "ptn"]
-tokipona = ["toki ", "pona ", "ala ", " li ", "mute ", "wile", "jan ", "kama ", "waso ", "sina "]
 
 class Stats(commands.Cog):
     def __init__(self, bot):

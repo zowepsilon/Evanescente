@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from utils import debuggable
+from rebuilder import DatabaseRebuilder
 
 import time
 import json
@@ -34,8 +35,6 @@ class Developper(commands.Cog):
             with open(self.bot.CONFIG_PATH, mode='w') as f:
                 json.dump(self.bot.config, f, indent=4)
         await ctx.send(":white_check_mark: Saved configuration!")
-
-
 
     @commands.group(invoke_without_command=True)
     @debuggable
@@ -120,6 +119,19 @@ class Developper(commands.Cog):
 
         self.bot.config["debug"] = not self.bot.config["debug"]
         await ctx.send(f"Le mode debug a été " + ("activé !" if self.bot.config["debug"] else "désactivé !"))
+
+    @commands.command()
+    @debuggable
+    async def rebuild_every_part_of_the_database(self, ctx, db_path: str):
+        if not self.bot.is_dev(ctx.author.id):
+            return await ctx.send("You need to be a developer to do that!")
+        
+        rebuild = DatabaseRebuilder(db_path)
+        await ctx.send(f"DB connectée à {db_path}")
+
+        for channel in ctx.guild.channels:
+            ctx.send(f"{channel.name} : {channel}")
+
 
 def setup(bot): 
     bot.add_cog(Developper(bot))

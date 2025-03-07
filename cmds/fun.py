@@ -11,10 +11,6 @@ class Fun(commands.Cog): # create a class for our cog that inherits from command
         self.bot = bot
         self.repeat = True
 
-    @commands.Cog.listener()
-    async def on_message(self, message):
-        pass
-
     @commands.command()
     @debuggable
     async def roll(self, ctx, *, dices: str = ""):
