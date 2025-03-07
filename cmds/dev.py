@@ -151,6 +151,9 @@ class Developper(commands.Cog):
         all_messages.sort(key=lambda message: message.created_at)
         await ctx.send(f"Tri des messages terminé !")
 
+        for msg in all_messages:
+            await ctx.send(f"{msg.content}")
+
 
 def setup(bot): 
     bot.add_cog(Developper(bot))
