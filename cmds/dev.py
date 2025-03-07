@@ -130,9 +130,15 @@ class Developper(commands.Cog):
         await ctx.send(f"DB connectée à {db_path}")
 
         all_messages = []
+        n = 0
         for channel in ctx.guild.channels:
             if isinstance(channel, discord.CategoryChannel):
                 continue
+
+            n += 1
+            if n == 5:
+                break
+
             try:
                 channel_messages = await channel.history(limit=None).flatten()
             except discord.Forbidden:
@@ -140,6 +146,10 @@ class Developper(commands.Cog):
 
             await ctx.send(f"{len(channel_messages)} trouvés dans {channel.name}")
             all_messages.extend(channel_messages)
+
+        await ctx.send(f"{n} salons ont été analysés pour {len(all_messages)} messages au total.\nJe trie les messages par date...")
+        all_messages.sort()
+        await ctx.send(f"Tri des messages terminé !")
 
 
 def setup(bot): 
