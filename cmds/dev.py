@@ -129,7 +129,7 @@ class Developper(commands.Cog):
         rebuild = DatabaseRebuilder(db_path)
         await ctx.send(f"DB connectée à {db_path}")
 
-        await ctx.send(f"{ctx.message.created_at}")
+        await ctx.send(f"{ctx.message.created_at}, {type(ctx.message.created_at)}, {int(ctx.message.created_at)}, {dir(ctx.message.created_at)}")
 
         all_messages = []
         n = 0
