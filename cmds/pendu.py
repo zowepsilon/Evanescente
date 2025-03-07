@@ -143,7 +143,9 @@ class Pendu(commands.Cog):
         out = f"## Leaderboard du pendu\n"
         for rank, user_id, correct_count, total_count, accuracy in leaderboard:
             name = sanitize(self.bot.nickname_cache.get_nick(user_id))
-            out += f"{rank}. {name} - Précision : {accuracy} ({correct_count}/{total_count} mots)\n"
+            percentage = round(100.0*accuracy, 2)
+
+            out += f"{rank}. {name} - Précision : {percentage}% ({correct_count}/{total_count} mots)\n"
 
         await ctx.send(out)
 
