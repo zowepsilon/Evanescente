@@ -149,7 +149,10 @@ class Developper(commands.Cog):
         all_messages.sort(key=lambda message: message.created_at)
         await ctx.send(f"Tri des messages terminé !")
         await ctx.send(f"Début du traitement des messages...")
-        for message in all_messages:
+        for i, message in enumerate(all_messages):
+            if i % 5000 == 0:
+                await ctx.send(f"{i} messages ont été traités")
+
             rebuilder.process_message(message)
 
         await ctx.send("Les messages ont bien été traités !")

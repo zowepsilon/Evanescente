@@ -1,4 +1,4 @@
-
+import discord
 import sqlite3
 
 from utils import NicknameCache, WordCounter, StatCounter, ReacCounter
