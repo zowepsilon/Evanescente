@@ -119,11 +119,8 @@ class Pendu(commands.Cog):
         if letter not in word_chars:
             return
 
-        if letter in self.games[channel].found:
-            return
-
-        if letter in self.games[channel].wrong:
-            return
+        if letter in self.games[channel].found or letter in self.games[channel].wrong:
+            return await message.reply("Cette lettre a déjà été essayée, andouille.")
 
         if self.games[channel].add(letter):
             await message.add_reaction("✅")
