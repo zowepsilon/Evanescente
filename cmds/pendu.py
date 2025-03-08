@@ -24,6 +24,7 @@ class PenduState:
     
     displayed_found: set[str] = field(default_factory=set)
     found: set[str] = field(default_factory=lambda: {'-'})
+    displayed_wrong: set[str] = field(default_factory=set)
     wrong: set[str] = field(default_factory=set)
 
     win: bool = False
@@ -34,7 +35,7 @@ class PenduState:
     def partial_word(self) -> str:
         return ''.join(c if c in self.found else '_' for c in self.word)
 
-    def add_found(self, c: str):
+    def add(self, letter: str) -> bool:
         classes = [
             'aàâä', 'b', 'cçĉ', 'd', 'eéèêë', 'f', 'g', 'h', 'iîï', 
             'jĵ', 'k', 'l', 'm', 'n', 'oôö', 'p', 'q', 'r', 's', 't',
@@ -42,13 +43,17 @@ class PenduState:
         ]
 
         for cl in classes:
-            if c not in cl:
+            if letter not in cl:
                 continue
             
-            self.found.update(cl)
-            self.displayed_found.add(cl[0])
-
-            break
+            if any(c in self.word for c in cl):
+                self.found.update(cl)
+                self.displayed_found.add(cl[0])
+                return True
+            else:
+                self.wrong.update(cl)
+                self.displayed_wrong.add(cl[0])
+                return False
 
     async def update(self):
         out = ""
@@ -71,7 +76,7 @@ class PenduState:
         out += f"- Coups restants: {self.remaining}\n"
 
         out += "- Lettres trouvées : " + ''.join(sorted(list(self.displayed_found))) + '\n'
-        out += "- Lettres incorrectes : " + ''.join(sorted(list(self.wrong))) + '\n'
+        out += "- Lettres incorrectes : " + ''.join(sorted(list(self.display_wrong))) + '\n'
 
         await self.message.edit(out)
 
@@ -105,8 +110,7 @@ class Pendu(commands.Cog):
         if letter in self.games[channel].wrong:
             return
 
-        if letter in word:
-            self.games[channel].add_found(letter)
+        if self.games[channel].add(letter):
             await message.add_reaction("✅")
 
             self.db.add_correct_letter(message.author.id)
@@ -117,7 +121,6 @@ class Pendu(commands.Cog):
             else:
                 await self.games[channel].update()
         else:
-            self.games[channel].wrong.add(letter)
             self.games[channel].remaining -= 1
             await self.games[channel].update()
             await message.add_reaction("❌")
