@@ -27,8 +27,6 @@ class PenduState:
     displayed_wrong: set[str] = field(default_factory=set)
     wrong: set[str] = field(default_factory=set)
 
-    win: bool = False
-
     def complete(self) -> bool:
         return all(c in self.found for c in self.word)
 
@@ -91,15 +89,28 @@ class Pendu(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if len(message.content) != 1 or message.author.bot or message.content[0] == '?':
+        if len(message.content) == 0 or message.author.bot or message.content[0] == '?':
             return
 
         channel = message.channel.id
         if message.channel.id not in self.games.keys():
             return
 
-        letter = message.content[0].lower()
         word = self.games[channel].word
+        if message.content == word:
+            await message.add_reaction("✅")
+            await message.add_reaction("🔥")
+            self.db.add_correct_letter(message.author.id)
+
+            for letter in word:
+                self.games[channel].add(letter)
+
+            await self.up(message.channel)
+            self.games.pop(channel)
+
+            return
+
+        letter = message.content[0].lower()
 
         if letter not in word_chars:
             return
