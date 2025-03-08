@@ -100,10 +100,11 @@ class Pendu(commands.Cog):
         if message.content == word:
             await message.add_reaction("✅")
             await message.add_reaction("🔥")
-            self.db.add_correct_letter(message.author.id)
-
+            
             for letter in word:
-                self.games[channel].add(letter)
+                if letter not in self.games[channel].found:
+                    self.db.add_correct_letter(message.author.id)
+                    self.games[channel].add(letter)
 
             await self.up(message.channel)
             self.games.pop(channel)
