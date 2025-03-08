@@ -76,7 +76,7 @@ class PenduState:
         out += f"- Coups restants: {self.remaining}\n"
 
         out += "- Lettres trouvées : " + ''.join(sorted(list(self.displayed_found))) + '\n'
-        out += "- Lettres incorrectes : " + ''.join(sorted(list(self.display_wrong))) + '\n'
+        out += "- Lettres incorrectes : " + ''.join(sorted(list(self.displayed_wrong))) + '\n'
 
         await self.message.edit(out)
 
