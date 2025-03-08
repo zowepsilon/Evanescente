@@ -28,7 +28,7 @@ cute = ["uwu", ":3", "rawr", "owo", "catgirl", "bébou"]
 insultes = ["chokbar", "putain", "merde", "fuck", "shit", "ptn"]
 tokipona = ["toki ", "pona ", "ala ", " li ", "mute ", "wile", "jan ", "kama ", "waso ", "sina "]
 
-word_chars = "aàâäbcçĉdeéèêëfghiîïjĵjklmnoôöpqrstuùûüvwxyÿz-"
+word_chars = "aàâäbcçĉdeéèêëfghiîïjĵklmnoôöpqrstuùûüvwxyÿz-"
 word_seps = "'()[]{}\"/,?;:.!`*_"
 sep_trans = str.maketrans({c: ' ' for c in word_seps})
 

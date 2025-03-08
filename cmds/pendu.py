@@ -21,8 +21,9 @@ class PenduState:
     word: str
     remaining: int
     bot: Bot
-
-    found: set[str] = field(default_factory=set)
+    
+    displayed_found: set[str] = field(default_factory=set)
+    found: set[str] = field(default_factory=lambda: {'-'})
     wrong: set[str] = field(default_factory=set)
 
     win: bool = False
@@ -32,6 +33,22 @@ class PenduState:
 
     def partial_word(self) -> str:
         return ''.join(c if c in self.found else '_' for c in self.word)
+
+    def add_found(self, c: str):
+        classes = [
+            'aàâä', 'b', 'cçĉ', 'd', 'eéèêë', 'f', 'g', 'h', 'iîï', 
+            'jĵ', 'k', 'l', 'm', 'n', 'oôö', 'p', 'q', 'r', 's', 't',
+            'uùûü', 'v', 'w', 'x', 'yÿ', 'z', '-'
+        ]
+
+        for cl in classes:
+            if c not in cl:
+                continue
+            
+            self.found.update(cl)
+            self.displayed_found.add(cl[0])
+
+            break
 
     async def update(self):
         out = ""
@@ -49,11 +66,11 @@ class PenduState:
             (rank, count, first_user_id) = self.bot.word_counter.get_word_rank(self.word)
             name = sanitize(self.bot.nickname_cache.get_nick(first_user_id))
 
-            out += f"(#{rank} - utilisé {count} fois, trouvé par {name})\n"
+            out += f"(#{rank} - utilisé {count} fois, trouvé par {name}).\n"
 
         out += f"- Coups restants: {self.remaining}\n"
 
-        out += "- Lettres trouvées : " + ''.join(sorted(list(self.found))) + '\n'
+        out += "- Lettres trouvées : " + ''.join(sorted(list(self.displayed_found))) + '\n'
         out += "- Lettres incorrectes : " + ''.join(sorted(list(self.wrong))) + '\n'
 
         await self.message.edit(out)
