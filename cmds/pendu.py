@@ -110,6 +110,9 @@ class Pendu(commands.Cog):
 
             return
 
+        if len(message.content) != 1:
+            return
+
         letter = message.content[0].lower()
 
         if letter not in word_chars:
