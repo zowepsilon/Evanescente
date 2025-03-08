@@ -106,7 +106,7 @@ class Pendu(commands.Cog):
             return
 
         if letter in word:
-            self.games[channel].found.add(letter)
+            self.games[channel].add_found(letter)
             await message.add_reaction("✅")
 
             self.db.add_correct_letter(message.author.id)
