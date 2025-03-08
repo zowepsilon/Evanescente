@@ -112,9 +112,9 @@ class Developper(commands.Cog):
         if not self.bot.is_dev(ctx.author.id):
             return await ctx.send("You need to be a developer to do that!")
 
-        request = request.lower().split()
+        request = request.split()
 
-        if request[0] == "drop" and request[1] == "table":
+        if request[0].lower() == "drop" and request[1].lower() == "table":
             return await ctx.send(f"Dropped table {request[2]} !")
 
     @commands.command()
