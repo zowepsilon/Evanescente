@@ -108,8 +108,14 @@ class Developper(commands.Cog):
 
     @commands.command()
     @debuggable
-    async def exception(self, ctx):
-        raise ValueError("user failed")
+    async def sql(self, ctx, *, request: str):
+        if not self.bot.is_dev(ctx.author.id):
+            return await ctx.send("You need to be a developer to do that!")
+
+        request = request.lower().split()
+
+        if request[0] == "drop" and request[1] == "table":
+            return await ctx.send(f"Dropped table {request[2]} !")
 
     @commands.command()
     @debuggable
