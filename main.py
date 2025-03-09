@@ -1,4 +1,4 @@
-import json
+imporzRjson
 import time
 import datetime
 
@@ -76,6 +76,7 @@ bot = Bot(modules=(
     "cmds.stats",
     "cmds.pendu",
     "cmds.code",
+    "cmds.chat",
 ))
 
 bot.run()
