@@ -23,7 +23,7 @@ class Chat(commands.Cog):
         out = random.choice(self.bot.config["replies"])
 
         name = sanitize(self.bot.nickname_cache.get_nick(message.author.id))
-        out = reply.replace("{user}", name)
+        out = out.replace("{user}", name)
 
         await message.reply(out)
 
