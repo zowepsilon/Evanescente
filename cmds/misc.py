@@ -319,7 +319,10 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
             out += "​"
             for line in range(5):
                 for char in message:
-                    out += art[char][line].translate(trans) + "      "
+                    try:
+                        out += art[char][line].translate(trans) + "      "
+                    except KeyError:
+                        pass
                 
                 out += "\n"
             out += "\n"
