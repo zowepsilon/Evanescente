@@ -15,10 +15,6 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
     async def on_ready(self):
         print(f"Bot ready, logged in as {self.bot.user}")
 
-    @commands.Cog.listener()
-    async def on_message(self, message):
-        pass
-
     @commands.command()
     @debuggable
     async def ping(self, ctx):
@@ -46,6 +42,286 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
     async def rickroll(self, ctx):
         await ctx.send("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
 
+    @commands.command()
+    @debuggable
+    async def roll(self, ctx, *, dices: str = ""):
+        rolls = []
+        for raw_d in dices.split():
+            d = raw_d
+
+            if d[0] == 'd':
+                n = 1
+            elif d[0] in '0123456789':
+                n = int(d[0])
+                d = d[1:]
+            else:
+                return await ctx.send(f"Dé invalide: {raw_d}")
+
+            if d[0] != 'd':
+                return await ctx.send(f"Dé invalide: {raw_d}")
+
+            d = d[1:]
+
+            try:
+                m = int(d)
+            except ValueError:
+                return await ctx.send(f"Dé invalide: {raw_d}")
+            
+            try:
+                for _ in range(n):
+                    rolls.append(random.randint(1, m))
+            except:
+                return await ctx.send(f"Dé invalide: {raw_d}")
+        
+        if len(rolls) == 0:
+            return await ctx.send(f"{ctx.author.mention} choisit le déterminisme...")
+        if len(rolls) == 1:
+            await ctx.send(f"{ctx.author.mention} a tiré un {rolls[0]}.")
+        else:
+            rolls = [str(r) for r in rolls]
+            await ctx.send(f"{ctx.author.mention} a tiré " + ', '.join(rolls[:-1]) + f" et {rolls[-1]}.")
+
+    @commands.command()
+    @debuggable
+    async def blood(self, ctx, *, message: str):
+        art = {
+            "a": (
+                "#####",
+                "#   #",
+                "#####",
+                "#   #",
+                "#   #",
+            ),
+            "b": (
+                "#### ",
+                "#   #",
+                "#### ",
+                "#   #",
+                "#### ",
+            ),
+            "c": (
+                "#####",
+                "#    ",
+                "#    ",
+                "#    ",
+                "#####",
+            ),
+            "d": (
+                "#### ",
+                "#   #",
+                "#   #",
+                "#   #",
+                "#### ",
+            ),
+            "e": (
+                "#####",
+                "#    ",
+                "#### ",
+                "#    ",
+                "#####",
+            ),
+            "f": (
+                "#####",
+                "#    ",
+                "#### ",
+                "#    ",
+                "#    ",
+            ),
+            "g": (
+                "#####",
+                "#    ",
+                "#  ##",
+                "#   #",
+                "#####",
+            ),
+            "h": (
+                "#   #",
+                "#   #",
+                "#####",
+                "#   #",
+                "#   #",
+            ),
+            "i": (
+                "###",
+                " # ",
+                " # ",
+                " # ",
+                "###",
+            ),
+            "j": (
+                "   #",
+                "   #",
+                "   #",
+                "#  #",
+                " ## ",
+            ),
+            "k": (
+                "#  ##",
+                "# ## ",
+                "###  ",
+                "# ## ",
+                "#  ##",
+            ),
+            "l": (
+                "#    ",
+                "#    ",
+                "#    ",
+                "#    ",
+                "#####",
+            ),
+            "m": (
+                "### ###",
+                "#  #  #",
+                "#  #  #",
+                "#  #  #",
+                "#  #  #",
+            ),
+            "n": (
+                "#   #",
+                "##  #",
+                "# # #",
+                "#  ##",
+                "#   #",
+            ),
+            "block": (
+                "#####",
+                "#   #",
+                "#   #",
+                "#   #",
+                "#####",
+            ),
+            "p": (
+                "#### ",
+                "#   #",
+                "#### ",
+                "#    ",
+                "#    ",
+            ),
+            "q": (
+                "#####",
+                "#   #",
+                "# # #",
+                "#  # ",
+                "### #",
+            ),
+            "r": (
+                "#### ",
+                "#   #",
+                "#### ",
+                "# #  ",
+                "#  # ",
+            ),
+            "s": (
+                "#####",
+                "#    ",
+                "#####",
+                "    #",
+                "#####",
+            ),
+            "t": (
+                "#####",
+                "  #  ",
+                "  #  ",
+                "  #  ",
+                "  #  ",
+            ),
+            "u": (
+                "#   #",
+                "#   #",
+                "#   #",
+                "#   #",
+                " ### ",
+            ),
+            "v": (
+                "#   #",
+                "#   #",
+                " # # ",
+                " # # ",
+                "  #  ",
+            ),
+            "w": (
+                "#   #   #",
+                "#   #   #",
+                " # # # # ",
+                " # # # # ",
+                "  #   #  ",
+            ),
+            "x": (
+                "#   #",
+                " # # ",
+                "  #  ",
+                " # # ",
+                "#   #",
+            ),
+            "y": (
+                "#   #",
+                "#   #",
+                " ####",
+                "    #",
+                " ####",
+            ),
+            "z": (
+                "#####",
+                "   # ",
+                "  #  ",
+                " #   ",
+                "#####",
+            ),
+            " ": (
+                "     ",
+                "     ",
+                "     ",
+                "     ",
+                "     ",
+            ),
+            "(": (
+                " #",
+                "# ",
+                "# ",
+                "# ",
+                " #",
+            ),
+            ")": (
+                "# ",
+                " #",
+                " #",
+                " #",
+                "# ",
+            ),
+            "{": (
+                " #",
+                "# ",
+                " #",
+                "# ",
+                " #",
+            ),
+            "}": (
+                "# ",
+                " #",
+                "# ",
+                " #",
+                "# ",
+            ),
+            "block": (
+                "#####",
+                "#####",
+                "#####",
+                "#####",
+                "#####",
+            ),
+        }
+        trans = str.maketrans({"#": ":drop_of_blood:", " ": "      "})
+
+        message = message.lower()
+
+        out = ""
+        for line in range(5):
+            for char in message:
+                out += art[char][line].translate(trans) + "      "
+            
+            out += "\n"
+
+        await ctx.send(out)
 
 
 def setup(bot): # this is called by Pycord to setup the cog

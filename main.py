@@ -72,7 +72,6 @@ bot = Bot(modules=(
     "cmds.admin",
     "cmds.help",
     "cmds.dev",
-    "cmds.fun",
     "cmds.stats",
     "cmds.pendu",
     "cmds.code",
