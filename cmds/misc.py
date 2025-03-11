@@ -318,11 +318,8 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
         for msg_line in message.splitlines():
             out += "​"
             for line in range(5):
-                for char in message:
-                    try:
-                        out += art[char][line].translate(trans) + "      "
-                    except KeyError:
-                        pass
+                for char in msg_line:
+                    out += art[char][line].translate(trans) + "      "
                 
                 out += "\n"
             out += "\n"
