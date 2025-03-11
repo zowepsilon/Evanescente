@@ -313,12 +313,15 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
         trans = str.maketrans({"#": ":drop_of_blood:", " ": "      "})
 
         message = message.lower()
-
+        
         out = ""
-        for line in range(5):
-            for char in message:
-                out += art[char][line].translate(trans) + "      "
-            
+        for msg_line in message.splitlines():
+            out += "​"
+            for line in range(5):
+                for char in message:
+                    out += art[char][line].translate(trans) + "      "
+                
+                out += "\n"
             out += "\n"
 
         await ctx.send(out)
