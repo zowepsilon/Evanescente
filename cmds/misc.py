@@ -183,7 +183,7 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
                 "#  ##",
                 "#   #",
             ),
-            "block": (
+            "o": (
                 "#####",
                 "#   #",
                 "#   #",
