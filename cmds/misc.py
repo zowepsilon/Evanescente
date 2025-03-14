@@ -92,10 +92,10 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
 
     @commands.command()
     @debuggable
-    async def abitbol(self, ctx):
-        i, h, quote = random.choice(self.quotes)
+    async def abitbol(self, ctx, index: int = None):
+        i, h, quote = self.quotes[i+1] if index is not None else random.choice(self.quotes)
 
-        await ctx.send(f"\"{quote}\"\nhttp://george-abitbol.fr/doc/mp4/{i}.mp4")
+        await ctx.send(f"\"{quote}\"\nhttp://george-abitbol.fr/doc/mp4/{i}.mp4\n-# #{i+1}")
 
     @commands.command()
     @debuggable
