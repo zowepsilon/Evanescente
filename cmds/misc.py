@@ -90,7 +90,7 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
             rolls = [str(r) for r in rolls]
             await ctx.send(f"{ctx.author.mention} a tiré " + ', '.join(rolls[:-1]) + f" et {rolls[-1]}.")
 
-    @commands.commmand()
+    @commands.command()
     @debuggable
     async def abitbol(self, ctx):
         i, h, quote = random.choice(self.quotes)
