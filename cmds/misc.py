@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 from utils import debuggable, sanitize
 
+import random
+
 from time import strftime
 
 class Miscellaneous(commands.Cog): # create a class for our cog that inherits from commands.Cog
@@ -10,6 +12,13 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
     def __init__(self, bot): # this is a special method that is called when the cog is loaded
         self.bot = bot
         self.repeat = True
+        
+        with open("lgd.txt") as f:
+            self.quotes = []
+            for line in f.readlines():
+                line = line[:-1]
+                i, h, text = line.split('|')
+                self.quotes.append((i, h, text))
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -80,6 +89,13 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
         else:
             rolls = [str(r) for r in rolls]
             await ctx.send(f"{ctx.author.mention} a tiré " + ', '.join(rolls[:-1]) + f" et {rolls[-1]}.")
+
+    @commands.commmand()
+    @debuggable
+    async def abitbol(self, ctx):
+        i, h, quote = random.choice(self.quotes)
+
+        await ctx.send(f"\"{quote}\"\nhttp://george-abitbol.fr/doc/mp4/{i}")
 
     @commands.command()
     @debuggable
