@@ -93,7 +93,7 @@ class Stats(commands.Cog):
             out += f"- {message_count} {category}s - Rang: #{rank}\n"
         try:
             (rank, count) = self.bot.word_counter.get_user_rank(user.id)
-            out += f"- {count} mots trouvés - Rang: #{rank}"
+            out += f"- {count} mots trouvés - Rang: #{rank}\n"
         except TypeError:
             pass
 
@@ -101,7 +101,7 @@ class Stats(commands.Cog):
             (_, message_count) = self.counters["message"].get_rank(user.id)
             (_, insulte_count) = self.counters["insulte"].get_rank(user.id)
             tdv = round(100 * insulte_count / message_count, 3)
-            out += f"- Taux de vulgarité: {tdv}%%"
+            out += f"- Taux de vulgarité: {tdv}%"
         except (TypeError, ZeroDivisionError): #c'est possible aussi
             pass
 
