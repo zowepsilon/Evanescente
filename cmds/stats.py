@@ -97,6 +97,14 @@ class Stats(commands.Cog):
         except TypeError:
             pass
 
+        try:
+            (_, message_count) = self.counters["message"].get_rank(user.id)
+            (_, insulte_count) = self.counters["insulte"].get_rank(user.id)
+            tdv = round(100 * insulte_count / message_count, 3)
+            out += f"- Taux de vulgarité: {tdv}%%"
+        except (TypeError, ZeroDivisionError): #c'est possible aussi
+            pass
+
         await ctx.send(out)
 
     @commands.command(aliases=["lb"])
