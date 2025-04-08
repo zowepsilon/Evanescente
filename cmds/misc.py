@@ -19,6 +19,11 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
                 line = line[:-1]
                 i, h, text = line.split('|')
                 self.quotes.append((i, h, text))
+        with open("lgd.txt") as f:
+            self.fesse = []
+            for line in f.readlines():
+                line = line[:-1]
+                self.fesse.append((i, h, text))
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -51,6 +56,9 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
     async def rickroll(self, ctx):
         await ctx.send("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
 
+    async def fesse(self,ctx,*,target: str = ""):
+        return await ctx.send(f"tu as été.e mauvais.e {target} pour la peine\n"+self.fesse[random(0,len(self.fesse))])
+    
     @commands.command()
     @debuggable
     async def roll(self, ctx, *, dices: str = ""):
@@ -105,7 +113,7 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
                 "#####",
                 "#   #",
                 "#####",
-                "#   #",
+                "#   #",    
                 "#   #",
             ),
             "b": (

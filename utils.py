@@ -24,8 +24,8 @@ def sanitize(text: str) -> str:
         .replace("@everyone", "@​everyone") \
         .replace("<@&", "<​@​&​")
 
-cute = ["uwu", ":3", "rawr", "owo", "catgirl", "bébou", "meow", "miaou", "miaw"]
-insultes = ["chokbar", "putain", "merde", "fuck", "shit", "ptn"]
+cute = ["uwu", ":3", "rawr", "owo", "catgirl", "bébou", "meow", "miaou", "miaw","bae"]
+insultes = ["chokbar", "putain", "merde", "fuck", "shit", "ptn","f***","pute","connard","connasse","fdp","bardela"]
 tokipona = ["toki ", "pona ", "ala ", " li ", "mute ", "wile", "jan ", "kama ", "waso ", "sina "]
 
 word_chars = "aàâäbcçĉdeéèêëfghiîïjĵklmnoôöpqrstuùûüvwxyÿz-"
@@ -180,7 +180,6 @@ class ReacCounter:
             """, [start, end])
 
         return self.cursor.fetchall()
-
 class WordCounter:
     def __init__(self, cursor, table_name):
         self.cursor = cursor

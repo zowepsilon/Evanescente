@@ -12,7 +12,7 @@ from utils import debuggable, sanitize, words_of_message, PenduAccuracyCounter, 
 
 cute = ["uwu", ":3", "rawr", "owo", "catgirl", "bébou"]
 
-insultes = ["chokbar", "putain", "merde", "fuck", "shit", "ptn"]
+insultes = ["chokbar", "putain", "merde", "fuck", "shit", "ptn","f***"]
 tokipona = ["toki ", "pona ", "ala ", " li ", "mute ", "wile ", "jan ", "kama ", "waso ", "sina "]
 
 @dataclass
