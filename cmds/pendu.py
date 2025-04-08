@@ -120,7 +120,7 @@ class Pendu(commands.Cog):
             return
 
         if letter in self.games[channel].found or letter in self.games[channel].wrong:
-            return await message.reply("Cette lettre a déjà été essayée, andouille.")
+            return await message.delete()
 
         if self.games[channel].add(letter):
             await message.delete()
@@ -135,7 +135,7 @@ class Pendu(commands.Cog):
         else:
             self.games[channel].remaining -= 1
             await self.games[channel].update()
-            await message.add_reaction("❌")
+            await message.delete()
 
             self.db.add_wrong_letter(message.author.id)
 
