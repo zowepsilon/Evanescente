@@ -123,7 +123,7 @@ class Pendu(commands.Cog):
             return await message.reply("Cette lettre a déjà été essayée, andouille.")
 
         if self.games[channel].add(letter):
-            await message.add_reaction("✅")
+            await message.delete()
 
             self.db.add_correct_letter(message.author.id)
             
