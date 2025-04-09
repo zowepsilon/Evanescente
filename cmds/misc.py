@@ -19,7 +19,7 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
                 line = line[:-1]
                 i, h, text = line.split('|')
                 self.quotes.append((i, h, text))
-        with open("lgd.txt") as f:
+        with open("fességif.txt") as f:
             self.fesse_list = []
             for line in f.readlines():
                 line = line[:-1]
