@@ -19,7 +19,7 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
                 line = line[:-1]
                 i, h, text = line.split('|')
                 self.quotes.append((i, h, text))
-        with open("fességif.txt") as f:
+        with open("misc/fességif.txt") as f:
             self.fesse_list = []
             for line in f.readlines():
                 line = line[:-1]
@@ -60,7 +60,7 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
     @commands.command()
     @debuggable
     async def fessé(self,ctx,*,target: str = ""):
-        return await ctx.send(f"tu as été.e mauvais.e {target} pour la peine\n"+self.fesse_list[random(0,len(self.fesse_list))])
+        return await ctx.send(f"tu as été.e mauvais.e {target} pour la peine\n"+random.choice(self.fesse_list))
     
     @commands.command()
     @debuggable
