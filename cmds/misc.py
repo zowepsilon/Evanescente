@@ -23,7 +23,7 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
             self.fesse_list = []
             for line in f.readlines():
                 line = line[:-1]
-                self.fesse_list.append((i, h, text))
+                self.fesse_list.append(line)
 
     @commands.Cog.listener()
     async def on_ready(self):
