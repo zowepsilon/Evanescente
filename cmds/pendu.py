@@ -12,7 +12,7 @@ from utils import debuggable, sanitize, words_of_message, PenduAccuracyCounter, 
 
 cute = ["uwu", ":3", "rawr", "owo", "catgirl", "bébou"]
 
-insultes = ["chokbar", "putain", "merde", "fuck", "shit", "ptn"]
+insultes = ["chokbar", "putain", "merde", "fuck", "shit", "ptn","f***"]
 tokipona = ["toki ", "pona ", "ala ", " li ", "mute ", "wile ", "jan ", "kama ", "waso ", "sina "]
 
 @dataclass
@@ -120,10 +120,10 @@ class Pendu(commands.Cog):
             return
 
         if letter in self.games[channel].found or letter in self.games[channel].wrong:
-            return await message.reply("Cette lettre a déjà été essayée, andouille.")
+            return await message.delete()
 
         if self.games[channel].add(letter):
-            await message.add_reaction("✅")
+            await message.delete()
 
             self.db.add_correct_letter(message.author.id)
             
@@ -135,7 +135,7 @@ class Pendu(commands.Cog):
         else:
             self.games[channel].remaining -= 1
             await self.games[channel].update()
-            await message.add_reaction("❌")
+            await message.delete()
 
             self.db.add_wrong_letter(message.author.id)
 
