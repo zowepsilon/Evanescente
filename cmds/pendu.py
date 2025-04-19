@@ -155,6 +155,21 @@ class Pendu(commands.Cog):
         self.games[ctx.channel.id] = PenduState(word=word, remaining=int(len(word) / difficulty), message=None, bot=self.bot)
         await self.up(ctx.message.channel)
 
+    @pendu.command(name="custom")
+    @debuggable
+    async def pendu_custom(self, ctx, word: str, difficulty: float = 0.3):
+        if not (word[:2] == '||' and word[-2:] == '||'):
+            return await ctx.send("Le mot doit être en spoilers.\nExemple: `?pendu custom ||patate||`")
+
+        word = word[2:-2]
+        words = words_of_message(word)
+        if len(words) != 1:
+            return await ctx.send(f"Mot invalide: ||{word}||")
+
+        word = words[0]
+        self.games[ctx.channel.id] = PenduState(word=word, remaining=int(len(word) / difficulty), message=None, bot=self.bot)
+        await self.up(ctx.message.channel)
+
     @pendu.command(name="up")
     @debuggable
     async def pendu_up(self, ctx):
