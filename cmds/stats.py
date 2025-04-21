@@ -214,9 +214,12 @@ class Stats(commands.Cog):
     @debuggable
     async def words_group(self, ctx):
         out = io.StringIO()
-        out.write('\n'.join(self.bot.word_counter.get_all_words()))
 
-        file = discord.File(out, filename="words.txt")
+        words = '\n'.join(self.bot.word_counter.get_all_words())
+        print(words)
+        print(words, file=out)
+
+        file = discord.File(out)
         await ctx.send(file=file)
 
         out.close()
