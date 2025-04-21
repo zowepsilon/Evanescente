@@ -216,7 +216,7 @@ class Stats(commands.Cog):
         out = io.StringIO()
         out.write('\n'.join(self.bot.word_counter.get_all_words()))
 
-        file = File(out, filename="words.txt")
+        file = discord.File(out, filename="words.txt")
         await ctx.send(file=file)
 
         out.close()
