@@ -317,7 +317,7 @@ class WordCounter:
             SELECT Word FROM {self.table_name}
         """)
 
-        return [word for (word, _) in self.cursor.fetchall()]
+        return [word for (word,) in self.cursor.fetchall()]
 
 class NicknameCache:
     def __init__(self, cursor, table_name):
