@@ -213,13 +213,10 @@ class Stats(commands.Cog):
     @words.command(name="export")
     @debuggable
     async def words_group(self, ctx):
-        out = io.StringIO()
-
         words = '\n'.join(self.bot.word_counter.get_all_words())
-        print(words)
-        print(words, file=out)
+        out = io.StringIO(words)
 
-        file = discord.File(out)
+        file = discord.File(out, filename="words.txt")
         await ctx.send(file=file)
 
         out.close()
