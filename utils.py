@@ -180,6 +180,7 @@ class ReacCounter:
             """, [start, end])
 
         return self.cursor.fetchall()
+
 class WordCounter:
     def __init__(self, cursor, table_name):
         self.cursor = cursor
@@ -310,6 +311,13 @@ class WordCounter:
             """, [start, end])
 
         return self.cursor.fetchall()
+
+    def get_all_words(self) -> list[str]:
+        self.cursor.execute(f"""
+            SELECT Word FROM {self.table_name}
+        """)
+
+        return [word for (word, _) in self.cursor.fetchall()]
 
 class NicknameCache:
     def __init__(self, cursor, table_name):

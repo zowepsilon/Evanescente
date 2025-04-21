@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 
+import io
 import asyncio
 import random
 import sqlite3
@@ -186,7 +187,7 @@ class Stats(commands.Cog):
 
         await ctx.send(out)
 
-    @commands.command()
+    @commands.group(invoke_without_command=True)
     @debuggable
     async def words(self, ctx, subrange: str = None):
         if subrange is not None:
@@ -209,6 +210,17 @@ class Stats(commands.Cog):
 
         await ctx.send(out)
 
+    @words.command(name="export")
+    @debuggable
+    async def words_group(self, ctx):
+        out = io.StringIO()
+        out.write('\n'.join(self.bot.word_counter.get_all_words()))
+
+        file = File(out, filename="words.txt")
+        await ctx.send(file=file)
+
+        out.close()
+    
     @commands.command()
     @debuggable
     async def word(self, ctx, word: str):
