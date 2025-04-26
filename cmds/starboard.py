@@ -15,8 +15,9 @@ class Starboard(commands.Cog):
         message = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
         reaction = discord.utils.get(message.reactions, emoji=payload.emoji)
         user = payload.member
+        starboard_id = self.bot.config["starboard_id"]
 
-        if reaction is None or reaction.count != 1 or reaction.emoji.id != self.bot.config["starboard_emoji_id"]:
+        if reaction is None or reaction.count != 1 or reaction.emoji.id != self.bot.config["starboard_emoji_id"] or message.channel_id == starboard_id:
             return
         
         embed = discord.Embed()
@@ -28,8 +29,9 @@ class Starboard(commands.Cog):
         if len(message.attachments) > 0:
             embed.set_image(message.attachments[0].url)
         
-        starboard_channel = self.bot.get_channel(self.bot.config["starboard_id"])
-        await starboard_channel.send(embed=embed)
+        starboard_channel = self.bot.get_channel()
+        message = await starboard_channel.send(embed=embed)
+        await message.add_reaction(reaction.emoji)
 
 def setup(bot):
     bot.add_cog(Starboard(bot))
