@@ -12,10 +12,10 @@ class Starboard(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
-        print(f"{payload = }")
-        return
+        message = await bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
+        reaction = discord.utils.get(message.reactions, emoji=payload.emoji.name)
+        user = payload.member
 
-        #reaction, user: "TODO"
         print(f"{user = }")
         print(f"{reaction.count = }")
         if reaction.count != 1:
