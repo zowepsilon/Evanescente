@@ -17,7 +17,7 @@ class Starboard(commands.Cog):
         user = payload.member
         starboard_id = self.bot.config["starboard_id"]
 
-        if reaction is None or reaction.count != 1 or reaction.emoji.id != self.bot.config["starboard_emoji_id"] or message.channel.id == starboard_id:
+        if reaction is None or reaction.count != 3 or reaction.emoji.id != self.bot.config["starboard_emoji_id"] or message.channel.id == starboard_id:
             return
         
         embed = discord.Embed()
