@@ -21,10 +21,18 @@ class Starboard(commands.Cog):
         
         content = sanitize(message.content)
         time = int(message.created_at.timestamp())
-        image = '\n'+message.attachments[0].url if len(message.attachments) > 0 else ""
+        image = '\n'+ if len(message.attachments) > 0 else ""
+
+        embed = discord.Embed()
+        embed.add_field("Content", content)
+        embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
+        embed.get_footer(text=message.jump_url)
+
+        if len(message.attachments) > 0:
+            embed.set_image(message.attachments[0].url)
         
         starboard_channel = self.bot.get_channel(self.bot.config["starboard_id"])
-        await starboard_channel.send(f"> {message.author.mention}\n{content}\n\n-# {message.jump_url}{image}")
+        await starboard_channel.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(Starboard(bot))
