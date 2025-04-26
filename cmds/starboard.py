@@ -20,7 +20,6 @@ class Starboard(commands.Cog):
             return
         
         content = ''.join('> '+line for line in content.split('\n'))
-        link = f"https://discord.com/channels/{message.guild.id}/{}/{}"
         image = '\n'+message.attachments[0].url if len(message.attachments) > 0 else ""
         
         starboard_channel = self.bot.get_channel(self.bot.config["starboard_id"])
