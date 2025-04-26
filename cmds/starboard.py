@@ -20,7 +20,7 @@ class Starboard(commands.Cog):
             return
         
         embed = discord.Embed()
-        embed.add_field("Content", sanitize(message.content))
+        embed.add_field(name="Content", value=sanitize(message.content))
         embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
         embed.get_footer(text=message.jump_url)
 
