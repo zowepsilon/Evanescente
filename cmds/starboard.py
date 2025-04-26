@@ -16,17 +16,15 @@ class Starboard(commands.Cog):
         reaction = discord.utils.get(message.reactions, emoji=payload.emoji)
         user = payload.member
 
-        if reaction is None:
-            return
-
-        if reaction.count != 1:
+        if reaction is None or reaction.count != 1 or reaction.emoji.id != self.bot.config["starboard_emoji_id"]:
             return
         
-        if reaction.emoji.id != self.bot.config["starboard_emoji_id"]:
-            return
+        content = ''.join('> '+line for line in content.split('\n'))
+        link = f"https://discord.com/channels/{message.guild.id}/{}/{}"
+        image = '\n'+message.attachments[0].url if len(message.attachments) > 0 else ""
         
         starboard_channel = self.bot.get_channel(self.bot.config["starboard_id"])
-        await starboard_channel.send(f"STARBOARD TEST:\n{reaction.message.content}")
+        await starboard_channel.send(f"{user.mention} :\n{content}\n{message.jump_url}{image}")
 
 def setup(bot):
     bot.add_cog(Starboard(bot))
