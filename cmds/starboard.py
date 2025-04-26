@@ -23,7 +23,7 @@ class Starboard(commands.Cog):
         image = '\n'+message.attachments[0].url if len(message.attachments) > 0 else ""
         
         starboard_channel = self.bot.get_channel(self.bot.config["starboard_id"])
-        await starboard_channel.send(f"> {message.author.mention} le <t:{time}:f>\n{message.content}\n-# {message.jump_url}{image}")
+        await starboard_channel.send(f"> {message.author.mention}\n{message.content}\n\n-# {message.jump_url}{image}")
 
 def setup(bot):
     bot.add_cog(Starboard(bot))
