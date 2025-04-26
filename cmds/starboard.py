@@ -23,6 +23,8 @@ class Starboard(commands.Cog):
         embed.set_author(name=message.author.name, url=message.jump_url, icon_url=message.author.display_avatar.url)
         embed.add_field(name="", value=sanitize(message.content))
 
+        embed.timestamp = message.created_at
+
         if len(message.attachments) > 0:
             embed.set_image(message.attachments[0].url)
         
