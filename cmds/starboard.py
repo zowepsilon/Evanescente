@@ -19,7 +19,7 @@ class Starboard(commands.Cog):
         if reaction is None or reaction.count != 1 or reaction.emoji.id != self.bot.config["starboard_emoji_id"]:
             return
         
-        content = ''.join('> '+line for line in content.split('\n'))
+        content = ''.join('> '+line for line in message.content.split('\n'))
         image = '\n'+message.attachments[0].url if len(message.attachments) > 0 else ""
         
         starboard_channel = self.bot.get_channel(self.bot.config["starboard_id"])
