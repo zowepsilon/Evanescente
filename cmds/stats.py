@@ -62,11 +62,11 @@ class Stats(commands.Cog):
         await asyncio.gather(*tasks)
 
     @commands.Cog.listener()
-    async def on_reaction_add(self, reaction, user):
-        if isinstance(reaction.emoji, str):
-            self.reac_counter.incr(reaction.emoji)
-        elif isinstance(reaction.emoji, discord.Emoji):
-            self.reac_counter.incr(str(reaction.emoji))
+    async def on_raw_reaction_add(self, payload):
+        if isinstance(payload.emoji, str):
+            self.reac_counter.incr(payload.emoji)
+        elif isinstance(payload.emoji, discord.Emoji):
+            self.reac_counter.incr(str(payload.emoji))
 
     @commands.Cog.listener()
     async def on_reaction_remove(self, reaction, user):
