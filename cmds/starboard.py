@@ -22,7 +22,7 @@ class Starboard(commands.Cog):
         embed = discord.Embed()
         embed.add_field(name="Content", value=sanitize(message.content))
         embed.set_author(name=message.author.name, icon_url=message.author.display_avatar.url)
-        embed.get_footer(text=message.jump_url)
+        embed.set_footer(text=message.jump_url)
 
         if len(message.attachments) > 0:
             embed.set_image(message.attachments[0].url)
