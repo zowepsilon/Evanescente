@@ -19,12 +19,8 @@ class Starboard(commands.Cog):
         if reaction is None or reaction.count != 1 or reaction.emoji.id != self.bot.config["starboard_emoji_id"]:
             return
         
-        content = sanitize(message.content)
-        time = int(message.created_at.timestamp())
-        image = '\n'+ if len(message.attachments) > 0 else ""
-
         embed = discord.Embed()
-        embed.add_field("Content", content)
+        embed.add_field("Content", sanitize(message.content))
         embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
         embed.get_footer(text=message.jump_url)
 
