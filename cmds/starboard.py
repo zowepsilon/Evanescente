@@ -17,7 +17,7 @@ class Starboard(commands.Cog):
         user = payload.member
 
         print(f"{user = }")
-        print(f"{reaction.count = }")
+        print(f"{reaction = }")
         if reaction.count != 1:
             return
         
