@@ -16,12 +16,12 @@ class Starboard(commands.Cog):
         reaction = discord.utils.get(message.reactions, emoji=payload.emoji)
         user = payload.member
 
-        print(f"{user = }")
-        print(f"{reaction = }")
+        if reaction is None:
+            return
+
         if reaction.count != 1:
             return
         
-        print(f"{reaction.emoji = }")
         if reaction.emoji.id != self.bot.config["starboard_emoji_id"]:
             return
         
