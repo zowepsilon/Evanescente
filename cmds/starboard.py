@@ -11,14 +11,18 @@ class Starboard(commands.Cog):
         self.repeat = True
 
     @commands.Cog.listener()
-    async def on_reaction_add(self, reaction, user):
+    async def on_raw_reaction_add(self, payload):
+        print(f"{payload = }")
+        return
+
+        reaction, user: "TODO"
         print(f"{user = }")
         print(f"{reaction.count = }")
         if reaction.count != 1:
             return
         
         print(f"{reaction.emoji = }")
-        if not reaction.is_custom_emoji() or reaction.emoji.id != self.bot.config["starboard_emoji_id"]:
+        if reaction.emoji.id != self.bot.config["starboard_emoji_id"]:
             return
         
         starboard_channel = self.bot.get_channel(self.bot.config["starboard_id"])
