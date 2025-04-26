@@ -29,7 +29,7 @@ class Starboard(commands.Cog):
         if len(message.attachments) > 0:
             embed.set_image(message.attachments[0].url)
         
-        starboard_channel = self.bot.get_channel()
+        starboard_channel = self.bot.get_channel(starboard_id)
         message = await starboard_channel.send(embed=embed)
         await message.add_reaction(reaction.emoji)
 
