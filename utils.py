@@ -389,6 +389,7 @@ class PenduAccuracyCounter:
                 WITH Ratios AS (
                     SELECT *, CAST(CorrectCount AS float) / CAST(TotalCount AS float) AS Accuracy
                     FROM {self.table_name}
+                    WHERE TotalCount >= 200
                 ), Rankings AS (
                     SELECT ROW_NUMBER() OVER (ORDER BY Accuracy DESC) AS Rank, *
                     FROM Ratios
@@ -403,6 +404,7 @@ class PenduAccuracyCounter:
                 WITH Ratios AS (
                     SELECT *, CAST(CorrectCount AS float) / CAST(TotalCount AS float) AS Accuracy
                     FROM {self.table_name}
+                    WHERE TotalCount >= 200
                 ), Rankings AS (
                     SELECT ROW_NUMBER() OVER (ORDER BY Accuracy DESC) AS Rank, *
                     FROM Ratios
