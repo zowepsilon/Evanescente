@@ -77,6 +77,7 @@ bot = Bot(modules=(
     "cmds.code",
     "cmds.chat",
     "cmds.starboard",
+    "cmds.game",
 ))
 
 bot.run()
