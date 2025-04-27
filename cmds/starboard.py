@@ -25,12 +25,12 @@ class Starboard(commands.Cog):
         
         embed = discord.Embed()
         embed.set_author(name=message.author.name, url=message.jump_url, icon_url=message.author.display_avatar.url)
-        embed.add_field(name="", value=sanitize(message.content))
+        embed.add_field(name="", value=message.content)
 
         embed.timestamp = message.created_at
 
         if len(message.attachments) > 0:
-            embed.set_image(message.attachments[0].url)
+            embed.set_image(url=message.attachments[0].url)
         
         starboard_channel = self.bot.get_channel(starboard_id)
         message = await starboard_channel.send(embed=embed)
