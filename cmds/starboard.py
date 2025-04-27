@@ -38,9 +38,10 @@ class Starboard(commands.Cog):
         
         embed = discord.Embed()
         embed.set_author(name=message.author.name, url=message.jump_url, icon_url=message.author.display_avatar.url)
-
-        for chunk in split_to_chunks(message.content, 1000):
-            embed.add_field(name="", value=chunk)
+        
+        if message.content != "":
+            for chunk in split_to_chunks(message.content, 1000):
+                embed.add_field(name="", value=chunk)
 
         embed.timestamp = message.created_at
 
