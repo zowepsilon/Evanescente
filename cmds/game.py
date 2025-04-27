@@ -18,11 +18,10 @@ class Game(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.reference is None or len(message.mentions) >= 1:
+        if message.reference is None or len(message.mentions) == 0:
             return
         
         content = message.content.lower()
-        print(repr(content))
 
         if message.reference is not None \
                 and any(content.startswith(st) for st in ("j'ai perdu", "j ai perdu", "jai perdu")):
