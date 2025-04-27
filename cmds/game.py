@@ -18,20 +18,20 @@ class Game(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.reference is None or len(message.mentions) == 1:
+        if message.reference is None or len(message.mentions) > 1:
             return
         
         message = message.lower()
 
         if message.reference is not None \
                 and any(message.startswith(st) for st in ("j'ai perdu", "j ai perdu", "jai perdu")):
-            author = (await ctx.fetch_message(message.reference.message_id)).author
-        elif perdu_regex.match(message) is not None:
-            author = message.mentions[0]
+            author = (await ctx.fetch_message(message.reference.message_id)).author.id
+        elif (m := perdu_regex.match(message)) is not None:
+            author = int(m.group(1))
         else:
             return
 
-        self.db.incr(author.id)
+        self.db.incr(author)
 
     @commands.command(aliases=["jeu"])
     async def game(self, ctx, subrange: str = None):
