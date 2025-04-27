@@ -21,12 +21,12 @@ class Game(commands.Cog):
         if message.reference is None or len(message.mentions) > 1:
             return
         
-        message = message.lower()
+        content = message.content.lower()
 
         if message.reference is not None \
-                and any(message.startswith(st) for st in ("j'ai perdu", "j ai perdu", "jai perdu")):
+                and any(content.startswith(st) for st in ("j'ai perdu", "j ai perdu", "jai perdu")):
             author = (await ctx.fetch_message(message.reference.message_id)).author.id
-        elif (m := perdu_regex.match(message)) is not None:
+        elif (m := perdu_regex.match(content)) is not None:
             author = int(m.group(1))
         else:
             return
