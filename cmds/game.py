@@ -5,7 +5,7 @@ import re
 import discord
 from discord.ext import commands
 
-from utils import debuggable, sanitize
+from utils import debuggable, sanitize, StatCounter
 
 perdu_regex = re.compile(r"<@(\d*)>\s*j[ ']?ai perdu", re.IGNORECASE)
 
