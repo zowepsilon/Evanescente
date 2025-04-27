@@ -18,7 +18,7 @@ class Game(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.reference is None or len(message.mentions[0]) == 1:
+        if message.reference is None or len(message.mentions) == 1:
             return
         
         message = message.lower()
