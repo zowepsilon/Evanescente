@@ -25,7 +25,7 @@ class Game(commands.Cog):
 
         if message.reference is not None \
                 and any(content.startswith(st) for st in ("j'ai perdu", "j ai perdu", "jai perdu")):
-            author = (await ctx.fetch_message(message.reference.message_id)).author.id
+            author = (await message.channel.fetch_message(message.reference.message_id)).author.id
         elif (m := perdu_regex.match(content)) is not None:
             author = int(m.group(1))
         else:
