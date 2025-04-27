@@ -22,6 +22,7 @@ class Game(commands.Cog):
             return
         
         content = message.content.lower()
+        print(repr(content))
 
         if message.reference is not None \
                 and any(content.startswith(st) for st in ("j'ai perdu", "j ai perdu", "jai perdu")):
@@ -29,6 +30,9 @@ class Game(commands.Cog):
         elif (m := perdu_regex.match(content)) is not None:
             author = int(m.group(1))
         else:
+            return
+
+        if author == message.author.id:
             return
 
         self.db.incr(author)
