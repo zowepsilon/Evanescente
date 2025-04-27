@@ -5,6 +5,19 @@ from discord.ext import commands
 
 from utils import debuggable, sanitize
 
+def split_to_chunks(text: str, chunk_size: int) -> list[str]:
+    atoms = text.split(' ')
+
+    chunks = [""]
+    for a in atoms:
+        if len(chunks[-1])+len(a) >= chunk_size:
+            chunks.append(a)
+        else:
+            chunks[-1] += ' '
+            chunks[-1] += a
+
+    return chunks
+
 class Starboard(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -25,7 +38,9 @@ class Starboard(commands.Cog):
         
         embed = discord.Embed()
         embed.set_author(name=message.author.name, url=message.jump_url, icon_url=message.author.display_avatar.url)
-        embed.add_field(name="", value=message.content)
+
+        for chunk in split_to_chunks(message.content, 1000):
+            embed.add_field(name="", value=chunk)
 
         embed.timestamp = message.created_at
 
