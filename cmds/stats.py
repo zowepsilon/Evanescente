@@ -141,7 +141,6 @@ class Stats(commands.Cog):
 
         await ctx.send(out)
 
-
     @commands.command()
     @debuggable
     async def explorers(self, ctx, subrange: str = None):
