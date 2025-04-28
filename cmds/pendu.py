@@ -102,8 +102,8 @@ class Pendu(commands.Cog):
         if message.channel.id not in self.games.keys():
             return
 
-        word = self.games[channel].word
-        if message.content == word:
+        game = self.games[channel]
+        if game.is_correct(message.content):
             await message.add_reaction("✅")
             await message.add_reaction("🔥")
             
