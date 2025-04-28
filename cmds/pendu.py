@@ -78,6 +78,8 @@ class PenduState:
 
         out += "- Lettres trouvées : " + ''.join(sorted(list(self.displayed_found))) + '\n'
         out += "- Lettres incorrectes : " + ''.join(sorted(list(self.displayed_wrong))) + '\n'
+
+        return out
     
     async def update(self):
         await self.message.edit(self.ui())
