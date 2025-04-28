@@ -103,6 +103,7 @@ class Pendu(commands.Cog):
             return
 
         game = self.games[channel]
+        word = game.word
         if game.is_correct(message.content):
             await message.add_reaction("✅")
             await message.add_reaction("🔥")
