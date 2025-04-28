@@ -3,6 +3,7 @@ from __future__ import annotations
 import discord
 from discord.ext import commands
 
+import functools
 import asyncio
 import random
 import sqlite3
@@ -14,6 +15,12 @@ cute = ["uwu", ":3", "rawr", "owo", "catgirl", "bébou"]
 
 insultes = ["chokbar", "putain", "merde", "fuck", "shit", "ptn","f***"]
 tokipona = ["toki ", "pona ", "ala ", " li ", "mute ", "wile ", "jan ", "kama ", "waso ", "sina "]
+
+classes = functools.reduce(
+    lambda acc, chars: acc | {c: chars for c in chars}, 
+    ['aàâä', 'b', 'cçĉ', 'd', 'eéèêë', 'f', 'g', 'h', 'iîï', 'jĵ', 'k', 'l', 'm', 'n', 'oôö', 'p', 'q', 'r', 's', 't', 'uùûü', 'v', 'w', 'x', 'yÿ', 'z', '-'],
+    {}
+)
 
 @dataclass
 class PenduState:
@@ -33,27 +40,23 @@ class PenduState:
     def partial_word(self) -> str:
         return ''.join(c if c in self.found else '_' for c in self.word)
 
+    def is_correct(self, word: str) -> bool:
+        return len(self.word) == len(word) \
+            and all(classes[expected][0] == classes[got][0] for expected, got in zip(self.word, word))
+
     def add(self, letter: str) -> bool:
-        classes = [
-            'aàâä', 'b', 'cçĉ', 'd', 'eéèêë', 'f', 'g', 'h', 'iîï', 
-            'jĵ', 'k', 'l', 'm', 'n', 'oôö', 'p', 'q', 'r', 's', 't',
-            'uùûü', 'v', 'w', 'x', 'yÿ', 'z', '-'
-        ]
-
-        for cl in classes:
-            if letter not in cl:
-                continue
+        cl = classes[letter]
             
-            if any(c in self.word for c in cl):
-                self.found.update(cl)
-                self.displayed_found.add(cl[0])
-                return True
-            else:
-                self.wrong.update(cl)
-                self.displayed_wrong.add(cl[0])
-                return False
+        if any(c in self.word for c in cl):
+            self.found.update(cl)
+            self.displayed_found.add(cl[0])
+            return True
+        else:
+            self.wrong.update(cl)
+            self.displayed_wrong.add(cl[0])
+            return False
 
-    async def update(self):
+    def ui(self) -> str:
         out = ""
 
         if self.complete():
@@ -75,8 +78,9 @@ class PenduState:
 
         out += "- Lettres trouvées : " + ''.join(sorted(list(self.displayed_found))) + '\n'
         out += "- Lettres incorrectes : " + ''.join(sorted(list(self.displayed_wrong))) + '\n'
-
-        await self.message.edit(out)
+    
+    async def update(self):
+        await self.message.edit(self.ui())
 
 
 class Pendu(commands.Cog):
@@ -179,8 +183,7 @@ class Pendu(commands.Cog):
         await self.up(ctx.channel)
 
     async def up(self, channel: Channel):
-        self.games[channel.id].message = await channel.send("uwu")
-        await self.games[channel.id].update()
+        self.games[channel.id].message = await channel.send(self.games[channel.id].ui())
 
     @pendu.command(name="leaderboard", aliases=["lb"])
     @debuggable
