@@ -52,11 +52,9 @@ class Starboard(commands.Cog):
             if message.attachments[0].content_type.split('/')[0] == "image":
                 embed.set_image(url=message.attachments[0].url)
             else:
-                attachments.append(message.attachments[0].to_file())
+                attachments.append(await essage.attachments[0].to_file())
             
-            tasks = list(a.to_file() for a in message.attachments[1:])
-            print(tasks)
-            attachments.extend(await asyncio.gather(*tasks))
+            attachments.extend(await asyncio.gather(a.to_file() for a in message.attachments[1:]))
         
         starboard_channel = self.bot.get_channel(starboard_id)
         message = await starboard_channel.send(embed=embed, files=attachments)
