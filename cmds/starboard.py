@@ -30,6 +30,9 @@ class Starboard(commands.Cog):
         user = payload.member
         starboard_id = self.bot.config["starboard_id"]
 
+        if len(message.attachments) > 0:
+            print(message.attachments[0])
+
         if reaction is None \
                 or reaction.count != 3 \
                 or reaction.emoji.id not in self.bot.config["starboard_emoji_ids"] \
