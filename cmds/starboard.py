@@ -47,12 +47,20 @@ class Starboard(commands.Cog):
                 embed.add_field(name="", value=chunk)
 
         embed.timestamp = message.created_at
-
+            
+        attachments = []
         if len(message.attachments) > 0:
-            embed.set_image(url=message.attachments[0].url)
+            if message.attachments[0].content_type.split('/')[0] == "image":
+                embed.set_image(url=message.attachments[0].url)
+            else:
+                attachments.append(message.attachments[0].to_file())
+            
+            for a in message.attachments[1:]:
+                attachments.append(a.to_file())
+
         
         starboard_channel = self.bot.get_channel(starboard_id)
-        message = await starboard_channel.send(embed=embed)
+        message = await starboard_channel.send(embed=embed, files=attachments)
         await message.add_reaction(reaction.emoji)
 
 def setup(bot):
