@@ -52,7 +52,7 @@ class Starboard(commands.Cog):
             if message.attachments[0].content_type.split('/')[0] == "image":
                 embed.set_image(url=message.attachments[0].url)
             else:
-                attachments.append(await essage.attachments[0].to_file())
+                attachments.append(await message.attachments[0].to_file())
             
             attachments.extend(await asyncio.gather(a.to_file() for a in message.attachments[1:]))
         
