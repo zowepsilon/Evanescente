@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import asyncio
+
 import discord
 from discord.ext import commands
 
@@ -30,9 +32,6 @@ class Starboard(commands.Cog):
         user = payload.member
         starboard_id = self.bot.config["starboard_id"]
 
-        if len(message.attachments) > 0:
-            print(message.attachments[0].content_type)
-
         if reaction is None \
                 or reaction.count != 3 \
                 or reaction.emoji.id not in self.bot.config["starboard_emoji_ids"] \
@@ -55,9 +54,7 @@ class Starboard(commands.Cog):
             else:
                 attachments.append(message.attachments[0].to_file())
             
-            for a in message.attachments[1:]:
-                attachments.append(a.to_file())
-
+            attachments.extend(await asyncio.gather(a.to_file() for a in message.attachments[1:]))
         
         starboard_channel = self.bot.get_channel(starboard_id)
         message = await starboard_channel.send(embed=embed, files=attachments)
