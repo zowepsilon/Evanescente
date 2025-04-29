@@ -54,7 +54,9 @@ class Starboard(commands.Cog):
             else:
                 attachments.append(message.attachments[0].to_file())
             
-            attachments.extend(await asyncio.gather(*list(a.to_file() for a in message.attachments[1:])))
+            tasks = list(a.to_file() for a in message.attachments[1:])
+            print(tasks)
+            attachments.extend(await asyncio.gather(*tasks))
         
         starboard_channel = self.bot.get_channel(starboard_id)
         message = await starboard_channel.send(embed=embed, files=attachments)
