@@ -31,7 +31,7 @@ class Starboard(commands.Cog):
         starboard_id = self.bot.config["starboard_id"]
 
         if len(message.attachments) > 0:
-            print(message.attachments[0])
+            print(message.attachments[0].content_type)
 
         if reaction is None \
                 or reaction.count != 3 \

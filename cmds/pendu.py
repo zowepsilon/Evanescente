@@ -42,7 +42,7 @@ class PenduState:
 
     def is_correct(self, word: str) -> bool:
         return len(self.word) == len(word) \
-            and all(classes[expected][0] == classes[got][0] for expected, got in zip(self.word, word))
+            and all(classes[expected][0] == classes[got][0] for expected, got in zip(self.word, word.lower()))
 
     def add(self, letter: str) -> bool:
         cl = classes[letter]
