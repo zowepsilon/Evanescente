@@ -46,7 +46,7 @@ class Typst(commands.Cog):
         try:
             loop = asyncio.get_running_loop()
             with concurrent.futures.ProcessPoolExecutor() as pool:
-                rendered = await loop.run_in_executor(pool, compile_to_png, content)
+                rendered = await loop.run_in_executor(pool, compile_to_png, source)
             
         except RuntimeError as e:
             reason = e.args[0].replace("`", "​`")
