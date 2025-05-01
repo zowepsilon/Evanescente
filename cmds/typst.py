@@ -46,18 +46,15 @@ class Typst(commands.Cog):
             loop = asyncio.get_running_loop()
             with ProcessPoolExecutor() as pool:
                 rendered = await loop.run_in_executor(pool, compile_to_png, content)
+            
+        except RuntimeError as e:
+            reason = e.args[0].replace("`", "​`")
+            return await ctx.send(f"Error while parsing typst:\n```{reason}```")
 
-            except RuntimeError as e:
-                reason = e.args[0].replace("`", "​`")
-                return await ctx.send(f"Error while parsing typst:\n```{reason}```")
-
-
-            file = discord.File(rendered, "rendered.png")
-
-            await ctx.send(file=file)
-
-            rendered.close()
+        file = discord.File(rendered, "rendered.png")
+        await ctx.send(file=file)
+        rendered.close()
 
 
-    def setup(bot):
-        bot.add_cog(Typst(bot))
+def setup(bot):
+    bot.add_cog(Typst(bot))
