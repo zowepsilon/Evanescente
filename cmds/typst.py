@@ -38,7 +38,7 @@ class Typst(commands.Cog):
 
         source = prefix + content
         
-        rendered = io.BytesIO(typst.compile(bytes(content, encoding="utf-8"), format="png", ppi=600.0))
+        rendered = io.BytesIO(typst.compile(bytes(source, encoding="utf-8"), format="png", ppi=600.0))
         file = discord.File(rendered, "rendered.png", description=content)
 
         await ctx.send(file=file)
