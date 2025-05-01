@@ -12,7 +12,7 @@ prefix = """
 #set page(
   width: auto,
   height: auto,
-  margin: 10pt,
+  margin: 5pt,
   fill: none,
 )
 
