@@ -10,7 +10,7 @@ from utils import debuggable
 
 prefix = """
 #set page(
-  width: 100pt,
+  width: 250pt,
   height: auto,
   margin: 5pt,
   fill: none,
