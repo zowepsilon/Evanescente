@@ -32,15 +32,7 @@ class Typst(commands.Cog):
         self.bot = bot
         self.repeat = True
 
-    @commands.command()
-    @debuggable
-    async def typst(self, ctx, *, content: str = None):
-        if content is None:
-            if ctx.message.reference is None:
-                return await ctx.send("Il faut répondre à un message contenant du code ou donner le code en argument !")
-
-            content = (await ctx.fetch_message(ctx.message.reference.message_id)).content
-
+    async def process(self, ctx, content: str):
         source = prefix + content
         
         try:
@@ -56,6 +48,25 @@ class Typst(commands.Cog):
         await ctx.send(file=file)
         rendered.close()
 
+    @commands.command()
+    @debuggable
+    async def typst(self, ctx, *, content: str = None):
+        if content is None:
+            if ctx.message.reference is None:
+                return await ctx.send("Il faut répondre à un message contenant du code ou donner le code en argument !")
 
+            content = (await ctx.fetch_message(ctx.message.reference.message_id)).content
+        
+        await self.process(ctx, content)
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if message.author.bot or len(message.content) == 0 or message.content[0] == '?':
+            return
+        
+        if message.content.count('$') >= 2:
+            self.process(message.content, message.channel)
+        
+        
 def setup(bot):
     bot.add_cog(Typst(bot))
