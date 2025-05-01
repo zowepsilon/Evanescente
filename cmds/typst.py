@@ -6,6 +6,7 @@ from discord.ext import commands
 import io
 import typst
 import asyncio
+import concurrent.futures
 
 from utils import debuggable
 
@@ -44,7 +45,7 @@ class Typst(commands.Cog):
         
         try:
             loop = asyncio.get_running_loop()
-            with ProcessPoolExecutor() as pool:
+            with concurrent.futures.ProcessPoolExecutor() as pool:
                 rendered = await loop.run_in_executor(pool, compile_to_png, content)
             
         except RuntimeError as e:
