@@ -12,11 +12,12 @@ from utils import debuggable
 
 prefix = """
 #set page(
-  width: 300pt,
   height: auto,
   margin: 5pt,
   fill: none,
 )
+
+#set page(width: 300pt) if page.width > 300pt
 
 #set text(
   fill: white,
