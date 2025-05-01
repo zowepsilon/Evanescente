@@ -17,7 +17,7 @@ prefix = """
   fill: none,
 )
 
-#set page(width: 300pt) if context page.width > 300pt
+#set page(width: 300pt) if #page.width > 300pt
 
 #set text(
   fill: white,
