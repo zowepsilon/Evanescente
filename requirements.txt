@@ -10,4 +10,4 @@ propcache==0.3.0
 py-cord==2.6.1
 yarl==1.18.3
 websockets==15.0.1
-
+typst==0.13.2
