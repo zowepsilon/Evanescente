@@ -65,7 +65,7 @@ class Typst(commands.Cog):
             return
         
         if message.content.count('$') >= 2:
-            self.process(message.content, message.channel)
+            await self.process(message.content, message.channel)
         
         
 def setup(bot):
