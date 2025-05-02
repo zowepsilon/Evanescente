@@ -38,7 +38,9 @@ class Typst(commands.Cog):
     async def process(self, ctx, message_id: int, content: str):
         if message_id in self.renders.keys():
             await self.renders[message_id].delete()
-
+        
+        if content.startswith("?typst "):
+            content = content[7:]
         source = prefix + content
         
         try:
