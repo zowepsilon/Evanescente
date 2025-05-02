@@ -55,9 +55,6 @@ class Typst(commands.Cog):
     @commands.command()
     @debuggable
     async def typst(self, ctx, *, content: str = None):
-        assert False, (type(ctx), ctx)
-
-
         if content is None:
             if ctx.message.reference is None:
                 return await ctx.send("Il faut répondre à un message contenant du code ou donner le code en argument !")
