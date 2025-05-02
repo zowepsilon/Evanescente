@@ -65,7 +65,7 @@ class Typst(commands.Cog):
             content = (await ctx.fetch_message(ctx.message.reference.message_id)).content
             await self.process(ctx, ctx.message.reference.message_id, content)
         else:
-            await self.process(ctx, ctx.message.message_id, content)
+            await self.process(ctx, ctx.message.id, content)
 
 
     @commands.Cog.listener()
