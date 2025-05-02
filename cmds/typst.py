@@ -34,6 +34,8 @@ class Typst(commands.Cog):
         self.bot = bot
         self.repeat = True
 
+        self.renders: dict[int, discord.Message] = {}
+
     async def process(self, ctx, content: str):
         source = prefix + content
         
@@ -47,12 +49,15 @@ class Typst(commands.Cog):
             return await ctx.send(f"Error while parsing typst:\n```{reason}```")
 
         file = discord.File(rendered, "rendered.png")
-        await ctx.send(file=file)
+        self.renders[message_id] = await ctx.send(file=file)
         rendered.close()
 
     @commands.command()
     @debuggable
     async def typst(self, ctx, *, content: str = None):
+        assert False, (type(ctx), ctx)
+
+
         if content is None:
             if ctx.message.reference is None:
                 return await ctx.send("Il faut répondre à un message contenant du code ou donner le code en argument !")
