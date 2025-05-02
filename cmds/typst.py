@@ -21,7 +21,6 @@ prefix = """
 
 #set text(
   fill: white,
-  stroke: black + 0.5pt
 )
 """
 
