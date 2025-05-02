@@ -97,7 +97,7 @@ class Typst(commands.Cog):
     async def on_raw_message_edit(self, payload):
         message = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
 
-        if message.author.bot or len(message.content) == 0 or not message.content.startswith("?typst "):
+        if message.author.bot or len(message.content) == 0 or message.content[0] == '?':
             return
         
         if message.content.count('$') >= 2:
