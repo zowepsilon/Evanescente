@@ -10,18 +10,32 @@ import concurrent.futures
 
 from utils import debuggable
 
-prefix = """
+layout = """
 #set page(
   height: auto,
+  width: auto,
   margin: 5pt,
   fill: none,
 )
 
-#set page(width: 300pt) // if #page.width > 300pt
-
 #set text(
   fill: white,
 )
+
+#let text = [
+  {}
+]
+
+#layout(size => {{
+  let (width,) = measure(
+    block(width: size.width, text),
+  )
+  if width > 300pt [
+    #block(width: 300pt, text)  
+  ] else [
+    #text
+  ]
+}})
 """
 
 def compile_to_png(source: str) -> io.BytesIO:
@@ -41,7 +55,8 @@ class Typst(commands.Cog):
         
         if content.startswith("?typst "):
             content = content[7:]
-        source = prefix + content
+
+        source = layout.format(content)
         
         try:
             loop = asyncio.get_running_loop()
