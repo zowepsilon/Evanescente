@@ -55,6 +55,11 @@ class Typst(commands.Cog):
         
         if content.startswith("?typst "):
             content = content[7:]
+        elif content.startswith("$$ "):
+            content = content[3:]
+        elif content.startswith("$$"):
+            content = content[2:]
+            
 
         source = layout.format(content)
         
