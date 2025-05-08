@@ -51,7 +51,7 @@ class Starboard(commands.Cog):
         if reaction is None \
                 or reaction.count != 3 \
                 or reaction.emoji.id not in self.bot.config["starboard_emoji_ids"] \
-                or message.channel.id == starboard_id
+                or message.channel.id == starboard_id \
                 or message.id in self.starboarded:
             return
 
