@@ -25,7 +25,7 @@ def sanitize(text: str) -> str:
         .replace("<@&", "<​@​&​")
 
 cute = ["uwu", ":3", "rawr", "owo", "catgirl", "bébou", "meow", "miaou", "miaw","bae"]
-insultes = ["chokbar", "putain", "merde", "fuck", "shit", "ptn","f***","pute","connard","connasse","fdp","bardela"]
+insultes = ["chokbar", "putain", "merde", "fuck", "shit", "ptn","f***","pute","connard","connasse","fdp","bardella"]
 tokipona = ["toki ", "pona ", "ala ", " li ", "mute ", "wile", "jan ", "kama ", "waso ", "sina "]
 
 word_chars = "aàâäbcçĉdeéèêëfghiîïjĵklmnoôöpqrstuùûüvwxyÿz-"

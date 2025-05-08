@@ -20,10 +20,26 @@ def split_to_chunks(text: str, chunk_size: int) -> list[str]:
 
     return chunks
 
+class BoundedSet[T]:
+    def __init__(self, capacity: int):
+        self.inner: list[T] = []
+        self.capacity = capacity
+
+    def add(self, x: T):
+        self.inner.append(x)
+
+        if len(self.inner) > capacity:
+            self.inner.pop(0)
+
+    def __contains__(self, x: T) -> bool:
+        return x in self.inner
+
+
 class Starboard(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.repeat = True
+        self.starboarded: BoundedSet[int] = BoundedSet(10)
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
@@ -35,8 +51,11 @@ class Starboard(commands.Cog):
         if reaction is None \
                 or reaction.count != 3 \
                 or reaction.emoji.id not in self.bot.config["starboard_emoji_ids"] \
-                or message.channel.id == starboard_id:
+                or message.channel.id == starboard_id
+                or message.id in self.starboarded:
             return
+
+        self.starboarded.add(message.id)
         
         embed = discord.Embed()
         embed.set_author(name=message.author.name, url=message.jump_url, icon_url=message.author.display_avatar.url)
