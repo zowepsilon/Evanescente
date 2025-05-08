@@ -78,7 +78,6 @@ bot = Bot(modules=(
     "cmds.chat",
     "cmds.code",
     "cmds.dev",
-    "cmds.game",
     "cmds.help",
     "cmds.misc",
     "cmds.pendu",
