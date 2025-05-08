@@ -14,18 +14,9 @@ intents = discord.Intents.all()
 
 class Bot(commands.Bot):
     CONFIG_PATH = "config.json"
-    DEFAULT_CONFIG_PATH = "default_config.json"
     
     def __init__(self, modules=()):
         print("Loading configuration...")
-        no_default_config = False
-        try:
-            with open(self.DEFAULT_CONFIG_PATH, mode='r') as f:
-                self.config = json.load(f)
-        except FileNotFoundError as e:
-            print("Warning: Could not find default config!")
-            no_default_config = True
-
         try:
             with open(self.CONFIG_PATH, mode='r') as f:
                 self.config.update(json.load(f))
