@@ -4,6 +4,7 @@
     },
     "database": "data.db",
     "prefix": "?",
+    "run_dir": "./run",
     "developers": [],
     "moderators": [],
     "vocabulaire_id": 0,

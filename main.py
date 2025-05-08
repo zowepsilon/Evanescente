@@ -1,6 +1,7 @@
 import json
 import time
 import datetime
+import os
 
 import sqlite3
 
@@ -55,6 +56,9 @@ class Bot(commands.Bot):
     def run(self):
         print("Launching bot...")
 
+        os.makedirs(self.config["run_dir"], exist_ok=True)
+        os.chdir(self.config["run_dir"])
+
         super().run(self.config["secrets"]["discord"])
         
         print("\nSaving data...")
@@ -68,16 +72,16 @@ class Bot(commands.Bot):
         return user_id in self.config["developers"]
 
 bot = Bot(modules=(
-    "cmds.misc",
     "cmds.admin",
-    "cmds.help",
-    "cmds.dev",
-    "cmds.stats",
-    "cmds.pendu",
-    "cmds.code",
     "cmds.chat",
-    "cmds.starboard",
+    "cmds.code",
+    "cmds.dev",
     "cmds.game",
+    "cmds.help",
+    "cmds.misc",
+    "cmds.pendu",
+    "cmds.starboard",
+    "cmds.stats",
     "cmds.typst",
 ))
 
