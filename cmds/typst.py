@@ -92,7 +92,7 @@ class Typst(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.author.bot or len(message.content) == 0 or message.content[0] == '?':
+        if message.author.bot or len(message.content) == 0 or message.content[0] == '?' or message.content.startswith(",tex"):
             return
         
         if message.content.count('$') >= 2:
