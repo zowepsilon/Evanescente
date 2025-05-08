@@ -13,7 +13,7 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
         self.bot = bot
         self.repeat = True
         
-        with open("lgd.txt") as f:
+        with open(self.bot.SOURCE + "/lgd.txt") as f:
             self.quotes = []
             for line in f.readlines():
                 line = line[:-1]
@@ -22,7 +22,7 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f"Bot ready, logged in as {self.bot.user}")
+        print(f"Bot ready, logged in as {self.bot.user}.")
 
     @commands.command()
     @debuggable
