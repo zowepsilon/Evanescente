@@ -14,7 +14,7 @@ intents = discord.Intents.all()
 
 class Bot(commands.Bot):
     CONFIG_PATH = "config.json"
-    DEFAULT_CONFIG_PATH = os.path.dirname(os.path.realpath(__file__)) / "default_config.json"
+    DEFAULT_CONFIG_PATH = os.path.dirname(os.path.realpath(__file__)) + "/default_config.json"
     
     def __init__(self, modules=()):
         print("Loading configuration...")
