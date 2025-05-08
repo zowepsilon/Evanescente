@@ -28,7 +28,7 @@ class BoundedSet[T]:
     def add(self, x: T):
         self.inner.append(x)
 
-        if len(self.inner) > capacity:
+        if len(self.inner) > self.capacity:
             self.inner.pop(0)
 
     def __contains__(self, x: T) -> bool:
