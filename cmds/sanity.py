@@ -31,8 +31,8 @@ class Sanity(commands.Cog):
 
         self.db.change_entry(target.id, ctx.author.id, level)
 
-        name = sanitize(self.bot.nickname_cache.get_nick(target))
-        level = self.db.get_sanity(target)
+        name = sanitize(self.bot.nickname_cache.get_nick(target.id))
+        level = self.db.get_sanity(target.id)
 
         await ctx.send(f"Tu as estimé le taux de santé mentale de {name} à {level}%.\nTaux de santé mentale : {level}%")
 
