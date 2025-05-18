@@ -83,6 +83,7 @@ bot = Bot(modules=(
     "cmds.help",
     "cmds.misc",
     "cmds.pendu",
+    "cmds.sanity",
     "cmds.starboard",
     "cmds.stats",
     "cmds.typst",

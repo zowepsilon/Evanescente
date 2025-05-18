@@ -331,7 +331,7 @@ class NicknameCache:
             );
         """)
 
-    def get_nick(self, user_id: int) -> str | None:
+    def get_nick(self, user_id: int) -> str:
         self.cursor.execute(f"""
             SELECT Name
             FROM {self.table_name}
@@ -415,3 +415,42 @@ class PenduAccuracyCounter:
             """, [start, end])
 
         return self.cursor.fetchall()
+
+
+class SanityDb:
+    def __init__(self, cursor, table_name):
+        self.cursor = cursor
+        self.table_name = table_name
+
+        self.cursor.execute(f"""
+            CREATE TABLE IF NOT EXISTS {self.table_name} (
+                TargetUserId int,
+                VoterUserId int,
+                Level int,
+                PRIMARY KEY (TargetUserId, VoterUserId)
+            );
+        """)
+
+    def change_entry(self, target_user_id: int, voter_user_id: int, level: int):
+        self.cursor.execute(f"""
+            INSERT OR REPLACE INTO {self.table_name}
+            VALUES(?, ?, ?)
+        """, [target_user_id, voter_user_id, level])
+    
+    def get_sanity(self, user_id: int) -> float:
+        self.cursor.execute(f"""
+            SELECT Level FROM {self.table_name}
+            WHERE TargetUserId = ?
+        """, [user_id])
+
+        entries = self.cursor.fetchall()
+        
+        return sum(e[0] for e in entries) / len(entries)
+    
+    def delete_entry(self, target_user_id: int, voter_user_id: int):
+        self.cursor.execute(f"""
+            DELETE FROM {self.table_name}
+            WHERE
+            TargetUserId = ?
+            VoterUserId = ?
+        """, [target_user_id, voter_user_id])
