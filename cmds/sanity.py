@@ -24,7 +24,7 @@ class Sanity(commands.Cog):
             name = sanitize(self.bot.nickname_cache.get_nick(target))
 
             try:
-                level = self.db.get_sanity(target)
+                level = round(self.db.get_sanity(target))
             except ZeroDivisionError:
                 return await ctx.send(f"{name} n'a pas encore de taux de santé mentale !")
 
