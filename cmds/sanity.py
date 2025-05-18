@@ -25,6 +25,9 @@ class Sanity(commands.Cog):
             level = self.db.get_sanity(target)
 
             return await ctx.send(f"Taux de santé mentale de {name} : {level}%")
+
+        if target.id == ctx.author.id:
+            return await ctx.send("Tu ne peux pas estimer ton propre taux de santé mentale.")
         
         if level < 0 or level > 100:
             return await ctx.send("Le taux de santé mentale doit être compris entre 0 et 100.")
