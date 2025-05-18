@@ -17,7 +17,7 @@ class Sanity(commands.Cog):
 
     @commands.command()
     @debuggable
-    async def sanity(self, ctx, target: discord.User = None, level: int = None):
+    async def sanity(self, ctx, target: discord.Member = None, level: int = None):
         if target is None or level is None:
             target = ctx.author.id if target is None else target.id
             
