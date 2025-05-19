@@ -27,7 +27,7 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
     @commands.command()
     @debuggable
     async def ping(self, ctx):
-        await ctx.send(f"Bonk in {round(self.bot.latency*1000)}ms!")
+        await ctx.send(f"<:bonk:1363133543726845952> in {round(self.bot.latency*1000)}ms!")
 
     @commands.command()
     @debuggable

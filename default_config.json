@@ -11,5 +11,6 @@
     "starboard_id": 0,
     "starboard_emoji_ids": [],
     "debug": false,
-    "replies": []
+    "replies": [],
+    "blacklist": []
 }

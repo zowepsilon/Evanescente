@@ -11,11 +11,6 @@ from dataclasses import dataclass, field
 
 from utils import debuggable, sanitize, words_of_message, PenduAccuracyCounter, word_chars
 
-cute = ["uwu", ":3", "rawr", "owo", "catgirl", "bébou"]
-
-insultes = ["chokbar", "putain", "merde", "fuck", "shit", "ptn","f***"]
-tokipona = ["toki ", "pona ", "ala ", " li ", "mute ", "wile ", "jan ", "kama ", "waso ", "sina "]
-
 classes = functools.reduce(
     lambda acc, chars: acc | {c: chars for c in chars}, 
     ['aàâä', 'b', 'cçĉ', 'd', 'eéèêë', 'f', 'g', 'h', 'iîï', 'jĵ', 'k', 'l', 'm', 'n', 'oôö', 'p', 'q', 'r', 's', 't', 'uùûü', 'v', 'w', 'x', 'yÿ', 'z', '-'],

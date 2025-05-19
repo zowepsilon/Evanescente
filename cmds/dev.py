@@ -128,6 +128,22 @@ class Developper(commands.Cog):
 
     @commands.command()
     @debuggable
+    async def blacklist(self, ctx):
+        if not self.bot.is_dev(ctx.author.id):
+            return await ctx.send("You need to be a developer to do that!")
+
+        channel = ctx.channel.id
+
+        if channel in self.bot.config["blacklist"]:
+            self.bot.config["blacklist"].remove(channel)
+            await ctx.send(f"{ctx.channel.mention} a été retiré de la blacklist.")
+        else:
+            self.bot.config["blacklist"].append(channel)
+            await ctx.send(f"{ctx.channel.mention} a été ajouté de la blacklist.")
+
+
+    @commands.command()
+    @debuggable
     async def rebuild_every_part_of_the_database(self, ctx, db_path: str):
         if not self.bot.is_dev(ctx.author.id):
             return await ctx.send("You need to be a developer to do that!")
@@ -136,6 +152,7 @@ class Developper(commands.Cog):
         await ctx.send(f"DB connectée à {db_path}")
 
         all_messages = []
+        ui
         n = 0
         for channel in ctx.guild.channels:
             if isinstance(channel, discord.CategoryChannel):

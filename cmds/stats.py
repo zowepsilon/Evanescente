@@ -33,6 +33,9 @@ class Stats(commands.Cog):
 
         for (_, c) in self.counters.items():
             c.on_message(message)
+
+        if message.channel.id in self.bot.config["blacklist"]:
+            return
         
         voc_channel = None
         name = None
