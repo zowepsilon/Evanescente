@@ -416,7 +416,6 @@ class PenduAccuracyCounter:
 
         return self.cursor.fetchall()
 
-
 class SanityDb:
     def __init__(self, cursor, table_name):
         self.cursor = cursor
@@ -437,7 +436,7 @@ class SanityDb:
             VALUES(?, ?, ?)
         """, [target_user_id, voter_user_id, level])
     
-    def get_sanity(self, user_id: int) -> float:
+    def get_sanity(self, user_id: int) -> (float, int):
         self.cursor.execute(f"""
             SELECT Level FROM {self.table_name}
             WHERE TargetUserId = ?
@@ -445,7 +444,7 @@ class SanityDb:
 
         entries = self.cursor.fetchall()
         
-        return sum(e[0] for e in entries) / len(entries)
+        return sum(e[0] for e in entries) / len(entries), len(entries)
     
     def delete_entry(self, target_user_id: int, voter_user_id: int):
         self.cursor.execute(f"""

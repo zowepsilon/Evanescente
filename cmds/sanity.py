@@ -24,11 +24,12 @@ class Sanity(commands.Cog):
             name = sanitize(self.bot.nickname_cache.get_nick(target))
 
             try:
-                level = round(self.db.get_sanity(target))
+                level, votes = self.db.get_sanity(target)
+                level = round(level)
             except ZeroDivisionError:
                 return await ctx.send(f"{name} n'a pas encore de taux de santé mentale !")
 
-            return await ctx.send(f"Taux de santé mentale de {name} : {level}%")
+            return await ctx.send(f"Taux de santé mentale de {name} : {level}% ({votes} estimations)")
 
         if target.id == ctx.author.id:
             return await ctx.send("Tu ne peux pas estimer ton propre taux de santé mentale.")
@@ -39,9 +40,10 @@ class Sanity(commands.Cog):
         self.db.change_entry(target.id, ctx.author.id, level)
 
         name = sanitize(self.bot.nickname_cache.get_nick(target.id))
-        new_level = round(self.db.get_sanity(target.id))
+        new_level, votes = self.db.get_sanity(target.id)
+        new_level = round(new_level)
 
-        await ctx.send(f"Tu as estimé le taux de santé mentale de {name} à {level}%.\nTaux de santé mentale : {new_level}%")
+        await ctx.send(f"Tu as estimé le taux de santé mentale de {name} à {level}%.\nTaux de santé mentale : {new_level}% ({votes} estimations)")
 
 
 def setup(bot):
