@@ -60,6 +60,8 @@ class Starboard(commands.Cog):
         embed = discord.Embed()
         embed.set_author(name=message.author.name, url=message.jump_url, icon_url=message.author.display_avatar.url)
 
+        content = message.content
+
         if message.reference is not None:
             reply = await self.bot.get_channel(payload.channel_id).fetch_message(message.reference.message_id)
 
@@ -68,12 +70,10 @@ class Starboard(commands.Cog):
                 author_name = sanitize(self.bot.nickname_cache.get_nick(message.author.id))
                 reply_name = sanitize(self.bot.nickname_cache.get_nick(reply.author.id))
 
-                embed.add_field(name=reply_name, value=lines[0]+"\n")
-                embed.add_field(name=author_name, value="")
-                
+                content = f"> {reply_name} : {lines[0]}\n{author_name} :\n{content}"
         
-        if message.content != "":
-            for chunk in split_to_chunks(message.content, 1000):
+        if content != "":
+            for chunk in split_to_chunks(content, 1000):
                 embed.add_field(name="", value=chunk)
 
         embed.timestamp = message.created_at
