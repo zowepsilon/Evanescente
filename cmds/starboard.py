@@ -70,7 +70,7 @@ class Starboard(commands.Cog):
                 author_name = sanitize(self.bot.nickname_cache.get_nick(message.author.id))
                 reply_name = sanitize(self.bot.nickname_cache.get_nick(reply.author.id))
 
-                content = f"> {reply_name} : {lines[0]}\n{author_name} :\n{content}"
+                content = f"> {reply_name} : {lines[0]}\n\n{content}"
         
         if content != "":
             for chunk in split_to_chunks(content, 1000):
