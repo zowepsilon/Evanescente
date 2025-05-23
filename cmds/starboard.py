@@ -59,6 +59,14 @@ class Starboard(commands.Cog):
         
         embed = discord.Embed()
         embed.set_author(name=message.author.name, url=message.jump_url, icon_url=message.author.display_avatar.url)
+
+        if message.reference is not None:
+            reply = await self.bot.get_channel(payload.channel_id).fetch_message(message.reference.message_id)
+            name = sanitize(self.bot.nickname_cache.get_nick(reply.author.id))
+
+            lines = reply.content.split('\n')
+            if len(lines) == 1 and len(lines[0]) < 1000:
+                embed.add_field(name="", value=f"{name} : "+lines[0])
         
         if message.content != "":
             for chunk in split_to_chunks(message.content, 1000):
