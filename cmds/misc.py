@@ -86,7 +86,7 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
             return await ctx.send(f"{ctx.author.mention} choisit le déterminisme...")
         if len(rolls) == 1:
             await ctx.send(f"{ctx.author.mention} a tiré un {rolls[0]}.")
-        else:
+        else:lines) == 1 and len(
             rolls = [str(r) for r in rolls]
             await ctx.send(f"{ctx.author.mention} a tiré " + ', '.join(rolls[:-1]) + f" et {rolls[-1]}.")
 
