@@ -23,8 +23,8 @@ class RunnerState:
     async def update_message(self):
         out = "Exécution en cours...\n" if not self.finished else "Exécution terminée\n"
 
-        stdout = '\n'.join(self.stdout.split('\n')[-20:])
-        stderr = '\n'.join(self.stderr.split('\n')[-20:])
+        self.stdout = '\n'.join(self.stdout.split('\n')[-20:])
+        self.stderr = '\n'.join(self.stderr.split('\n')[-20:])
 
         if self.stderr != "":
             out += "-# STDERR\n"
