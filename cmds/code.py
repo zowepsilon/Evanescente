@@ -14,8 +14,8 @@ from utils import debuggable
 
 @dataclass
 class RunnerState:
-    stdout: list[str]
-    stderr: list[str]
+    stdout: str
+    stderr: str
     finished: bool
 
     message: Message
@@ -23,16 +23,19 @@ class RunnerState:
     async def update_message(self):
         out = "Exécution en cours...\n" if not self.finished else "Exécution terminée\n"
 
+        stdout = '\n'.join(self.stdout.split('\n')[-20:])
+        stderr = '\n'.join(self.stderr.split('\n')[-20:])
+
         if self.stderr != "":
             out += "-# STDERR\n"
             out += "```rust\n"
-            out += "\n".join(self.stderr[-20:]).replace("`", "​`")
+            err += stderr.replace("`", "​`")
             out += "```\n"
 
         if self.stdout != "":
             out += "-# STDOUT\n"
             out += "```\n"
-            out += "\n".join(self.stdout[-20:]).replace("`", "​`")
+            out += stdout.replace("`", "​`")
             out += "```\n"
 
         await self.message.edit(out)
@@ -70,7 +73,7 @@ class Code(commands.Cog):
         message = await ctx.send("Exécution en cours...")
 
         async with connect("wss://play.rust-lang.org/websocket") as websocket:
-            state = RunnerState(stdout=[], stderr=[], finished=False, message=message)
+            state = RunnerState(stdout="", stderr="", finished=False, message=message)
 
             await websocket.send('{"type":"websocket/connected","payload":{"iAcceptThisIsAnUnsupportedApi":true},"meta":{"websocket":true,"sequenceNumber":0}}')
             await websocket.recv()
@@ -95,19 +98,19 @@ class Code(commands.Cog):
                             case "output/execute/wsExecuteStderr":
                                 payload = res["payload"]
                                 if payload[0] == '\r':
-                                    state.stderr.pop()
+                                    state.stderr = '\n'.join(state.stderr.split('\n')[:-1])
                                     payload = payload[1:]
 
-                                state.stderr.extend(payload.split('\n'))
+                                state.stderr += payload
                                 await state.update_message()
 
                             case "output/execute/wsExecuteStdout":
                                 payload = res["payload"]
                                 if payload[0] == '\r':
-                                    state.stdout.pop()
+                                    state.stdout = '\n'.join(state.stdout.split('\n')[:-1])
                                     payload = payload[1:]
 
-                                state.stdout.extend(payload.split('\n'))
+                                state.stdout += payload
                                 await state.update_message()
 
                             case "output/execute/wsExecuteStatus" | "output/execute/wsExecuteBegin":
