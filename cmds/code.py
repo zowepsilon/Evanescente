@@ -29,7 +29,7 @@ class RunnerState:
         if self.stderr != "":
             out += "-# STDERR\n"
             out += "```rust\n"
-            err += stderr.replace("`", "​`")
+            out += stderr.replace("`", "​`")
             out += "```\n"
 
         if self.stdout != "":
