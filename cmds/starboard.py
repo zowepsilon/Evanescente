@@ -65,12 +65,12 @@ class Starboard(commands.Cog):
         if message.reference is not None:
             reply = await self.bot.get_channel(payload.channel_id).fetch_message(message.reference.message_id)
 
-            lines = reply.content.split('\n')
-            if len(lines) == 1 and len(lines[0]) < 1000:
+            lines = ' '.join(reply.content.split('\n'))
+            if len(lines) < 1000:
                 author_name = sanitize(self.bot.nickname_cache.get_nick(message.author.id))
                 reply_name = sanitize(self.bot.nickname_cache.get_nick(reply.author.id))
 
-                content = f"> {reply_name} : {lines[0]}\n{content}"
+                content = f"> {reply_name} : {lines}\n{content}"
         
         if content != "":
             for chunk in split_to_chunks(content, 1000):
