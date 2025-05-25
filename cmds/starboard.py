@@ -62,11 +62,6 @@ class Starboard(commands.Cog):
 
         content = message.content
 
-        if content.startswith("https://tenor.com") \
-            or (content.startswith("https://") and ".gif" in content):
-            embed.set_image(url=content)
-            content = ""
-
         if message.reference is not None:
             reply = await self.bot.get_channel(payload.channel_id).fetch_message(message.reference.message_id)
 
