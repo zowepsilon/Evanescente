@@ -62,6 +62,10 @@ class Starboard(commands.Cog):
 
         content = message.content
 
+        if content.startswith("https://") and ".gif" in content:
+            embed.set_image(content)
+            content = ""
+
         if message.reference is not None:
             reply = await self.bot.get_channel(payload.channel_id).fetch_message(message.reference.message_id)
 
@@ -71,7 +75,8 @@ class Starboard(commands.Cog):
                 reply_name = sanitize(self.bot.nickname_cache.get_nick(reply.author.id))
 
                 content = f"> {reply_name} : {lines}\n{content}"
-        
+
+
         if content != "":
             for chunk in split_to_chunks(content, 1000):
                 embed.add_field(name="", value=chunk)
