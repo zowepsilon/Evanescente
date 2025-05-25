@@ -62,7 +62,8 @@ class Starboard(commands.Cog):
 
         content = message.content
 
-        if content.startswith("https://") and ".gif" in content:
+        if content.startswith("https://tenor.com") \
+            or (content.startswith("https://") and ".gif" in content):
             embed.set_image(content)
             content = ""
 
