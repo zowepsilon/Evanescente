@@ -23,6 +23,8 @@ layout = """
   fill: white,
 )
 
+#set align(left)
+
 {}
 """
 
