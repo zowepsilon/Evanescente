@@ -13,29 +13,17 @@ from utils import debuggable
 layout = """
 #set page(
   height: auto,
-  width: auto,
   margin: 5pt,
   fill: none,
 )
+
+#set page(width: 300pt) // if #page.width > 300pt
 
 #set text(
   fill: white,
 )
 
-#let text = [
-  {}
-]
-
-#layout(size => {{
-  let (width,) = measure(
-    block(width: size.width, text),
-  )
-  if width > 300pt [
-    #block(width: 300pt, text)  
-  ] else [
-    #text
-  ]
-}})
+{}
 """
 
 def compile_to_png(source: str) -> io.BytesIO:
