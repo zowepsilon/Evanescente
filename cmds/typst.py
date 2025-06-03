@@ -17,13 +17,14 @@ layout = """
   fill: none,
 )
 
+#set align(left)
+
 #set page(width: 300pt) // if #page.width > 300pt
 
 #set text(
   fill: white,
 )
 
-#set align(left)
 
 {}
 """
