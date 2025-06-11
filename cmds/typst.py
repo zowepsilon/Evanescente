@@ -25,7 +25,6 @@ layout = """
   fill: white,
 )
 
-
 {}
 """
 

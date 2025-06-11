@@ -92,10 +92,34 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
 
     @commands.command()
     @debuggable
-    async def abitbol(self, ctx, index: int = None):
-        i, h, quote = self.quotes[int(index)-1] if index is not None else random.choice(self.quotes)
+    async def abitbol(self, ctx, *, index: str = None):
 
-        await ctx.send(f"\"{quote}\"\nhttp://george-abitbol.fr/doc/mp4/{i}.mp4\n-# #{i}/{len(self.quotes)}")
+        if index is None:
+            i, h, quote =  random.choice(self.quotes)
+            return await ctx.send(f"\"{quote}\"\nhttp://george-abitbol.fr/doc/mp4/{i}.mp4\n-# #{i}/{len(self.quotes)+1}")
+
+        try:
+            matches = [int(index)]
+        except ValueError:
+            matches = [i for (i, h, quotes) in quotes if index in quote]
+
+
+        if len(matches) == 0:
+            await ctx.send("Aucun extrait trouvé !")
+        elif len(matches) == 1:
+            i, h, quote = self.quotes[matches[0]-1]
+
+            await ctx.send(f"\"{quote}\"\nhttp://george-abitbol.fr/doc/mp4/{i}.mp4\n-# #{i}/{len(self.quotes)+1}")
+        else:
+            i, h, quote = self.quotes[matches[0]-1]
+
+            others = "-# Autres extraits : "
+            for m in matches[1:-1]:
+                others += f"#{m}, "
+
+            others += f"#{matches[-1]}"
+
+            await ctx.send(f"\"{quote}\"\nhttp://george-abitbol.fr/doc/mp4/{i}.mp4\n-# #{i}/{len(self.quotes)+1}{others}")
 
     @commands.command()
     @debuggable
