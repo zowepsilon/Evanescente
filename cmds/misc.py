@@ -119,7 +119,7 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
 
             others += f"#{matches[-1]}"
 
-            await ctx.send(f"\"{quote}\"\nhttp://george-abitbol.fr/doc/mp4/{i}.mp4\n-# #{i}/{len(self.quotes)+1}{others}")
+            await ctx.send(f"\"{quote}\"\nhttp://george-abitbol.fr/doc/mp4/{i}.mp4\n-# #{i}/{len(self.quotes)+1}\n{others}")
 
     @commands.command()
     @debuggable
