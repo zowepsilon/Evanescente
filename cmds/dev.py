@@ -190,7 +190,7 @@ class Developper(commands.Cog):
 
     @commands.command()
     @debuggable
-    async def data(self, ctx):
+    async def data(self, ctx, path: str):
         if not self.bot.is_dev(ctx.author.id):
             return await ctx.send("You need to be a developer to do that!")
         
@@ -240,15 +240,13 @@ class Developper(commands.Cog):
 
             all_messages[message.id] = data
 
-        await ctx.send("Les messages ont bien été traités !")
 
-        out = StringIO()
+        out = open(path, "w")
         json.dump(all_message, out)
 
-        file = discord.File(out, filename="messages.json")
-        await ctx.send(file=file)
-
         out.close()
+
+        await ctx.send("Les messages ont bien été traités !")
         
 
 def setup(bot): 
