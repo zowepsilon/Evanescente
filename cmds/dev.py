@@ -6,6 +6,7 @@ from rebuilder import DatabaseRebuilder
 import time
 import json
 import subprocess
+from io import StringIO
 
 class Developper(commands.Cog):
     def __init__(self, bot):
@@ -152,7 +153,7 @@ class Developper(commands.Cog):
         await ctx.send(f"DB connectée à {db_path}")
 
         all_messages = []
-        ui
+
         n = 0
         for channel in ctx.guild.channels:
             if isinstance(channel, discord.CategoryChannel):
@@ -185,6 +186,72 @@ class Developper(commands.Cog):
             self.bot.nickname_cache.set_nick(m.id, m.display_name)
 
         await ctx.send(f"Les noms de {len(ctx.author.guild.members)} membres ont été rechargés !")
+        
+
+    @commands.command()
+    @debuggable
+    async def data(self, ctx):
+        if not self.bot.is_dev(ctx.author.id):
+            return await ctx.send("You need to be a developer to do that!")
+        
+        rebuilder = (db_path)
+        await ctx.send(f"DB connectée à {db_path}")
+
+        raw_messages = []
+
+        n = 0
+        for channel in ctx.guild.channels:
+            if isinstance(channel, discord.CategoryChannel):
+                continue
+
+            n += 1
+
+            try:
+                channel_messages = await channel.history(limit=None).flatten()
+            except discord.Forbidden:
+                continue
+
+            await ctx.send(f"- {len(channel_messages)} trouvés dans {channel.name}")
+            all_messages.extend(channel_messages)
+
+        await ctx.send(f"{n} salons ont été analysés pour {len(all_messages)} messages au total.\nJe trie les messages par date...")
+        all_messages.sort(key=lambda message: message.created_at)
+        await ctx.send(f"Tri des messages terminé !")
+        await ctx.send(f"Début du traitement des messages...")
+
+        all_messages = {}
+        for i, message in enumerate(raw_messages):
+            if i % 5000 == 0:
+                await ctx.send(f"{i} messages ont été traités")
+
+            data = {
+                "content": message.content,
+                "author": message.author.id,
+                "channel": message.channel.id,
+                "created_at": message.created_at.timestamp(),
+                "edited_at": message.edited_at.timestamp(),
+            }
+
+            if message.attachments:
+                data["attachments"] = [a.url for a in message.attachments]
+
+            if message.mentions:
+                data["mentions"] = [m.id for m in message.mentions]
+
+            if message.reference is not None:
+                data["reference"] = message.reference.id
+
+            all_messages[message.id] = data
+
+        await ctx.send("Les messages ont bien été traités !")
+
+        out = StringIO()
+        json.dump(all_message, out)
+
+        file = discord.File(out, filename="messages.json")
+        await ctx.send(file=file)
+
+        out.close()
         
 
 def setup(bot): 
