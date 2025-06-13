@@ -210,11 +210,11 @@ class Developper(commands.Cog):
             except discord.Forbidden:
                 continue
 
-            await ctx.send(f"{len(channel_messages)} trouvés dans {channel.name}")
-            all_messages.extend(channel_messages)
+            await ctx.send(f"{len(channel_messages)} messages trouvés dans {channel.name}")
+            raw_messages.extend(channel_messages)
 
         await ctx.send(f"{n} salons ont été analysés pour {len(all_messages)} messages au total.\nTri des messages par date...")
-        all_messages.sort(key=lambda message: message.created_at)
+        raw_messages.sort(key=lambda message: message.created_at)
         await ctx.send(f"Tri des messages terminé !")
         await ctx.send(f"Début du traitement des messages...")
 
@@ -243,10 +243,8 @@ class Developper(commands.Cog):
             all_messages[message.id] = data
 
 
-        out = open(path, "w")
-        json.dump(all_message, out)
-
-        out.close()
+        with open(path, "w") as out:
+            json.dump(all_messages, out)
 
         await ctx.send("Les messages ont bien été traités !")
         
