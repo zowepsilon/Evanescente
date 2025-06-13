@@ -203,15 +203,17 @@ class Developper(commands.Cog):
 
             n += 1
 
+            await ctx.send(f"Inspection de {channel.name}...")
+
             try:
                 channel_messages = await channel.history(limit=None).flatten()
             except discord.Forbidden:
                 continue
 
-            await ctx.send(f"- {len(channel_messages)} trouvés dans {channel.name}")
+            await ctx.send(f"{len(channel_messages)} trouvés dans {channel.name}")
             all_messages.extend(channel_messages)
 
-        await ctx.send(f"{n} salons ont été analysés pour {len(all_messages)} messages au total.\nJe trie les messages par date...")
+        await ctx.send(f"{n} salons ont été analysés pour {len(all_messages)} messages au total.\nTri des messages par date...")
         all_messages.sort(key=lambda message: message.created_at)
         await ctx.send(f"Tri des messages terminé !")
         await ctx.send(f"Début du traitement des messages...")
