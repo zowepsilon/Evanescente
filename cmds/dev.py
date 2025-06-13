@@ -213,7 +213,7 @@ class Developper(commands.Cog):
             await ctx.send(f"{len(channel_messages)} messages trouvés dans {channel.name}")
             raw_messages.extend(channel_messages)
 
-        await ctx.send(f"{n} salons ont été analysés pour {len(all_messages)} messages au total.\nTri des messages par date...")
+        await ctx.send(f"{n} salons ont été analysés pour {len(raw_messages)} messages au total.\nTri des messages par date...")
         raw_messages.sort(key=lambda message: message.created_at)
         await ctx.send(f"Tri des messages terminé !")
         await ctx.send(f"Début du traitement des messages...")
@@ -241,7 +241,6 @@ class Developper(commands.Cog):
                 data["reference"] = message.reference.id
 
             all_messages[message.id] = data
-
 
         with open(path, "w") as out:
             json.dump(all_messages, out)
