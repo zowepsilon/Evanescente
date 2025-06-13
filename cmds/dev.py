@@ -194,9 +194,6 @@ class Developper(commands.Cog):
         if not self.bot.is_dev(ctx.author.id):
             return await ctx.send("You need to be a developer to do that!")
         
-        rebuilder = (db_path)
-        await ctx.send(f"DB connectée à {db_path}")
-
         raw_messages = []
 
         n = 0
