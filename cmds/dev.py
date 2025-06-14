@@ -228,8 +228,10 @@ class Developper(commands.Cog):
                 "author": message.author.id,
                 "channel": message.channel.id,
                 "created_at": message.created_at.timestamp(),
-                "edited_at": message.edited_at.timestamp(),
             }
+
+            if message.edited_at is not None:
+                data["edited_at"] = message.edited_at.timestamp()
 
             if message.attachments:
                 data["attachments"] = [a.url for a in message.attachments]
