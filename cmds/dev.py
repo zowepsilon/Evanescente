@@ -236,11 +236,12 @@ class Developper(commands.Cog):
                     data["reference"] = message.reference.id
 
                 all_messages[message.id] = data
-
-            with open(f"{path}/{channel.name}-{channel.id}.json", "w") as out:
+            
+            filename = f"{path}/{channel.name}-{channel.id}.json"
+            with open(filename, "w") as out:
                 json.dump(all_messages, out)
 
-            await ctx.send("Les messages de {channel.name} ont bien été traités !")
+            await ctx.send(f"Les messages de {channel.name} ont bien été sauvegardés dans {filename} !")
         
 
 def setup(bot): 
