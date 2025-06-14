@@ -233,7 +233,7 @@ class Developper(commands.Cog):
                     data["mentions"] = [m.id for m in message.mentions]
 
                 if message.reference is not None:
-                    data["reference"] = message.reference.id
+                    data["reference"] = message.reference.message_id
 
                 channel_messages[message.id] = data
             
