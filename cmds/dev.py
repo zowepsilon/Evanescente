@@ -191,13 +191,14 @@ class Developper(commands.Cog):
 
     @commands.command()
     @debuggable
-    async def data(self, ctx, path: str):
+    async def data(self, ctx, path: str, chan: int = None):
         if not self.bot.is_dev(ctx.author.id):
             return await ctx.send("You need to be a developer to do that!")
 
         os.makedirs(path, exist_ok=True)
         
-        for channel in ctx.guild.channels:
+        chans = ctx.guild.channels if chan is None else [self.bot.get_channel(chan)]
+        for channel in chans:
             if isinstance(channel, discord.CategoryChannel):
                 continue
 
