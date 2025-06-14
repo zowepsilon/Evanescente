@@ -6,6 +6,7 @@ from rebuilder import DatabaseRebuilder
 import time
 import json
 import subprocess
+import os
 from io import StringIO
 
 class Developper(commands.Cog):
@@ -193,61 +194,53 @@ class Developper(commands.Cog):
     async def data(self, ctx, path: str):
         if not self.bot.is_dev(ctx.author.id):
             return await ctx.send("You need to be a developer to do that!")
-        
-        raw_messages = []
 
-        n = 0
+        os.makedirs(path, exist_ok=True)
+        
         for channel in ctx.guild.channels:
             if isinstance(channel, discord.CategoryChannel):
                 continue
 
-            n += 1
-
             await ctx.send(f"Inspection de {channel.name}...")
 
             try:
-                channel_messages = await channel.history(limit=None).flatten()
+                raw_messages = await channel.history(limit=None).flatten()
             except discord.Forbidden:
                 continue
 
-            await ctx.send(f"{len(channel_messages)} messages trouvés dans {channel.name}")
-            raw_messages.extend(channel_messages)
+            await ctx.send(f"{len(raw_messages)} messages trouvés dans {channel.name}")
+            raw_messages.sort(key=lambda message: message.created_at)
+            
+            channel_messages = {}
+            for i, message in enumerate(raw_messages):
+                if i % 5000 == 0:
+                    await ctx.send(f"{i} messages ont été traités")
 
-        await ctx.send(f"{n} salons ont été analysés pour {len(raw_messages)} messages au total.\nTri des messages par date...")
-        raw_messages.sort(key=lambda message: message.created_at)
-        await ctx.send(f"Tri des messages terminé !")
-        await ctx.send(f"Début du traitement des messages...")
+                data = {
+                    "content": message.content,
+                    "author": message.author.id,
+                    "channel": message.channel.id,
+                    "created_at": message.created_at.timestamp(),
+                }
 
-        all_messages = {}
-        for i, message in enumerate(raw_messages):
-            if i % 5000 == 0:
-                await ctx.send(f"{i} messages ont été traités")
+                if message.edited_at is not None:
+                    data["edited_at"] = message.edited_at.timestamp()
 
-            data = {
-                "content": message.content,
-                "author": message.author.id,
-                "channel": message.channel.id,
-                "created_at": message.created_at.timestamp(),
-            }
+                if message.attachments:
+                    data["attachments"] = [a.url for a in message.attachments]
 
-            if message.edited_at is not None:
-                data["edited_at"] = message.edited_at.timestamp()
+                if message.mentions:
+                    data["mentions"] = [m.id for m in message.mentions]
 
-            if message.attachments:
-                data["attachments"] = [a.url for a in message.attachments]
+                if message.reference is not None:
+                    data["reference"] = message.reference.id
 
-            if message.mentions:
-                data["mentions"] = [m.id for m in message.mentions]
+                all_messages[message.id] = data
 
-            if message.reference is not None:
-                data["reference"] = message.reference.id
+            with open(f"{path}/{channel.name}-{channel.id}.json", "w") as out:
+                json.dump(all_messages, out)
 
-            all_messages[message.id] = data
-
-        with open(path, "w") as out:
-            json.dump(all_messages, out)
-
-        await ctx.send("Les messages ont bien été traités !")
+            await ctx.send("Les messages de {channel.name} ont bien été traités !")
         
 
 def setup(bot): 
