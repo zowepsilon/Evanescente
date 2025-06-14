@@ -213,7 +213,7 @@ class Developper(commands.Cog):
             
             channel_messages = {}
             for i, message in enumerate(raw_messages):
-                if i % 5000 == 0:
+                if i % 5000 == 0 and i != 0:
                     await ctx.send(f"{i} messages ont été traités")
 
                 data = {
@@ -235,11 +235,11 @@ class Developper(commands.Cog):
                 if message.reference is not None:
                     data["reference"] = message.reference.id
 
-                all_messages[message.id] = data
+                channel_messages[message.id] = data
             
             filename = f"{path}/{channel.name}-{channel.id}.json"
             with open(filename, "w") as out:
-                json.dump(all_messages, out)
+                json.dump(channel_messages, out)
 
             await ctx.send(f"Les messages de {channel.name} ont bien été sauvegardés dans {filename} !")
         
