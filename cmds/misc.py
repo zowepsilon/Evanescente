@@ -139,7 +139,7 @@ class Miscellaneous(commands.Cog):
                 "vector_query":"embedding:([], k: 30, distance_threshold: 0.1, alpha: 0.9)",
                 "highlight_full_fields":"title,altTitle,transcript,topics,embedding",
                 "collection":"xkcd",
-                "q":"{index}",
+                "q":"{search}",
                 "facet_by":"publishDateYear,topics",
                 "max_facet_values":100,
                 "page":1,
