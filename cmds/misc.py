@@ -24,7 +24,7 @@ class Miscellaneous(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        self.session = aiohttp.ClientSession()
+        
 
         print(f"Bot ready, logged in as {self.bot.user}.")
 
@@ -147,12 +147,12 @@ class Miscellaneous(commands.Cog):
             }}]
         }}'''
 
-        async with self.session.post(url, data=data) as req:
+        async with self.bot.session.post(url, data=data) as req:
             doc = (await req.json())["results"][0]["hits"][0]["document"]
             index, title, url, alt = doc["id"], doc["title"], doc["imageUrl"], doc["altTitle"]
 
 
-        await ctx.send(f"\"**{title}**\"\n{url}\n-# {alt}\n-# [#{index}](https://www.xkcd.com/{index})")
+        await ctx.send(f"\"**{title}**\"\n-# {alt}\n-# [#{index}]({url})")
 
 
     @commands.command()

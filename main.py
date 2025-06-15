@@ -47,6 +47,8 @@ class Bot(commands.Bot):
         self.nickname_cache = NicknameCache(self.cursor, "NicknameCache")
         self.word_counter = WordCounter(self.cursor, "WordCounts")
 
+        self.session = aiohttp.ClientSession()
+
         self.startup_time = time.gmtime()
         self.reload_time = time.gmtime()
 
@@ -70,6 +72,8 @@ class Bot(commands.Bot):
 
         with open(self.CONFIG_PATH, mode='w') as f:
             json.dump(self.config, f, indent=4)
+
+        self.session.close()
         
         print("Stopped bot!")
     
