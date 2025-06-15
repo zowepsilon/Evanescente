@@ -152,7 +152,7 @@ class Miscellaneous(commands.Cog):
             index, title, url, alt = doc["id"], doc["title"], doc["imageUrl"], doc["altTitle"]
 
 
-        await ctx.send(f"\"**{title}**\"\n{url}\n-# {alt}\n-# [#{i}](https://www.xkcd.com/{index})")
+        await ctx.send(f"\"**{title}**\"\n{url}\n-# {alt}\n-# [#{index}](https://www.xkcd.com/{index})")
 
 
     @commands.command()
