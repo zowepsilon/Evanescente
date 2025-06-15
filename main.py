@@ -47,7 +47,6 @@ class Bot(commands.Bot):
         self.nickname_cache = NicknameCache(self.cursor, "NicknameCache")
         self.word_counter = WordCounter(self.cursor, "WordCounts")
 
-        self.session = aiohttp.ClientSession()
 
         self.startup_time = time.gmtime()
         self.reload_time = time.gmtime()
