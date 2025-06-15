@@ -24,7 +24,7 @@ class Miscellaneous(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        self.session = await aiohttp.ClientSession()
+        self.session = aiohttp.ClientSession()
 
         print(f"Bot ready, logged in as {self.bot.user}.")
 
