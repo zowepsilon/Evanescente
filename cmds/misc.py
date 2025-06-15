@@ -126,12 +126,12 @@ class Miscellaneous(commands.Cog):
 
     @commands.command()
     @debuggable
-    async def xkcd(self, ctx, *, index: str):
+    async def xkcd(self, ctx, *, search: str):
         # curl '' --compressed -X POST --data-raw '' | py -m json.tool
         url = "https://qtg5aekc2iosjh93p.a1.typesense.net/multi_search?use_cache=true&x-typesense-api-key=8hLCPSQTYcBuK29zY5q6Xhin7ONxHy99"
-        index = index.replace('\"', "\\\"")
-        data = f'''{
-            "searches":[{
+        search = search.replace('\"', "\\\"")
+        data = f'''{{
+            "searches":[{{
                 "query_by":"title,altTitle,transcript,topics,embedding",
                 "query_by_weights":"127,80,80,1,1",
                 "num_typos":1,
@@ -144,8 +144,8 @@ class Miscellaneous(commands.Cog):
                 "max_facet_values":100,
                 "page":1,
                 "per_page":1
-            }]
-        }'''
+            }}]
+        }}'''
 
         async with self.session.post(url, data=data) as req:
             doc = await req.json()["results"][0]["hits"][0]["document"]
