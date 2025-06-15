@@ -149,7 +149,7 @@ class Miscellaneous(commands.Cog):
 
         async with self.session.post(url, data=data) as req:
             doc = (await req.json())["results"][0]["hits"][0]["document"]
-            index, title, url, alt = doc["id"], doc["title"], doc["imageUrl"], doc["altTile"]
+            index, title, url, alt = doc["id"], doc["title"], doc["imageUrl"], doc["altTitle"]
 
 
         await ctx.send(f"\"**{title}**\"\n{url}\n-# {alt}\n-# [#{i}](https://www.xkcd.com/{index})")
