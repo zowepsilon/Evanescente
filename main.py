@@ -2,8 +2,9 @@ import json
 import time
 import datetime
 import os
-
 import sqlite3
+
+import aiohttp
 
 import discord
 from discord.ext import commands

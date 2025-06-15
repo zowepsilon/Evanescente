@@ -1,15 +1,17 @@
-import discord
-from discord.ext import commands
-from utils import debuggable, sanitize
-
 import random
-
 from time import strftime
 
-class Miscellaneous(commands.Cog): # create a class for our cog that inherits from commands.Cog
-    # this class is used to create a cog, which is a module that can be added to the bot
+import discord
+from discord.ext import commands
 
-    def __init__(self, bot): # this is a special method that is called when the cog is loaded
+import aiohttp
+
+from utils import debuggable, sanitize
+
+
+class Miscellaneous(commands.Cog):
+
+    def __init__(self, bot):
         self.bot = bot
         self.repeat = True
         
@@ -22,6 +24,8 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
 
     @commands.Cog.listener()
     async def on_ready(self):
+        self.session = await aiohttp.ClientSession()
+
         print(f"Bot ready, logged in as {self.bot.user}.")
 
     @commands.command()
@@ -93,7 +97,6 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
     @commands.command()
     @debuggable
     async def abitbol(self, ctx, *, index: str = None):
-
         if index is None:
             i, h, quote =  random.choice(self.quotes)
             return await ctx.send(f"\"{quote}\"\nhttp://george-abitbol.fr/doc/mp4/{i}.mp4\n-# #{i}/{len(self.quotes)+1}")
@@ -120,6 +123,37 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
             others += f"#{matches[-1]}"
 
             await ctx.send(f"\"{quote}\"\nhttp://george-abitbol.fr/doc/mp4/{i}.mp4\n-# #{i}/{len(self.quotes)+1}\n{others}")
+
+    @commands.command()
+    @debuggable
+    async def xkcd(self, ctx, *, index: str):
+        # curl '' --compressed -X POST --data-raw '' | py -m json.tool
+        url = "https://qtg5aekc2iosjh93p.a1.typesense.net/multi_search?use_cache=true&x-typesense-api-key=8hLCPSQTYcBuK29zY5q6Xhin7ONxHy99"
+        index = index.replace('\"', "\\\"")
+        data = f'''{
+            "searches":[{
+                "query_by":"title,altTitle,transcript,topics,embedding",
+                "query_by_weights":"127,80,80,1,1",
+                "num_typos":1,
+                "exclude_fields":"embedding",
+                "vector_query":"embedding:([], k: 30, distance_threshold: 0.1, alpha: 0.9)",
+                "highlight_full_fields":"title,altTitle,transcript,topics,embedding",
+                "collection":"xkcd",
+                "q":"{index}",
+                "facet_by":"publishDateYear,topics",
+                "max_facet_values":100,
+                "page":1,
+                "per_page":1
+            }]
+        }'''
+
+        async with self.session.post(url, data=data) as req:
+            doc = await req.json()["results"][0]["hits"][0]["document"]
+            index, title, url, alt = doc["id"], doc["title"], doc["imageUrl"], doc["altTile"]
+
+
+        await ctx.send(f"\"**{title}**\"\n{url}\n-# {alt}\n-# [#{i}](https://www.xkcd.com/{index})")
+
 
     @commands.command()
     @debuggable
