@@ -101,7 +101,7 @@ class Miscellaneous(commands.Cog): # create a class for our cog that inherits fr
         try:
             matches = [int(index)]
         except ValueError:
-            matches = [int(i) for (i, h, quote) in self.quotes if index in quote]
+            matches = [int(i) for (i, h, quote) in self.quotes if index.lower() in quote.lower()]
 
 
         if len(matches) == 0:
