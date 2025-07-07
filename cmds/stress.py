@@ -25,7 +25,7 @@ class Stress(commands.Cog):
     def cog_unload(self):
         self.stress_loop.cancel()
 
-    @tasks.loop(minutes=1.0)
+    @tasks.loop(minutes=5.0)
     async def stress_loop(self):
         channel = self.bot.get_channel(1366379079275642911)
         await self.check_stress(channel)
