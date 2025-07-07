@@ -23,20 +23,33 @@ class Stress(commands.Cog):
             self.bot.config["stress_hash"] = 0
 
     @tasks.loop(minutes=5.0)
-    async def check_stress(self):
+    async def stress_loop(self):
+        channel = self.bot.get_channel(1366379079275642911)
+        await self.check_stress(channel)
+
+    @commands.commmand()
+    @debuggable
+    async def stress(self, ctx):
+        changed = await self.check_stress(ctx)
+
+        if not changed:
+            await ctx.send("https://banques-ecoles.fr/ n'a pas changé")
+
+    async def check_stress(self, ctx) -> bool:
         async with self.session.get("https://banques-ecoles.fr") as req:
             new_content = await req.text()
             new_hash = hash(new_content)
 
             if self.bot.config["stress_hash"] == new_hash:
-                return
+                return False
 
             old_hash = self.bot.config["stress_hash"]
             self.bot.config["stress_hash"] = new_hash
 
-        channel = self.bot.get_channel(1366379079275642911)
 
-        await channel.send(f"<@&1391768767523979286> https://banques-ecoles.fr/ a changé : `{old_hash}` → `{new_hash}`")
+        await ctx.send(f"<@&1391768767523979286> https://banques-ecoles.fr/ a changé : `{old_hash}` → `{new_hash}`")
+
+        return True
 
 
 
