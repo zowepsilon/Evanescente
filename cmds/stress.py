@@ -23,7 +23,7 @@ class Stress(commands.Cog):
         if "stress_hash" not in self.bot.config:
             self.bot.config["stress_hash"] = None
 
-    @tasks.loop(minutes=5.0)
+    @tasks.loop(minutes=1.0)
     async def stress_loop(self):
         channel = self.bot.get_channel(1366379079275642911)
         await self.check_stress(channel)
