@@ -20,8 +20,10 @@ class Stress(commands.Cog):
     async def on_ready(self):
         self.session = aiohttp.ClientSession()
 
-        if "stress_hash" not in self.bot.config:
-            self.bot.config["stress_hash"] = None
+        self.stress_loop.start()
+
+    def cog_unload(self):
+        self.stress_loop.cancel()
 
     @tasks.loop(minutes=1.0)
     async def stress_loop(self):
@@ -50,8 +52,7 @@ class Stress(commands.Cog):
             old_hash = self.bot.config["stress_hash"]
             self.bot.config["stress_hash"] = new_hash
 
-
-        await ctx.send(f"<@ & 1391768767523979286> https://banques-ecoles.fr/ a changé : `{old_hash}` → `{new_hash}`")
+        await ctx.send(f"<@ & 1391768767523979286> https://banques-ecoles.fr/ a changé\n`{old_hash}` → `{new_hash}`")
 
         return True
 
