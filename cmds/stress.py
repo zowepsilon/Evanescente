@@ -56,7 +56,7 @@ class Stress(commands.Cog):
         if old_hash == ' ':
             return False
 
-        await ctx.send(f"<@ & 1391768767523979286> https://banques-ecoles.fr/ a changé\n`{old_hash}` → `{new_hash}`")
+        await ctx.send(f"<@&1391768767523979286> https://banques-ecoles.fr/ a changé\n`{old_hash}` → `{new_hash}`")
 
         return True
 
