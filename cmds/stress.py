@@ -27,7 +27,7 @@ class Stress(commands.Cog):
         channel = self.bot.get_channel(1366379079275642911)
         await self.check_stress(channel)
 
-    @commands.commmand()
+    @commands.command()
     @debuggable
     async def stress(self, ctx):
         changed = await self.check_stress(ctx)
