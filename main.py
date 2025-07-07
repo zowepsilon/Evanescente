@@ -72,8 +72,6 @@ class Bot(commands.Bot):
         with open(self.CONFIG_PATH, mode='w') as f:
             json.dump(self.config, f, indent=4)
 
-        self.session.close()
-        
         print("Stopped bot!")
     
     def is_dev(self, user_id: int):
