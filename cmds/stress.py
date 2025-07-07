@@ -1,5 +1,6 @@
 import random
 from time import strftime
+import hashlib
 
 import discord
 from discord.ext import commands, tasks
@@ -20,7 +21,7 @@ class Stress(commands.Cog):
         self.session = aiohttp.ClientSession()
 
         if "stress_hash" not in self.bot.config:
-            self.bot.config["stress_hash"] = 0
+            self.bot.config["stress_hash"] = None
 
     @tasks.loop(minutes=5.0)
     async def stress_loop(self):
@@ -38,7 +39,10 @@ class Stress(commands.Cog):
     async def check_stress(self, ctx) -> bool:
         async with self.session.get("https://banques-ecoles.fr") as req:
             new_content = await req.text()
-            new_hash = hash(new_content)
+
+            m = hashlib.sha256()
+            m.update(bytes(new_content, encoding='utf-8'))
+            new_hash = m.hexdigest()
 
             if self.bot.config["stress_hash"] == new_hash:
                 return False
@@ -47,7 +51,7 @@ class Stress(commands.Cog):
             self.bot.config["stress_hash"] = new_hash
 
 
-        await ctx.send(f"<@&1391768767523979286> https://banques-ecoles.fr/ a changé : `{old_hash}` → `{new_hash}`")
+        await ctx.send(f"<@ & 1391768767523979286> https://banques-ecoles.fr/ a changé : `{old_hash}` → `{new_hash}`")
 
         return True
 
