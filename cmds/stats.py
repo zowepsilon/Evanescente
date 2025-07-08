@@ -88,7 +88,7 @@ class Stats(commands.Cog):
         user = user if user is not None else ctx.author
 
         name = sanitize(self.bot.nickname_cache.get_nick(user.id))
-        out = f"### Statistiques pour {name}: \n"
+        out = f"### Statistiques de {name} \n"
         for category in self.counters.keys():
             try:
                 (rank, message_count) = self.counters[category].get_rank(user.id)
