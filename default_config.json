@@ -13,5 +13,7 @@
     "stress_hash": " ",
     "debug": false,
     "replies": [],
-    "blacklist": []
+    "blacklist": [],
+    "birthday_channel": 0,
+    "birthday_role": 0
 }

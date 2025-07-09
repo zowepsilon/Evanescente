@@ -453,3 +453,41 @@ class SanityDb:
             TargetUserId = ?
             VoterUserId = ?
         """, [target_user_id, voter_user_id])
+
+
+class BirthdayDb:
+    def __init__(self, cursor, table_name):
+        self.cursor = cursor
+        self.table_name = table_name
+
+        self.cursor.execute(f"""
+            CREATE TABLE IF NOT EXISTS {self.table_name} (
+                UserId int PRIMARY KEY,
+                Year int,
+                Month int,
+                Day int,
+            );
+        """)
+
+    def get_birthdays_for_date(self, month: int, day: int) -> list[int]:
+        self.cursor.execute(f"""
+            SELECT UserId
+            FROM {self.table_name}
+            WHERE Month = ?, Day = ?
+        """, [month, day])
+        
+        return self.cursor.fetchall()
+
+    def set_date(self, user_id: int, year: int, month: int, day: int):
+        self.cursor.execute(f"""
+            INSERT INTO {self.table_name}
+            VALUES(?, ?, ?, ?)
+            ON CONFLICT(UserId)
+            DO UPDATE
+            SET Year = ?, Month = ?, Day = ?
+        """,  [user_id, year, month, day, year, month, day])
+
+    def get_all_birthdays(self) -> list[(int, int, int, int)]:
+        self.cursor.execute(f"SELECT * FROM {self.table_name}")
+
+        rerturn self.cursor.fetchall()
