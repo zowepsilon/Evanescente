@@ -465,7 +465,7 @@ class BirthdayDb:
                 UserId int PRIMARY KEY,
                 Year int,
                 Month int,
-                Day int,
+                Day int
             );
         """)
 
