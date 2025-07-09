@@ -490,4 +490,4 @@ class BirthdayDb:
     def get_all_birthdays(self) -> list[(int, int, int, int)]:
         self.cursor.execute(f"SELECT * FROM {self.table_name}")
 
-        rerturn self.cursor.fetchall()
+        return self.cursor.fetchall()
