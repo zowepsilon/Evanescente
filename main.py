@@ -79,6 +79,7 @@ class Bot(commands.Bot):
 
 bot = Bot(modules=(
     "cmds.admin",
+    "cmds.birthday",
     "cmds.chat",
     "cmds.code",
     "cmds.dev",
