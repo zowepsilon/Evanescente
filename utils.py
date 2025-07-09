@@ -473,7 +473,7 @@ class BirthdayDb:
         self.cursor.execute(f"""
             SELECT UserId
             FROM {self.table_name}
-            WHERE Month = ?, Day = ?
+            WHERE Month = ? AND Day = ?
         """, [month, day])
         
         return self.cursor.fetchall()
