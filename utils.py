@@ -469,9 +469,9 @@ class BirthdayDb:
             );
         """)
 
-    def get_birthdays_for_date(self, month: int, day: int) -> list[int]:
+    def get_birthdays_for_date(self, month: int, day: int) -> list[(int, int)]:
         self.cursor.execute(f"""
-            SELECT UserId
+            SELECT UserId, Year
             FROM {self.table_name}
             WHERE Month = ? AND Day = ?
         """, [month, day])
