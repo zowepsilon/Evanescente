@@ -57,7 +57,17 @@ class Birthday(commands.Cog):
 
     @commands.command()
     @debuggable
-    async def birthdays(self, ctx, max_rank: int = 5):
+    async def birthdays(self, ctx, subrange: str = "1-5"):
+
+        subrange_spl = subrange.split("-")
+        if len(subrange_spl) != 2:
+            return await ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
+        try:
+            start, end = int(subrange_spl[0]), int(subrange_spl[1])
+        except ValueError:
+            return await ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
+    
+
         births = self.db.get_all_birthdays()
         today = datetime.date.today()
 
@@ -72,7 +82,7 @@ class Birthday(commands.Cog):
         bds.sort(key=lambda x: datetime.date(x[1], x[2], x[3]) - today)
 
         out = "### Prochains anniversaires\n"
-        for (user_id, year, month, day) in bds[:max_rank]:
+        for (user_id, year, month, day) in bds[start-1:end]:
             name = sanitize(self.bot.nickname_cache.get_nick(user_id))
             out += f"- {name} le {day:02}/{month:02}/{year:04}\n"
 
