@@ -55,5 +55,29 @@ class Birthday(commands.Cog):
 
         await ctx.send(f"Anniversaire enregistré !")
 
+    @commmands.command()
+    @debuggable
+    async def birthdays(self, ctx, max_rank: int = 10):
+        births = self.db.get_all_birthdays()
+        today = datetime.date.today()
+
+        bds = [(
+            user_id, 
+            today.year if (month, day) < (today.month, today.day) else today.year+1,
+            month,
+            day,
+        ) for user_id, year, month, day in births]
+
+
+        bds.sort(key=lambda x: datetime.date(x[1], x[2], x[3]) - today)
+
+        out = "### Prochains anniversaires\n"
+        for (user_id, year, month, day) in bds[:max_rank]:
+            name = sanitize(self.bot.nickname_cache.get_nick(user_id))
+            out += f"- {name} le {day:02}/{month:02}/{year:04}"
+
+        await ctx.send(out)
+            
+
 def setup(bot):
     bot.add_cog(Birthday(bot))
