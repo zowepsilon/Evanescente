@@ -8,7 +8,7 @@ from discord.ext import commands, tasks
 from utils import debuggable, BirthdayDb, sanitize
 
 tz = datetime.timezone(datetime.timedelta(hours=2))
-check_time = datetime.time(hour=10, minute=0, tzinfo=tz)
+check_time = datetime.time(hour=2, minute=8, tzinfo=tz)
 
 class Birthday(commands.Cog):
 
@@ -32,8 +32,9 @@ class Birthday(commands.Cog):
         role_id = self.bot.config["birthday_role"]
 
         tasks = []
-        for user_id in lucky_ones:
-            tasks.append(channel.send(f"Joyeux anniversaire, <@{user_id[0]}> !"))
+        for (user_id, year) in lucky_ones:
+            age = today.year - year
+            tasks.append(channel.send(f"Joyeux {age}e anniversaire, <@{user_id[0]}> !"))
 
         await asyncio.gather(*tasks)
 
