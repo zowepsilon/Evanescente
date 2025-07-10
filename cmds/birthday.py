@@ -8,7 +8,7 @@ from discord.ext import commands, tasks
 from utils import debuggable, BirthdayDb, sanitize
 
 tz = datetime.timezone(datetime.timedelta(hours=2))
-check_time = datetime.time(hour=2, minute=4, tzinfo=tz)
+check_time = datetime.time(hour=10, minute=0, tzinfo=tz)
 
 class Birthday(commands.Cog):
 
