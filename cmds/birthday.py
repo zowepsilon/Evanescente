@@ -57,13 +57,13 @@ class Birthday(commands.Cog):
 
     @commands.command()
     @debuggable
-    async def birthdays(self, ctx, max_rank: int = 10):
+    async def birthdays(self, ctx, max_rank: int = 5):
         births = self.db.get_all_birthdays()
         today = datetime.date.today()
 
         bds = [(
             user_id, 
-            today.year if (month, day) < (today.month, today.day) else today.year+1,
+            today.year+1 if (month, day) <= (today.month, today.day) else today.year,
             month,
             day,
         ) for user_id, year, month, day in births]
@@ -74,7 +74,7 @@ class Birthday(commands.Cog):
         out = "### Prochains anniversaires\n"
         for (user_id, year, month, day) in bds[:max_rank]:
             name = sanitize(self.bot.nickname_cache.get_nick(user_id))
-            out += f"- {name} le {day:02}/{month:02}/{year:04}"
+            out += f"- {name} le {day:02}/{month:02}/{year:04}\n"
 
         await ctx.send(out)
             
