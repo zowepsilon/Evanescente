@@ -73,18 +73,20 @@ class Birthday(commands.Cog):
 
         bds = [(
             user_id, 
+            year,
             today.year+1 if (month, day) <= (today.month, today.day) else today.year,
             month,
             day,
         ) for user_id, year, month, day in births]
 
 
-        bds.sort(key=lambda x: datetime.date(x[1], x[2], x[3]) - today)
+        bds.sort(key=lambda x: datetime.date(x[2], x[3], x[4]) - today)
 
         out = "### Prochains anniversaires\n"
-        for (user_id, year, month, day) in bds[start-1:end]:
+        for (user_id, birth_year, year, month, day) in bds[start-1:end]:
             name = sanitize(self.bot.nickname_cache.get_nick(user_id))
-            out += f"- {name} le {day:02}/{month:02}/{year:04}\n"
+            age = year-birth_year
+            out += f"- {name} le {day:02}/{month:02}/{year:04} ({age} ans)\n"
 
         await ctx.send(out)
             
