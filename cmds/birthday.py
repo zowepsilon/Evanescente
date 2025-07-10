@@ -55,7 +55,7 @@ class Birthday(commands.Cog):
 
         await ctx.send(f"Anniversaire enregistré !")
 
-    @commmands.command()
+    @commands.command()
     @debuggable
     async def birthdays(self, ctx, max_rank: int = 10):
         births = self.db.get_all_birthdays()
