@@ -83,10 +83,10 @@ class Birthday(commands.Cog):
         bds.sort(key=lambda x: datetime.date(x[2], x[3], x[4]) - today)
 
         out = "### Prochains anniversaires\n"
-        for (user_id, birth_year, year, month, day) in bds[start-1:end]:
+        for i, (user_id, birth_year, year, month, day) in enumerate(bds[start-1:end], start=start):
             name = sanitize(self.bot.nickname_cache.get_nick(user_id))
             age = year-birth_year
-            out += f"- {name} le {day:02}/{month:02}/{year:04} ({age} ans)\n"
+            out += f"{i}. {name} le {day:02}/{month:02}/{year:04} ({age} ans)\n"
 
         await ctx.send(out)
             
