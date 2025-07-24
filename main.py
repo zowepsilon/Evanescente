@@ -47,7 +47,6 @@ class Bot(commands.Bot):
         self.nickname_cache = NicknameCache(self.cursor, "NicknameCache")
         self.word_counter = WordCounter(self.cursor, "WordCounts")
 
-
         self.startup_time = time.gmtime()
         self.reload_time = time.gmtime()
 
@@ -62,6 +61,8 @@ class Bot(commands.Bot):
     def run(self):
         print("Launching bot...")
 
+        orig_dir = os.getcwd()
+
         os.makedirs(self.config["run_dir"], exist_ok=True)
         os.chdir(self.config["run_dir"])
 
@@ -69,6 +70,7 @@ class Bot(commands.Bot):
         
         print("\nSaving data...")
 
+        os.chdir(orig_dir)
         with open(self.CONFIG_PATH, mode='w') as f:
             json.dump(self.config, f, indent=4)
 
@@ -89,7 +91,6 @@ bot = Bot(modules=(
     "cmds.sanity",
     "cmds.starboard",
     "cmds.stats",
-    "cmds.stress",
     "cmds.typst",
 ))
 
