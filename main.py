@@ -83,7 +83,6 @@ bot = Bot(modules=(
     "cmds.admin",
     "cmds.birthday",
     "cmds.chat",
-    "cmds.code",
     "cmds.dev",
     "cmds.help",
     "cmds.misc",
@@ -91,7 +90,6 @@ bot = Bot(modules=(
     "cmds.sanity",
     "cmds.starboard",
     "cmds.stats",
-    "cmds.typst",
 ))
 
 bot.run()
