@@ -47,10 +47,10 @@ class Graph(commands.Cog):
         user2_nick = sanitize(self.bot.nickname_cache.get_nick(other.id))
 
         if self.db.get_edge(ctx.author.id, other.id):
-            await ctx.send(f"L'arête entre {user2_nick} et {user2_nick} existe déjà !")
+            await ctx.send(f"L'arête entre {user1_nick} et {user2_nick} existe déjà !")
         else:
             self.db.add_edge(ctx.author.id, other.id)
-            await ctx.send(f"L'arête entre {user2_nick} et {user2_nick} a été ajoutée !")
+            await ctx.send(f"L'arête entre {user1_nick} et {user2_nick} a été ajoutée !")
 
     @debuggable
     async def _graph(self, ctx, target: discord.Member = None, level: int = None):
