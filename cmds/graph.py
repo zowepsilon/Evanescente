@@ -30,7 +30,7 @@ class Graph(commands.Cog):
         g = graphviz.Graph(engine='neato', format='png')
 
         for uid in nodes:
-            g.node(str(uid), self.bot.get_nick(uid))
+            g.node(str(uid), self.bot.nickname_cache.get_nick(uid))
 
         for (u, v) in edges:
             g.edge(str(u), str(v))
@@ -40,8 +40,8 @@ class Graph(commands.Cog):
     @graph.command(name='add')
     @debuggable
     async def graph_add(self, ctx, other: discord.Member):
-        user1_nick = sanitize(self.bot.get_nick(ctx.author.id))
-        user2_nick = sanitize(self.bot.get_nick(other.id))
+        user1_nick = sanitize(self.bot.nickname_cache.get_nick(ctx.author.id))
+        user2_nick = sanitize(self.bot.nickname_cache.get_nick(other.id))
 
         if self.db.get_edge(ctx.author.id, other.id):
             await ctx.send(f"L'arête entre {user2_nick} et {user2_nick} existe déjà !")
