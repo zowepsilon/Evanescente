@@ -46,22 +46,62 @@ class Graph(commands.Cog):
 
         rendered.close()
 
-    @graph.command(name='add')
-    @debuggable
-    async def graph_add(self, ctx, other: discord.Member):
-        if other.id == ctx.author.id:
+    async def add(self, ctx, user1: discord.Member, user2: discord.Member):
+        if user1.id == user2.id:
             await ctx.send("Tu ne peux pas ajouter d'arête triviale.")
             return
 
         user1_nick = sanitize(self.bot.nickname_cache.get_nick(ctx.author.id))
         user2_nick = sanitize(self.bot.nickname_cache.get_nick(other.id))
 
-        if self.db.get_edge(ctx.author.id, other.id):
+        if self.db.get_edge(user1.id, user2.id):
             await ctx.send(f"L'arête entre {user1_nick} et {user2_nick} existe déjà !")
         else:
-            self.db.add_edge(ctx.author.id, other.id)
+            self.db.add_edge(user1.id, user2.id)
             await ctx.send(f"L'arête entre {user1_nick} et {user2_nick} a été ajoutée !")
 
+    async def remove(self, ctx, user1: discord.Member, user2: discord.Member):
+        if user1.id == user2.id:
+            await ctx.send("Tu ne peux pas enlever d'arête triviale.")
+            return
+
+        user1_nick = sanitize(self.bot.nickname_cache.get_nick(user1.id))
+        user2_nick = sanitize(self.bot.nickname_cache.get_nick(user2.id))
+
+        if self.db.get_edge(user1.id, user2.id):
+            self.db.remove_edge(user1.id, user2.id)
+            await ctx.send(f"L'arête entre {user1_nick} et {user2_nick} a été supprimée !")
+        else:
+            await ctx.send(f"L'arête entre {user1_nick} et {user2_nick} n'existe pas !")
+
+    @graph.command(name='add')
+    @debuggable
+    async def graph_add(self, ctx, other: discord.Member):
+        await self.add(ctx, ctx.author, other)
+
+    @graph.command(name='remove')
+    @debuggable
+    async def graph_remove(self, ctx, other: discord.Member):
+        await self.remove(ctx, ctx.author, other)
+
+    @graph.command(name='forceadd')
+    @debuggable
+    async def graph_forceadd(self, ctx, user1: discord.Member, user2: discord.Member):
+        if not self.bot.is_dev(ctx.author.id):
+            await ctx.send("Tu n'es pas développeuse !")
+            return
+        
+        await self.add(ctx, user1, user2)
+
+    @graph.command(name='forceremove')
+    @debuggable
+    async def graph_forceremove(self, ctx, user1: discord.Member, user2: discord.Member):
+        if not self.bot.is_dev(ctx.author.id):
+            await ctx.send("Tu n'es pas développeuse !")
+            return
+        
+        await self.remove(ctx, user1, user2)
+    
     @graph.command(name="source")
     async def graph_source(self, ctx):
         source = io.StringIO(self.render().source)
