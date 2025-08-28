@@ -13,7 +13,7 @@ class Graph(commands.Cog):
 
         self.db = GraphDb(self.bot.cursor, "MeetingGraph")
 
-    def render(self) -> graphviz.Graph:
+    def render(self, *, engine: str = None) -> graphviz.Graph:
         edges = self.db.get_graph()
         nodes = {e[0] for e in edges} | {e[1] for e in edges}
         
@@ -28,10 +28,18 @@ class Graph(commands.Cog):
 
         return g
 
+    ENGINES = ("dot", "neato", "fdp", "sfdp", "circo", "twopi", "osage", "patchwork")
+
     @commands.group(invoke_without_command=True)
     @debuggable
-    async def graph(self, ctx):
-        rendered = io.BytesIO(self.render().pipe())
+    async def graph(self, ctx, *, engine: str = None):
+        engine = engine or "dot"
+
+        if engine not in self.ENGINES:
+            await ctx.send(f"Moteur inconnu. Les moteurs supportés sont `{'`, `'.join(self.ENGINES[:-1])}` et `{self.ENGINES[-1]}`.")
+            return
+
+        rendered = io.BytesIO(self.render(engine=engine).pipe())
 
         file = discord.File(rendered, filename="graph.png")
         await ctx.send(file=file)
