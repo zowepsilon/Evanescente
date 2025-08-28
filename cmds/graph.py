@@ -49,7 +49,7 @@ class Graph(commands.Cog):
     @graph.command(name='add')
     @debuggable
     async def graph_add(self, ctx, other: discord.Member):
-        if target.id == ctx.author.id:
+        if other.id == ctx.author.id:
             await ctx.send("Tu ne peux pas ajouter d'arête triviale.")
             return
 
