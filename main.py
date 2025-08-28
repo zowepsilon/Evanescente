@@ -84,6 +84,7 @@ bot = Bot(modules=(
     "cmds.birthday",
     "cmds.chat",
     "cmds.dev",
+    "cmds.graph",
     "cmds.help",
     "cmds.misc",
     "cmds.pendu",

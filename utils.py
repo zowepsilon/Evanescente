@@ -17,7 +17,6 @@ def debuggable(f):
 
     return new
 
-
 def sanitize(text: str) -> str:
     return text \
         .replace("@here", "@​here") \
@@ -454,7 +453,6 @@ class SanityDb:
             VoterUserId = ?
         """, [target_user_id, voter_user_id])
 
-
 class BirthdayDb:
     def __init__(self, cursor, table_name):
         self.cursor = cursor
@@ -491,3 +489,51 @@ class BirthdayDb:
         self.cursor.execute(f"SELECT * FROM {self.table_name}")
 
         return self.cursor.fetchall()
+
+class GraphDb:
+    def __init__(self, cursor, table_name):
+        self.cursor = cursor
+        self.table_name = table_name
+
+        self.cursor.execute(f"""
+            CREATE TABLE IF NOT EXISTS {self.table_name} (
+                UserId1 int,
+                UserId2 int,
+                PRIMARY KEY (UserId1, UserId2)
+            );
+        """)
+
+    def get_graph(self) -> list[(int, int)]:
+        self.cursor.execute(f"""
+            SELECT UserId1, UserId2 FROM {self.table_name}
+        """)
+
+        return self.cursor.fetchall()
+
+    def get_edge(self, user_id1: int, user_id2: int) -> bool:
+        user_id1, user_id2 = min(user_id1, user_id2), max(user_id1, user_id2)
+
+        self.cursor.execute(f"""
+            SELECT UserId1, UserId2 FROM {self.table_name}
+            WHERE UserId1 = ?
+            AND   UserId2 = ?
+        """, [user_id])
+
+        return self.cursor.fetchone() is not None
+
+    def add_edge(self, user_id1: int, user_id2: int):
+        user_id1, user_id2 = min(user_id1, user_id2), max(user_id1, user_id2)
+
+        self.cursor.execute(f"""
+            INSERT OR REPLACE INTO {self.table_name}
+            VALUES(?, ?)
+        """, [user_id1, user_id2])
+    
+    def remove_edge(self, user_id1: int, user_id2: int):
+        user_id1, user_id2 = min(user_id1, user_id2), max(user_id1, user_id2)
+
+        self.cursor.execute(f"""
+            DELETE FROM {self.table_name}
+            WHERE UserId1 = ?
+            AND   UserId2 = ?
+        """, [user_id1, user_id2])
