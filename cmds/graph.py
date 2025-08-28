@@ -20,6 +20,8 @@ class Graph(commands.Cog):
 
         file = discord.File(rendered, filename="graph.png")
         await ctx.send(file=file)
+
+        rendered.close()
         
     def render(self) -> bytes:
         edges = self.db.get_graph()
@@ -34,6 +36,18 @@ class Graph(commands.Cog):
             g.edge(str(u), str(v))
 
         return g.pipe()
+
+    @graph.command(name='add')
+    @debuggable
+    async def graph_add(self, ctx, other: discord.Member):
+        user1_nick = sanitize(self.bot.get_nick(ctx.author.id))
+        user2_nick = sanitize(self.bot.get_nick(other.id))
+
+        if self.db.get_edge(ctx.author.id, other.id):
+            await ctx.send(f"L'arête entre {user2_nick} et {user2_nick} existe déjà !")
+        else:
+            self.db.add_edge(ctx.author.id, other.id)
+            await ctx.send(f"L'arête entre {user2_nick} et {user2_nick} a été ajoutée !")
 
     @debuggable
     async def _graph(self, ctx, target: discord.Member = None, level: int = None):
