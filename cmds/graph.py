@@ -35,6 +35,8 @@ class Graph(commands.Cog):
         for (u, v) in edges:
             g.edge(str(u), str(v))
 
+        print(g.source)
+
         return g.pipe()
 
     @graph.command(name='add')
