@@ -16,7 +16,7 @@ class Graph(commands.Cog):
     @commands.group(invoke_without_command=True)
     @debuggable
     async def graph(self, ctx):
-        rendered = self.render()
+        rendered = io.BytesIO(self.render())
 
         file = discord.File(rendered, filename="graph.png")
         await ctx.send(file=file)
