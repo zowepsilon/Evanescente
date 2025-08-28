@@ -517,7 +517,7 @@ class GraphDb:
             SELECT UserId1, UserId2 FROM {self.table_name}
             WHERE UserId1 = ?
             AND   UserId2 = ?
-        """, [user_id])
+        """, [user_id1, user_id2])
 
         return self.cursor.fetchone() is not None
 
