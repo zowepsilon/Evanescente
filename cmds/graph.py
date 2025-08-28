@@ -51,8 +51,8 @@ class Graph(commands.Cog):
             await ctx.send("Tu ne peux pas ajouter d'arête triviale.")
             return
 
-        user1_nick = sanitize(self.bot.nickname_cache.get_nick(ctx.author.id))
-        user2_nick = sanitize(self.bot.nickname_cache.get_nick(other.id))
+        user1_nick = sanitize(self.bot.nickname_cache.get_nick(user1.id))
+        user2_nick = sanitize(self.bot.nickname_cache.get_nick(user2.id))
 
         if self.db.get_edge(user1.id, user2.id):
             await ctx.send(f"L'arête entre {user1_nick} et {user2_nick} existe déjà !")
