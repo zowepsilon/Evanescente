@@ -61,7 +61,7 @@ class Graph(commands.Cog):
         file = discord.File(source, filename="graph.gv")
         await ctx.send(file=file)
 
-       source.close()
+        source.close()
 
 def setup(bot):
     bot.add_cog(Graph(bot))
