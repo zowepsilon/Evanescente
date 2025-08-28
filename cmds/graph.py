@@ -28,6 +28,7 @@ class Graph(commands.Cog):
         nodes = {e[0] for e in edges} | {e[1] for e in edges}
         
         g = graphviz.Graph(engine='neato', format='png')
+        g = graphviz.Graph(format='png')
 
         for uid in nodes:
             g.node(str(uid), self.bot.nickname_cache.get_nick(uid))
