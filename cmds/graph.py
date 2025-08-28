@@ -17,7 +17,7 @@ class Graph(commands.Cog):
         edges = self.db.get_graph()
         nodes = {e[0] for e in edges} | {e[1] for e in edges}
         
-        g = graphviz.Graph(engine='neato', format='png')
+        g = graphviz.Graph(engine=engine, format='png')
         #g = graphviz.Graph(format='png')
 
         for uid in nodes:
