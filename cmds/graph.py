@@ -18,7 +18,7 @@ class Graph(commands.Cog):
     async def graph(self, ctx):
         rendered = self.render()
 
-        file = discord.File(rendered, out="graph.png")
+        file = discord.File(rendered, filename="graph.png")
         await ctx.send(file=file)
         
     def render(self) -> bytes:
