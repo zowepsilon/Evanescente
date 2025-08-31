@@ -116,12 +116,12 @@ class Graph(commands.Cog):
     async def graph_local(self, ctx, *, user: discord.Member = None):
         user = user or ctx.author
 
-        source = io.StringIO(self.render(center=user.id).source)
+        rendered = io.BytesIO(self.render(center=user.id).pipe())
 
-        file = discord.File(source, filename="graph.gv")
+        file = discord.File(rendered, filename="graph.png")
         await ctx.send(file=file)
 
-        source.close()
+        rendered.close()
 
 def setup(bot):
     bot.add_cog(Graph(bot))
