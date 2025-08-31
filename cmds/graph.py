@@ -23,7 +23,7 @@ class Graph(commands.Cog):
 
         if center is not None and nodes == set():
             # If `center` hasn't met anyone, them feel the weight of their own loneliness.
-            nodes.insert(center)
+            nodes.add(center)
         
         g = graphviz.Graph(format='png')
 
