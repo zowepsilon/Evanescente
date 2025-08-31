@@ -510,6 +510,15 @@ class GraphDb:
 
         return self.cursor.fetchall()
 
+    def get_adjacent(self, user_id: int):
+        self.cursor.execute(f"""
+            SELECT UserId1, UserId2 FROM {self.table_name}
+            WHERE UserId1 = ?
+            OR    UserId2 = ?
+        """, [user_id, user_id])
+
+        return self.cursor.fetchall()
+
     def get_edge(self, user_id1: int, user_id2: int) -> bool:
         user_id1, user_id2 = min(user_id1, user_id2), max(user_id1, user_id2)
 

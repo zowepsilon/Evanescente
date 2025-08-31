@@ -13,12 +13,19 @@ class Graph(commands.Cog):
 
         self.db = GraphDb(self.bot.cursor, "MeetingGraph")
 
-    def render(self, *, engine: str = None) -> graphviz.Graph:
-        edges = self.db.get_graph()
+    def render(self, *, center: int  = None) -> graphviz.Graph:
+        if center is None:
+            edges = self.db.get_graph()
+        else:
+            edges = self.db.get_adjacent(center)
+
         nodes = {e[0] for e in edges} | {e[1] for e in edges}
+
+        if center is not None and nodes == set():
+            # If `center` hasn't met anyone, them feel the weight of their own loneliness.
+            nodes.insert(center)
         
-        g = graphviz.Graph(engine=engine, format='png')
-        #g = graphviz.Graph(format='png')
+        g = graphviz.Graph(format='png')
 
         for uid in nodes:
             g.node(str(uid), self.bot.nickname_cache.get_nick(uid))
@@ -28,17 +35,9 @@ class Graph(commands.Cog):
 
         return g
 
-    ENGINES = ("dot", "neato", "fdp", "sfdp", "circo", "twopi", "osage", "patchwork")
-
     @commands.group(invoke_without_command=True)
     @debuggable
-    async def graph(self, ctx, *, engine: str = None):
-        engine = engine or "dot"
-
-        if engine not in self.ENGINES:
-            await ctx.send(f"Moteur inconnu. Les moteurs supportés sont `{'`, `'.join(self.ENGINES[:-1])}` et `{self.ENGINES[-1]}`.")
-            return
-
+    async def graph(self, ctx):
         rendered = io.BytesIO(self.render(engine=engine).pipe())
 
         file = discord.File(rendered, filename="graph.png")
@@ -105,6 +104,15 @@ class Graph(commands.Cog):
     @graph.command(name="source")
     async def graph_source(self, ctx):
         source = io.StringIO(self.render().source)
+
+        file = discord.File(source, filename="graph.gv")
+        await ctx.send(file=file)
+
+        source.close()
+
+    @graph.command(name="local")
+    async def graph_local(slf, ctx, *, user: discord.Member = None):
+        source = io.StringIO(self.render(center=user or ctx.author).source)
 
         file = discord.File(source, filename="graph.gv")
         await ctx.send(file=file)

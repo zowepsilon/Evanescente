@@ -1,0 +1,69 @@
+diff --git a/cmds/graph.py b/cmds/graph.py
+index eafef05..a6fcdf1 100644
+--- a/cmds/graph.py
++++ b/cmds/graph.py
+@@ -1,6 +1,7 @@
+ import discord
+ from discord.ext import commands
+ 
++import typing
+ import io
+ import graphviz
+ 
+@@ -13,10 +14,17 @@ class Graph(commands.Cog):
+ 
+         self.db = GraphDb(self.bot.cursor, "MeetingGraph")
+ 
+-    def render(self, *, engine: str = None) -> graphviz.Graph:
+-        edges = self.db.get_graph()
++    def render(self, *, center: int = None, engine: str = None) -> graphviz.Graph:
++        if center is None:
++            edges = self.db.get_graph()
++        else:
++            edges = self.db.get_adjacent(center)
++
+         nodes = {e[0] for e in edges} | {e[1] for e in edges}
+-        
++        if center is not None:
++            # If `center` hasn't met anyone, them feel the weight of their own loneliness.
++            nodes.insert(center)
++
+         g = graphviz.Graph(engine=engine, format='png')
+         #g = graphviz.Graph(format='png')
+ 
+@@ -32,14 +40,14 @@ class Graph(commands.Cog):
+ 
+     @commands.group(invoke_without_command=True)
+     @debuggable
+-    async def graph(self, ctx, *, engine: str = None):
++    async def graph(self, ctx, center: typing.Optional[discord.Member], *, engine: str = None):
+         engine = engine or "dot"
+ 
+         if engine not in self.ENGINES:
+             await ctx.send(f"Moteur inconnu. Les moteurs supportés sont `{'`, `'.join(self.ENGINES[:-1])}` et `{self.ENGINES[-1]}`.")
+             return
+ 
+-        rendered = io.BytesIO(self.render(engine=engine).pipe())
++        rendered = io.BytesIO(self.render(center=center.id, engine=engine).pipe())
+ 
+         file = discord.File(rendered, filename="graph.png")
+         await ctx.send(file=file)
+diff --git a/utils.py b/utils.py
+index 6714f81..6d037de 100644
+--- a/utils.py
++++ b/utils.py
+@@ -510,6 +510,15 @@ class GraphDb:
+ 
+         return self.cursor.fetchall()
+ 
++    def get_adjacent(self, user_id: int):
++        self.cursor.execute(f"""
++            SELECT UserId1, UserId2 FROM {self.table_name}
++            WHERE UserId1 = ?
++            OR    UserId2 = ?
++        """, [user_id, user_id])
++
++        return self.cursor.fetchall()
++
+     def get_edge(self, user_id1: int, user_id2: int) -> bool:
+         user_id1, user_id2 = min(user_id1, user_id2), max(user_id1, user_id2)
