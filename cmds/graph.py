@@ -21,11 +21,14 @@ class Graph(commands.Cog):
 
         nodes = {e[0] for e in edges} | {e[1] for e in edges}
 
-        if center is not None and nodes == set():
+        if center is not None:
             # If `center` hasn't met anyone, them feel the weight of their own loneliness.
             nodes.add(center)
         
-        g = graphviz.Graph(format='png')
+        if center is None:
+            g = graphviz.Graph(format='png')
+        else:
+            g = graphviz.Graph(format='png', engine="twopi", node_attr={"root": str(center)})
 
         for uid in nodes:
             g.node(str(uid), self.bot.nickname_cache.get_nick(uid))
