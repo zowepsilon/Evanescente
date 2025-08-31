@@ -22,7 +22,7 @@ class Graph(commands.Cog):
         nodes = {e[0] for e in edges} | {e[1] for e in edges}
 
         if center is not None:
-            # If `center` hasn't met anyone, them feel the weight of their own loneliness.
+            # If `center` hasn't met anyone, then let them feel the weight of their own loneliness.
             nodes.add(center)
         
         if center is None:
@@ -41,7 +41,7 @@ class Graph(commands.Cog):
     @commands.group(invoke_without_command=True)
     @debuggable
     async def graph(self, ctx):
-        rendered = io.BytesIO(self.render(engine=engine).pipe())
+        rendered = io.BytesIO(self.render().pipe())
 
         file = discord.File(rendered, filename="graph.png")
         await ctx.send(file=file)
