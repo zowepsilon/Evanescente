@@ -28,7 +28,7 @@ class Graph(commands.Cog):
         if center is None:
             g = graphviz.Graph(format='png')
         else:
-            g = graphviz.Graph(format='png', engine='twopi', graph_attr={'root': "a", "overlap": "false"})
+            g = graphviz.Graph(format='png', engine='twopi', graph_attr={'root': str(center), "overlap": "false"})
 
         for uid in nodes:
             g.node(str(uid), self.bot.nickname_cache.get_nick(uid))
