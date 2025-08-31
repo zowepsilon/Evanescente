@@ -102,6 +102,7 @@ class Graph(commands.Cog):
         await self.remove(ctx, user1, user2)
     
     @graph.command(name="source")
+    @debuggable
     async def graph_source(self, ctx):
         source = io.StringIO(self.render().source)
 
@@ -111,7 +112,8 @@ class Graph(commands.Cog):
         source.close()
 
     @graph.command(name="local")
-    async def graph_local(slf, ctx, *, user: discord.Member = None):
+    @debuggable
+    async def graph_local(self, ctx, *, user: discord.Member = None):
         source = io.StringIO(self.render(center=user or ctx.author).source)
 
         file = discord.File(source, filename="graph.gv")
