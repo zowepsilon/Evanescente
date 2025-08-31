@@ -114,7 +114,9 @@ class Graph(commands.Cog):
     @graph.command(name="local")
     @debuggable
     async def graph_local(self, ctx, *, user: discord.Member = None):
-        source = io.StringIO(self.render(center=user or ctx.author).source)
+        user = user or ctx.author
+
+        source = io.StringIO(self.render(center=user.id).source)
 
         file = discord.File(source, filename="graph.gv")
         await ctx.send(file=file)
