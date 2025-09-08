@@ -140,7 +140,7 @@ class Graph(commands.Cog):
         
             start -= 1
         else:
-            start = None
+            start = 0
             end = 10
 
         leaderboard = self.db.get_leaderboard()[start:end]
@@ -148,7 +148,8 @@ class Graph(commands.Cog):
         out = "## Leaderboard du graphe\n"
         for i, (user_id, degree) in enumerate(leaderboard):
             name = sanitize(self.bot.nickname_cache.get_nick(user_id))
-            out += f"{i+1}. {name} - {degree} personnes rencontrées\n"
+            rank = i + 1 + start
+            out += f"{rank}. {name} - {degree} personnes rencontrées\n"
 
         await ctx.send(out)
 
