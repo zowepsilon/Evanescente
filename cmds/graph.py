@@ -138,7 +138,6 @@ class Graph(commands.Cog):
             except ValueError:
                 return await ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
         
-            leaderboard = self.db.get_leaderboard(start, end)
             start -= 1
         else:
             start = None
