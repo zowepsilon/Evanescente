@@ -546,3 +546,17 @@ class GraphDb:
             WHERE UserId1 = ?
             AND   UserId2 = ?
         """, [user_id1, user_id2])
+
+    def get_leaderboard(self) -> list[(int, int)]:
+        self.cursor.execute(f"""
+            SELECT UserId, COUNT(*) AS Degree
+            FROM (
+                SELECT UserId1 AS UserId FROM {self.table_name}
+                UNION ALL
+                SELECT UserId2 AS UserId FROM {self.table_name}
+            )
+            GROUP BY UserId
+            ORDER BY Degree DESC
+        """)
+
+        return self.cursor.fetchall()

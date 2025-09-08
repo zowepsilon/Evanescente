@@ -126,5 +126,32 @@ class Graph(commands.Cog):
 
         rendered.close()
 
+    @graph.command(name="leaderboard", aliases=["lb"])
+    @debuggable
+    async def graph_lb(self, ctx, subrange: str = None):
+        if subrange is not None:
+            subrange_spl = subrange.split("-")
+            if len(subrange_spl) != 2:
+                return await ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
+            try:
+                start, end = int(subrange_spl[0]), int(subrange_spl[1])
+            except ValueError:
+                return await ctx.send(f"Range invalide `{subrange}`. Exemple de range : 5-15")
+        
+            leaderboard = self.db.get_leaderboard(start, end)
+            start -= 1
+        else:
+            start = None
+            end = 10
+
+        leaderboard = self.db.get_leaderboard()[start:end]
+
+        out = "## Leaderboard du graphe\n"
+        for i, (user_id, degree) in enumerate(Leaderboard):
+            name = sanitize(self.bot.nickname_cache.get_nick(user_id))
+            out += f"{i+1}. {name} - {degree} personnes rencontrées\n"
+
+        await ctx.send(out)
+
 def setup(bot):
     bot.add_cog(Graph(bot))
