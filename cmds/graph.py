@@ -13,7 +13,7 @@ class Graph(commands.Cog):
 
         self.db = GraphDb(self.bot.cursor, "MeetingGraph")
 
-    def render(self, *, center: int  = None) -> graphviz.Graph:
+    def render(self, *, center: int = None) -> graphviz.Graph:
         if center is None:
             edges = self.db.get_graph()
         else:
