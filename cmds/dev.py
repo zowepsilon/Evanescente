@@ -206,7 +206,8 @@ class Developper(commands.Cog):
 
             try:
                 raw_messages = await channel.history(limit=None).flatten()
-            except (discord.Forbidden, AttributeError):
+            except (discord.Forbidden, AttributeError) as e:
+                await ctx.send(f"Erreur pendant {channel.name}: {e}")
                 continue
 
             await ctx.send(f"{len(raw_messages)} messages trouvés dans {channel.name}")
