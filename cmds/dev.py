@@ -251,7 +251,7 @@ class Developper(commands.Cog):
 
             await ctx.send(f"Les messages de {channel.name} ont bien été sauvegardés dans {filename} !")
         
-        ctx.send(f"Save finie dans {path}!")
+        await ctx.send(f"Save finie dans {path}!")
 
 def setup(bot): 
     bot.add_cog(Developper(bot))
