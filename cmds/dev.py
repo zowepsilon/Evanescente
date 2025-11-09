@@ -7,7 +7,7 @@ import time
 import json
 import subprocess
 import os
-from io import StringIO
+
 
 class Developper(commands.Cog):
     def __init__(self, bot):
@@ -206,7 +206,7 @@ class Developper(commands.Cog):
 
             try:
                 raw_messages = await channel.history(limit=None).flatten()
-            except discord.Forbidden:
+            except (discord.Forbidden, AttributeError):
                 continue
 
             await ctx.send(f"{len(raw_messages)} messages trouvés dans {channel.name}")
