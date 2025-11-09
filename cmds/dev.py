@@ -202,6 +202,12 @@ class Developper(commands.Cog):
             if isinstance(channel, discord.CategoryChannel):
                 continue
 
+            filename = f"{path}/{channel.name}-{channel.id}.json"
+
+            if os.path.isfile(filename):
+                await ctx.send(f"Skipping {channel.name} (file already exists)")
+                continue
+
             await ctx.send(f"Inspection de {channel.name}...")
 
             try:
