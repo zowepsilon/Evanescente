@@ -19,9 +19,7 @@ class Inactive(commands.Cog):
             return
 
         roles = [int(role.id) for role in member.roles[1:]]
-        if not self.db.make_inactive(member.id, roles):
-            await ctx.send("Ce membre est déjà inactif !")
-            return
+        self.db.make_inactive(member.id, roles)
 
         inactive_role = await ctx.guild.get_role(self.bot.config["inactive_role_id"])
 
