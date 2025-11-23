@@ -26,6 +26,8 @@ class Inactive(commands.Cog):
         await member.remove_roles(*member.roles[1:], reason="EVA: removed for inactivity")
         await member.add_roles(inactive_role, reason="EVA: added for inactivity")
 
+        await ctx.send("Ce membre est maintenant marqué comme inactif !")
+
     @commands.command()
     @debuggable
     async def make_active(self, ctx, member: discord.Member):
@@ -43,6 +45,8 @@ class Inactive(commands.Cog):
 
         await member.add_roles(*roles, reason="EVA: added for activity")
         await member.remove_roles(inactive_role, reason="EVA: removed for activity")
+
+        await ctx.send("Ce membre n'est pas marqué comme inactif !")
 
 
 def setup(bot):
