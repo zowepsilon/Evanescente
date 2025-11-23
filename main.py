@@ -79,6 +79,7 @@ class Bot(commands.Bot):
     def is_dev(self, user_id: int):
         return user_id in self.config["developers"]
 
+
 bot = Bot(modules=(
     "cmds.admin",
     "cmds.birthday",
@@ -86,6 +87,7 @@ bot = Bot(modules=(
     "cmds.dev",
     "cmds.graph",
     "cmds.help",
+    "cmds.inactive",
     "cmds.misc",
     "cmds.pendu",
     "cmds.sanity",

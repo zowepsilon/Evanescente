@@ -560,3 +560,45 @@ class GraphDb:
         """)
 
         return self.cursor.fetchall()
+
+
+class InactiveRolesDb:
+    def __init__(self, cursor, table_name):
+        self.cursor = cursor
+        self.table_name = table_name
+
+        self.cursor.execute(f"""
+            CREATE TABLE IF NOT EXISTS {self.table_name} (
+                UserId int PRIMARY KEY,
+                Roles VARCHAR(255)
+            );
+        """)
+
+    def make_inactive(self, user_id: int, roles: list[int]):
+        roles = ','.join(map(str, roles))
+
+        self.cursor.execute(f"""
+            INSERT INTO {self.table_name}
+            VALUES(?, ?)
+            ON CONFLICT(UserId)
+            DO UPDATE
+            SET Roles = ?
+        """,  [user_id, roles, roles])
+
+    def make_active(self, user_id: int) -> list[int]:
+        self.cursor.execute(f"""
+            SELECT Roles
+            FROM {self.table_name}
+            WHERE UserId = ?;
+        """, [user_id])
+
+        result = self.cursor.fetchone()
+        if result is None:
+            return None
+
+        self.cursor.execute(f"""
+            DELETE FROM {self.table_name}
+            WHERE UserId = ?;
+        """, [user_id])
+
+        return [int(role_id) for role_id in result[0].split(',')]
