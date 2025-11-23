@@ -21,7 +21,7 @@ class Inactive(commands.Cog):
         roles = [int(role.id) for role in member.roles[1:]]
         self.db.make_inactive(member.id, roles)
 
-        inactive_role = await ctx.guild.get_role(self.bot.config["inactive_role_id"])
+        inactive_role = ctx.guild.get_role(self.bot.config["inactive_role_id"])
 
         self.remove_roles(*member.roles[1:], reason="EVA: removed for inactivity")
         self.add_roles(inactive_role, reason="EVA: added for inactivity")
