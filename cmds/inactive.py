@@ -23,8 +23,8 @@ class Inactive(commands.Cog):
 
         inactive_role = ctx.guild.get_role(self.bot.config["inactive_role_id"])
 
-        self.remove_roles(*member.roles[1:], reason="EVA: removed for inactivity")
-        self.add_roles(inactive_role, reason="EVA: added for inactivity")
+        await member.remove_roles(*member.roles[1:], reason="EVA: removed for inactivity")
+        await member.add_roles(inactive_role, reason="EVA: added for inactivity")
 
     @commands.command()
     @debuggable
@@ -41,8 +41,8 @@ class Inactive(commands.Cog):
         roles = [ctx.guild.get_role(role_id) for role_id in roles]
         inactive_role = ctx.guild.get_role(self.bot.config["inactive_role_id"])
 
-        self.add_roles(*roles, reason="EVA: added for activity")
-        self.remove_roles(inactive_role, reason="EVA: removed for activity")
+        await member.add_roles(*roles, reason="EVA: added for activity")
+        await member.remove_roles(inactive_role, reason="EVA: removed for activity")
 
 
 def setup(bot):
