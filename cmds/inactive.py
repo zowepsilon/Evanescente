@@ -19,11 +19,11 @@ class Inactive(commands.Cog):
             return
 
         roles = [int(role.id) for role in member.roles[1:]]
-        if not self.make_inactive(roles):
+        if not self.db.make_inactive(member.id, roles):
             await ctx.send("Ce membre est déjà inactif !")
             return
 
-        inactive_role = ctx.guild.get_role(self.bot.config["inactive_role_id"])
+        inactive_role = await ctx.guild.get_role(self.bot.config["inactive_role_id"])
 
         self.remove_roles(*member.roles[1:], reason="EVA: removed for inactivity")
         self.add_roles(inactive_role, reason="EVA: added for inactivity")
@@ -35,12 +35,12 @@ class Inactive(commands.Cog):
             await ctx.send("You must be an admin to do that!")
             return
 
-        roles = self.make_active()
+        roles = self.db.make_active(member.id)
         if roles is None:
             await ctx.send("Ce membre est déjà actif !")
             return
 
-        roles = [ctx.guild.get_role(role_id) for role_id in roles]
+        roles = [await ctx.guild.get_role(role_id) for role_id in roles]
         inactive_role = ctx.guild.get_role(self.bot.config["inactive_role_id"])
 
         self.add_roles(*roles, reason="EVA: added for activity")
