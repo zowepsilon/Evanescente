@@ -14,12 +14,14 @@ class Inactive(commands.Cog):
     @commands.command()
     @debuggable
     async def make_inactive(self, ctx, member: discord.Member):
-        if ctx.author.guild_permissions.administrator:
+        if not ctx.author.guild_permissions.administrator:
             await ctx.send("You must be an admin to do that!")
             return
 
         roles = [int(role.id) for role in member.roles[1:]]
-        self.make_inactive(roles)
+        if not self.make_inactive(roles):
+            await ctx.send("Ce membre est déjà inactif !")
+            return
 
         inactive_role = ctx.guild.get_role(self.bot.config["inactive_role_id"])
 
@@ -29,11 +31,16 @@ class Inactive(commands.Cog):
     @commands.command()
     @debuggable
     async def make_active(self, ctx, member: discord.Member):
-        if ctx.author.guild_permissions.administrator:
+        if not ctx.author.guild_permissions.administrator:
             await ctx.send("You must be an admin to do that!")
             return
 
-        roles = [ctx.guild.get_role(role_id) for role_id in self.make_active()]
+        roles = self.make_active()
+        if roles is None:
+            await ctx.send("Ce membre est déjà actif !")
+            return
+
+        roles = [ctx.guild.get_role(role_id) for role_id in roles]
         inactive_role = ctx.guild.get_role(self.bot.config["inactive_role_id"])
 
         self.add_roles(*roles, reason="EVA: added for activity")
