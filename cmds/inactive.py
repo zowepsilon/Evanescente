@@ -46,7 +46,7 @@ class Inactive(commands.Cog):
         await member.add_roles(*roles, reason="EVA: added for activity")
         await member.remove_roles(inactive_role, reason="EVA: removed for activity")
 
-        await ctx.send("Ce membre n'est pas marqué comme inactif !")
+        await ctx.send("Ce membre n'est plus marqué comme inactif !")
 
 
 def setup(bot):
