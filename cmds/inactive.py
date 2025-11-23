@@ -19,7 +19,7 @@ class Inactive(commands.Cog):
             return
 
         roles = [int(role.id) for role in member.roles[1:]]
-        if self.db.make_inactive(member.id, roles):
+        if not self.db.make_inactive(member.id, roles):
             await ctx.send("Ce membre est déjà inactif !")
             return
 
