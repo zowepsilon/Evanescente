@@ -54,7 +54,7 @@ class Inactive(commands.Cog):
     async def check_activity(self, ctx, member: discord.Member):
         date = None
         async for msg in member.history(limit=10):
-            await ctx.send(f"Dernier message : {msg}")
+            await ctx.send(f"Dernier message : {msg.content} - {msg.created_at}")
             date = msg.created_at
 
 
