@@ -48,16 +48,5 @@ class Inactive(commands.Cog):
 
         await ctx.send("Ce membre n'est plus marqué comme inactif !")
 
-
-    @commands.command()
-    @debuggable
-    async def check_activity(self, ctx, member: discord.Member):
-        date = None
-        async for msg in member.history(limit=10):
-            await ctx.send(f"{msg.author.display_name} : {msg.content} - {msg.created_at}")
-            date = msg.created_at
-
-
-
 def setup(bot):
     bot.add_cog(Inactive(bot))

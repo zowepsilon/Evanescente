@@ -93,6 +93,7 @@ bot = Bot(modules=(
     "cmds.sanity",
     "cmds.starboard",
     "cmds.stats",
+    "cmds.stress",
 ))
 
 bot.run()
