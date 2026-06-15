@@ -21,7 +21,7 @@ classes = functools.reduce(
 class PenduState:
     message: Message
     word: str
-    remaining: int
+    count: int
     bot: Bot
     
     displayed_found: set[str] = field(default_factory=set)
@@ -56,20 +56,18 @@ class PenduState:
 
         if self.complete():
             out += "## Gagné !\n"
-        elif self.remaining == 0:
-            out += "## Perdu !\n"
 
-        if self.remaining != 0 and not self.complete():
+        if not self.complete():
             out += f"### Le mot est `{self.partial_word()}`.\n"
         else:
-            out += f"### Le mot était `{self.word}` "
+            out += f"### Le mot était `{self.word}` "
 
             (rank, count, first_user_id) = self.bot.word_counter.get_word_rank(self.word)
             name = sanitize(self.bot.nickname_cache.get_nick(first_user_id))
 
             out += f"(#{rank} - utilisé {count} fois, trouvé par {name}).\n"
 
-        out += f"- Coups restants: {self.remaining}\n"
+        out += f"- Coups : {self.count}\n"
 
         out += "- Lettres trouvées : " + ''.join(sorted(list(self.displayed_found))) + '\n'
         out += "- Lettres incorrectes : " + ''.join(sorted(list(self.displayed_wrong))) + '\n'
@@ -135,15 +133,11 @@ class Pendu(commands.Cog):
             else:
                 await self.games[channel].update()
         else:
-            self.games[channel].remaining -= 1
+            self.games[channel].count += 1
             await self.games[channel].update()
             await message.delete()
 
             self.db.add_wrong_letter(message.author.id)
-
-            if self.games[channel].remaining == 0:
-                await self.up(message.channel)
-                self.games.pop(channel)
 
     @commands.group(invoke_without_command=True)
     @debuggable
@@ -152,16 +146,16 @@ class Pendu(commands.Cog):
 
     @pendu.command(name="start")
     @debuggable
-    async def pendu_start(self, ctx, difficulty: float = 0.3):
+    async def pendu_start(self, ctx):
         word = self.bot.word_counter.get_random_word()
-        self.games[ctx.channel.id] = PenduState(word=word, remaining=int(len(word) / difficulty), message=None, bot=self.bot)
+        self.games[ctx.channel.id] = PenduState(word=word, count=0, message=None, bot=self.bot)
         await self.up(ctx.message.channel)
 
     @pendu.command(name="custom")
     @debuggable
-    async def pendu_custom(self, ctx, word: str, difficulty: float = 0.3):
+    async def pendu_custom(self, ctx, word: str):
         if not (word[:2] == '||' and word[-2:] == '||'):
-            return await ctx.send("Le mot doit être en spoilers.\nExemple: `?pendu custom ||patate||`")
+            return await ctx.send("Le mot doit être en spoilers.\nExemple: `?pendu custom ||perdu||`")
 
         word = word[2:-2]
         words = words_of_message(word)
@@ -169,7 +163,7 @@ class Pendu(commands.Cog):
             return await ctx.send(f"Mot invalide: ||{word}||")
 
         word = words[0]
-        self.games[ctx.channel.id] = PenduState(word=word, remaining=int(len(word) / difficulty), message=None, bot=self.bot)
+        self.games[ctx.channel.id] = PenduState(word=word, count=0, message=None, bot=self.bot)
         await self.up(ctx.message.channel)
 
     @pendu.command(name="up")
