@@ -11,7 +11,10 @@ from discord.ext import commands
 
 from utils import NicknameCache, WordCounter
 
-intents = discord.Intents.all()
+intents = discord.Intents.default()
+intents.members = True
+intents.message_content = True
+
 
 class Bot(commands.Bot):
     SOURCE = os.path.dirname(os.path.realpath(__file__))
@@ -49,7 +52,7 @@ class Bot(commands.Bot):
 
         self.startup_time = time.gmtime()
         self.reload_time = time.gmtime()
-
+        
         super().__init__(
             command_prefix=commands.when_mentioned_or(self.config["prefix"]),
             intents=intents
@@ -93,6 +96,7 @@ bot = Bot(modules=(
     "cmds.sanity",
     "cmds.starboard",
     "cmds.stats",
+    "cmds.forbidden_letter"
 ))
 
 bot.run()
