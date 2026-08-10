@@ -15,5 +15,6 @@
     "blacklist": [],
     "birthday_channel": 0,
     "birthday_role": 0,
-    "inactive_role_id": 0
+    "inactive_role_id": 0,
+	"forbidden_letter_channel_id": 0
 }

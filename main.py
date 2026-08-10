@@ -49,7 +49,7 @@ class Bot(commands.Bot):
 
         self.startup_time = time.gmtime()
         self.reload_time = time.gmtime()
-
+        
         super().__init__(
             command_prefix=commands.when_mentioned_or(self.config["prefix"]),
             intents=intents
@@ -93,6 +93,7 @@ bot = Bot(modules=(
     "cmds.sanity",
     "cmds.starboard",
     "cmds.stats",
+    "cmds.forbidden_letter"
 ))
 
 bot.run()
