@@ -3,6 +3,7 @@ from discord.ext import commands
 
 import random
 import re
+from unidecode import unidecode
 
 from utils import debuggable
 
@@ -35,7 +36,7 @@ class ForbiddenLetter(commands.Cog):
                 message.channel.id == self.bot.config["forbidden_letter_channel_id"]:
             no_url_content = re.sub(url_regex, "", message.content)
             normalised_content = unidecode(no_url_content)
-            lower_content = content.lower()
+            lower_content = normalised_content.lower()
             
             if self.letter in lower_content:
                 await message.delete()
