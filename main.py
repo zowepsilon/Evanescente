@@ -11,10 +11,7 @@ from discord.ext import commands
 
 from utils import NicknameCache, WordCounter
 
-intents = discord.Intents.default()
-intents.members = True
-intents.message_content = True
-
+intents = discord.Intents.all()
 
 class Bot(commands.Bot):
     SOURCE = os.path.dirname(os.path.realpath(__file__))
