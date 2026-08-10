@@ -12,3 +12,4 @@ yarl==1.18.3
 websockets==15.0.1
 typst==0.13.2
 graphviz==0.21
+unidecode==1.4.0

@@ -34,7 +34,10 @@ class ForbiddenLetter(commands.Cog):
         if not message.author.bot and \
                 message.channel.id == self.bot.config["forbidden_letter_channel_id"]:
             no_url_content = re.sub(url_regex, "", message.content)
-            if self.letter in no_url_content:
+            normalised_content = unidecode(no_url_content)
+            lower_content = content.lower()
+            
+            if self.letter in lower_content:
                 await message.delete()
 
     @commands.command()
