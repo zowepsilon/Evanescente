@@ -26,7 +26,7 @@ class ForbiddenLetter(commands.Cog):
         await forbidden_letter_channel.send(
                 f"# Nouveau caractère interdit après ce message : `{self.letter}`")
     
-   @commands.Cog.listener()
+    @commands.Cog.listener()
     async def on_message(self, message):
         if not message.author.bot and \
                 message.channel.id == self.bot.config["forbidden_letter_channel_id"]:
