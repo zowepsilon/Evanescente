@@ -13,7 +13,7 @@ url_regex = r'https?:\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=
 class ForbiddenLetter(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.letter = 'a'
+        self.letter = 'l'
 
     async def new_letter(self, letter=None):
         if letter:
@@ -26,11 +26,7 @@ class ForbiddenLetter(commands.Cog):
         await forbidden_letter_channel.send(
                 f"# Nouveau caractère interdit après ce message : `{self.letter}`")
     
-    @commands.Cog.listener()
-    async def on_ready(self):
-        await self.new_letter()
-
-    @commands.Cog.listener()
+   @commands.Cog.listener()
     async def on_message(self, message):
         if not message.author.bot and \
                 message.channel.id == self.bot.config["forbidden_letter_channel_id"]:
