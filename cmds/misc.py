@@ -8,6 +8,8 @@ import aiohttp
 
 from utils import debuggable, sanitize
 
+abitbol_source = "https://web.archive.org/web/20260606051622im_/https://george-abitbol.fr/doc/mp4/{}.mp4"
+
 
 class Miscellaneous(commands.Cog):
 
@@ -99,7 +101,8 @@ class Miscellaneous(commands.Cog):
     async def abitbol(self, ctx, *, index: str = None):
         if index is None:
             i, h, quote =  random.choice(self.quotes)
-            return await ctx.send(f"\"{quote}\"\nhttp://george-abitbol.fr/doc/mp4/{i}.mp4\n-# #{i}/{len(self.quotes)+1}")
+            url = abitbol_source.format(i)
+            return await ctx.send(f"\"{quote}\"\n{url}\n-# #{i}/{len(self.quotes)+1}")
 
         try:
             matches = [int(index)]
@@ -111,8 +114,8 @@ class Miscellaneous(commands.Cog):
             await ctx.send("Aucun extrait trouvé !")
         elif len(matches) == 1:
             i, h, quote = self.quotes[matches[0]-1]
-
-            await ctx.send(f"\"{quote}\"\nhttp://george-abitbol.fr/doc/mp4/{i}.mp4\n-# #{i}/{len(self.quotes)+1}")
+            url = abitbol_source.format(i)
+            await ctx.send(f"\"{quote}\"\n{url}\n-# #{i}/{len(self.quotes)+1}")
         else:
             i, h, quote = self.quotes[matches[0]-1]
 
@@ -122,7 +125,8 @@ class Miscellaneous(commands.Cog):
 
             others += f"#{matches[-1]}"
 
-            await ctx.send(f"\"{quote}\"\nhttp://george-abitbol.fr/doc/mp4/{i}.mp4\n-# #{i}/{len(self.quotes)+1}\n{others}")
+            url = abitbol_source.format(i)
+            await ctx.send(f"\"{quote}\"\n{url}\n-# #{i}/{len(self.quotes)+1}\n{others}")
 
     @commands.command()
     @debuggable
